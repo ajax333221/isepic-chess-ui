@@ -1,0 +1,5 @@
+# AUTO-DETECT
+* text=auto
+
+# JS files use LF
+*.js eol=lf
