@@ -6,7 +6,7 @@ Ic-UI is the user interface for [isepic-chess.js (GitHub repo)](https://github.c
 Demo
 -------------
 
-https://github.com/ajax333221/isepic-chess-ui/
+https://ajax333221.github.io/isepic-chess-ui/
 
 Features
 -------------
