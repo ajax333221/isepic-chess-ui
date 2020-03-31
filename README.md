@@ -23,12 +23,36 @@ Features
 How to use?
 -------------
 
-:wrench: Under construction :wrench:
+1. Add the necessary files (the order of the **.js** files is important):
+
+```
+<link rel="stylesheet" href="./css/isepic-chess-ui.css">
+<script src="./js/jquery-3.3.1.min.js"></script>
+<script src="./js/isepic-chess.js"></script>
+<script src="./js/isepic-chess-ui.js"></script>
+```
+
+2. Wrap your code inside `$(function(){...});` to wait for the DOM to be ready.
+
+```
+<script>
+	$(function(){
+		var board = Ic.initBoard({
+			name : "main"
+		});
+		
+		IcUi.refreshBoard.apply(board, [0]);
+	});
+</script>
+```
+<sub>**Note:** Documentation for `Ic.initBoard()` can be found [here](https://github.com/ajax333221/isepic-chess#documentation).</sub>
+
+3. Open the **.html** file.
 
 To Do
 -------------
 
-- Documentation on "How to use?"
+- Automatically bind `IcUi.refreshBoard()` to boards (`IcUi.refreshBoard.apply(board, [0]);` will become just `board.refreshBoard()`)
 - Adaptable board size
 - Create, rename and delete boards through the UI
 - Set-up position mode
