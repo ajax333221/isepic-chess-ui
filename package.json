@@ -24,6 +24,7 @@
     "isepic-chess": ">=2.6.0"
   },
   "bugs": "https://github.com/ajax333221/isepic-chess-ui/issues",
+  "homepage": "https://github.com/ajax333221/isepic-chess-ui#readme",
   "private": true,
   "license": "MIT"
 }
