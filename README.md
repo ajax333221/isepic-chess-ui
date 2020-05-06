@@ -18,7 +18,7 @@ Features
 - Visual material difference
 - Piece displacement animation
 - ~~Drag-and-drop pieces~~ (currently disabled)
-- Chess-font by ajax333221 ![White King](css/images/wk.png "white king" | width=20px)![White Queen](css/images/wq.png "white queen" | width=20px)![White Rook](css/images/wr.png "white rook" | width=20px)![White Bishop](css/images/wb.png "white bishop" | width=20px)![White Knight](css/images/wn.png "white knight" | width=20px)![White Pawn](css/images/wp.png "white pawn" | width=20px)![Black King](css/images/bk.png "black king" | width=20px)![Black Queen](css/images/bq.png "black queen" | width=20px)![Black Rook](css/images/br.png "black rook" | width=20px)![Black Bishop](css/images/bb.png "black bishop" | width=20px)![Black Knight](css/images/bn.png "black knight" | width=20px)![Black Pawn](css/images/bp.png "black pawn" | width=20px)
+- Chess-font by ajax333221 [[css/images/wk.png alt="white king" | width=20px]][[css/images/wq.png alt="white queen" | width=20px]][[css/images/wr.png alt="white rook" | width=20px]][[css/images/wb.png alt="white bishop" | width=20px]][[css/images/wn.png alt="white knight" | width=20px]][[css/images/wp.png alt="white pawn" | width=20px]][[css/images/bk.png alt="black king" | width=20px]][[css/images/bq.png alt="black queen" | width=20px]][[css/images/br.png alt="black rook" | width=20px]][[css/images/bb.png alt="black bishop" | width=20px]][[css/images/bn.png alt="black knight" | width=20px]][[css/images/bp.png alt="black pawn" | width=20px]]
 
 How to use?
 -------------
