@@ -18,8 +18,7 @@ Features
 - Visual material difference
 - Piece displacement animation
 - ~~Drag-and-drop pieces~~ (currently disabled)
-- Chess-font by ajax333221 <img src="css/images/wk.png" width="20"> <img src="./css/images/wk.png" width="20"> <img src="css/images/wk.png" width="20">
-[[css/images/wk.png | alt="white king" | width=20px]][[./css/images/wq.png | alt="white queen" | width=20px]][[css/images/wr.png alt="white rook" | width=20px]][[css/images/wb.png alt="white bishop" | width=20px]][[css/images/wn.png alt="white knight" | width=20px]][[css/images/wp.png alt="white pawn" | width=20px]][[css/images/bk.png alt="black king" | width=20px]][[css/images/bq.png alt="black queen" | width=20px]][[css/images/br.png alt="black rook" | width=20px]][[css/images/bb.png alt="black bishop" | width=20px]][[css/images/bn.png alt="black knight" | width=20px]][[css/images/bp.png alt="black pawn" | width=20px]]
+- Chess-font by ajax333221 <img src="./css/images/wk.png" width="20"><img src="./css/images/wq.png" width="20"><img src="./css/images/wr.png" width="20"><img src="./css/images/wb.png" width="20"><img src="./css/images/wn.png" width="20"><img src="./css/images/wp.png" width="20"><img src="./css/images/bk.png" width="20"><img src="./css/images/bq.png" width="20"><img src="./css/images/br.png" width="20"><img src="./css/images/bb.png" width="20"><img src="./css/images/bn.png" width="20"><img src="./css/images/bp.png" width="20">
 
 How to use?
 -------------
