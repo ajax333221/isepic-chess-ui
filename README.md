@@ -41,7 +41,7 @@ How to use?
 			name : "main"
 		});
 		
-		IcUi.refreshBoard.apply(board, [0]);
+		board.refreshBoard();
 	});
 </script>
 ```
@@ -52,7 +52,6 @@ How to use?
 To Do
 -------------
 
-- Automatically bind `IcUi.refreshBoard()` to boards (`IcUi.refreshBoard.apply(board, [0]);` will become just `board.refreshBoard()`)
 - Adaptable board size
 - Create, rename and delete boards through the UI
 - Set-up position mode
