@@ -38,7 +38,7 @@ How to use?
 <script>
 	$(function(){
 		var board = Ic.initBoard({
-			name : "main"
+			boardName : "main"
 		});
 		
 		board.refreshBoard();
@@ -55,6 +55,7 @@ To Do
 - Adaptable board size
 - Create, rename and delete boards through the UI
 - Set-up position mode
+- Add prev/next and first/last as callable methods
 - Break down components for customizability
 - Variety of themes and chess-fonts
 
