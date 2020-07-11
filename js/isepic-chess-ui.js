@@ -4,7 +4,7 @@
 
 (function(win, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.0.3";
+		var _VERSION="1.0.5";
 		
 		function refreshBoard(animate_move){
 			var that, temp, is_reversed, from_bos, to_bos, initial_val, final_val, piece_class, promotion_class, is_new_html;
@@ -45,7 +45,7 @@
 			}
 			
 			function _getObjInfoHTML(){
-				var i, j, temp, current_row, rtn;
+				var i, j, temp, current_square, current_row, rtn;
 				
 				rtn="<li><strong>Selected board:</strong> <span>"+that.BoardName+"</span></li>";
 				rtn+="<li><strong>Is rotated?:</strong> <span>"+that.IsRotated+"</span></li>";
@@ -92,13 +92,17 @@
 					current_row=[];
 					
 					for(j=0; j<8; j++){//0...7
-						temp=""+that.getSquare([i, j]).val;
+						current_square=that.getSquare({
+							qos : [i, j]
+						});
+						
+						temp=""+current_square.val;
 						
 						if(temp.length===1){
 							temp=" "+temp;
 						}
 						
-						current_row.push("<span title='"+(Ic.toBos([i, j]).toUpperCase()+" = "+(that.getSquare([i, j]).pieceClass || "empty"))+"'>"+temp+"</span>");
+						current_row.push("<span title='"+(current_square.bos.toUpperCase()+" = "+(current_square.className || "empty"))+"'>"+temp+"</span>");
 					}
 					
 					rtn+="<li><strong>A"+(8-i)+"-H"+(8-i)+":</strong> "+current_row.join(" | ")+"</li>";
@@ -293,18 +297,21 @@
 				});
 				
 				(function(){//reset piece classes
-					var i, j, len, diff_top, diff_bottom, captured_html, new_class, piece_class, current_pos;
+					var i, j, len, diff_top, diff_bottom, captured_html, new_class, square_class, current_square;
 					
 					for(i=0; i<8; i++){//0...7
 						for(j=0; j<8; j++){//0...7
-							current_pos=(that.IsRotated ? [(7-i), (7-j)] : [i, j]);
+							current_square=that.getSquare({
+								qos : (that.IsRotated ? [(7-i), (7-j)] : [i, j])
+							});
+							
 							new_class=((i+j)%2 ? "ic_bs" : "ic_ws");
 							
 							//si prev next exclude, pasar blank square (ni si quiera poner un piece holder)
-							piece_class=that.getSquare(current_pos).pieceClass;
-							piece_class=(piece_class ? (" ic_"+piece_class) : "");
+							square_class=current_square.className;
+							square_class=(square_class ? (" ic_"+square_class) : "");
 							
-							$("#ic_id_"+Ic.toBos(current_pos)).attr("class", new_class).html("<div class='"+("ic_piece_holder"+piece_class)+"'></div>");
+							$("#ic_id_"+current_square.bos).attr("class", new_class).html("<div class='"+("ic_piece_holder"+square_class)+"'></div>");
 						}
 					}
 					
@@ -312,14 +319,14 @@
 					diff_top=(that.IsRotated ? that.MaterialDiff.w : that.MaterialDiff.b);
 					
 					for(i=0, len=diff_top.length; i<len; i++){//0<len
-						captured_html+="<img src='"+("./css/images/"+Ic.toPieceClass(diff_top[i])+".png")+"' width='20' height='20'>";
+						captured_html+="<img src='"+("./css/images/"+Ic.toClassName(diff_top[i])+".png")+"' width='20' height='20'>";
 					}
 					
 					captured_html+="<hr>";
 					diff_bottom=(that.IsRotated ? that.MaterialDiff.b : that.MaterialDiff.w);
 					
 					for(i=0, len=diff_bottom.length; i<len; i++){//0<len
-						captured_html+="<img src='"+("./css/images/"+Ic.toPieceClass(diff_bottom[i])+".png")+"' width='20' height='20'>";
+						captured_html+="<img src='"+("./css/images/"+Ic.toClassName(diff_bottom[i])+".png")+"' width='20' height='20'>";
 					}
 					
 					$("#ic_id_board .ic_captureds").html(captured_html);
@@ -336,10 +343,10 @@
 						from_bos=(is_reversed ? temp.ToBos : temp.FromBos);
 						to_bos=(is_reversed ? temp.FromBos : temp.ToBos);
 						
-						piece_class=Ic.toPieceClass(is_reversed ? final_val : initial_val);
+						piece_class=Ic.toClassName(is_reversed ? final_val : initial_val);
 						piece_class=(piece_class ? (" ic_"+piece_class) : "");
 						
-						promotion_class=Ic.toPieceClass((initial_val!==final_val && !is_reversed) ? final_val : 0);
+						promotion_class=Ic.toClassName((initial_val!==final_val && !is_reversed) ? final_val : 0);
 						promotion_class=(promotion_class ? (" ic_"+promotion_class) : "");
 						
 						_animatePiece(from_bos, to_bos, piece_class, promotion_class);
@@ -348,7 +355,7 @@
 							from_bos=Ic.toBos([Ic.getRankPos(temp.ToBos), (temp.KingCastled===1 ? 7 : 0)]);
 							to_bos=Ic.toBos([Ic.getRankPos(temp.ToBos), (temp.KingCastled===1 ? 5 : 3)]);
 							
-							piece_class=Ic.toPieceClass(Ic.toAbsVal("r")*Ic.getSign(Ic.getRankPos(temp.ToBos)===0));
+							piece_class=Ic.toClassName(Ic.toAbsVal("r")*Ic.getSign(Ic.getRankPos(temp.ToBos)===0));
 							piece_class=(piece_class ? (" ic_"+piece_class) : "");
 							
 							if(is_reversed){
