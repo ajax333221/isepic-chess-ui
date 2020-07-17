@@ -1,6 +1,6 @@
 {
   "name": "isepic-chess-ui",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "title": "isepic-chess-ui.js",
   "description": "UI of isepic-chess.js",
   "keywords": [
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "jquery": ">=3.3.1",
-    "isepic-chess": ">=2.7.5"
+    "isepic-chess": ">=2.7.6"
   },
   "bugs": "https://github.com/ajax333221/isepic-chess-ui/issues",
   "homepage": "https://github.com/ajax333221/isepic-chess-ui#readme",
