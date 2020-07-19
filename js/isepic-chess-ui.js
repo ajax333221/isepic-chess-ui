@@ -4,7 +4,7 @@
 
 (function(win, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.0.7";
+		var _VERSION="1.0.8";
 		
 		function refreshBoard(animate_move){
 			var that, temp, is_reversed, from_bos, to_bos, initial_val, final_val, piece_class, promotion_class, is_new_html;
@@ -92,9 +92,7 @@
 					current_row=[];
 					
 					for(j=0; j<8; j++){//0...7
-						current_square=that.getSquare({
-							qos : [i, j]
-						});
+						current_square=that.getSquare([i, j]);
 						
 						temp=""+current_square.val;
 						
@@ -300,11 +298,8 @@
 					
 					for(i=0; i<8; i++){//0...7
 						for(j=0; j<8; j++){//0...7
-							current_square=that.getSquare({
-								qos : (that.IsRotated ? [(7-i), (7-j)] : [i, j])
-							});
-							
 							new_class=((i+j)%2 ? "ic_bs" : "ic_ws");
+							current_square=that.getSquare(that.IsRotated ? [(7-i), (7-j)] : [i, j]);
 							
 							//si prev next exclude, pasar blank square (ni si quiera poner un piece holder)
 							square_class=current_square.className;
