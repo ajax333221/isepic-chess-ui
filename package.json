@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "jquery": ">=3.3.1",
-    "isepic-chess": ">=2.7.8"
+    "isepic-chess": ">=2.7.9"
   },
   "bugs": "https://github.com/ajax333221/isepic-chess-ui/issues",
   "homepage": "https://github.com/ajax333221/isepic-chess-ui#readme",
