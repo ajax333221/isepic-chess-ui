@@ -3,6 +3,11 @@
   "version": "1.2.0",
   "title": "isepic-chess-ui.js",
   "description": "UI of isepic-chess.js",
+  "main": "js/isepic-chess-ui.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajax333221/isepic-chess-ui.git"
+  },
   "keywords": [
     "chess",
     "chessboard",
@@ -11,20 +16,15 @@
     "interface",
     "animated"
   ],
-  "author": {
-    "name": "Ajax Isepic"
-  },
-  "main": "js/isepic-chess-ui.js",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/ajax333221/isepic-chess-ui.git"
-  },
+  "author": "Ajax Isepic",
+  "license": "MIT",
   "dependencies": {
     "jquery": ">=3.3.1",
     "isepic-chess": ">=2.9.2"
   },
-  "bugs": "https://github.com/ajax333221/isepic-chess-ui/issues",
+  "bugs": {
+    "url": "https://github.com/ajax333221/isepic-chess-ui/issues"
+  },
   "homepage": "https://github.com/ajax333221/isepic-chess-ui#readme",
-  "private": true,
-  "license": "MIT"
+  "private": true
 }
