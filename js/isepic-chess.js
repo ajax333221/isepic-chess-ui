@@ -4,7 +4,7 @@
 
 (function(win){
 	var Ic=(function(){
-		var _VERSION="2.9.0";
+		var _VERSION="2.9.2";
 		var _SILENT_MODE=true;
 		var _BOARDS=Object.create(null);
 		
@@ -16,7 +16,7 @@
 		var _QUEEN=5;
 		var _KING=6;
 		var _DEFAULT_FEN="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-		var _MUTABLE_KEYS=["Active", "NonActive", "Fen", "WCastling", "BCastling", "EnPassantBos", "HalfMove", "FullMove", "InitialFullMove", "MoveList", "CurrentMove", "IsRotated", "IsCheck", "IsCheckmate", "IsStalemate", "IsThreefold", "IsFiftyMove", "IsInsufficientMaterial", "MaterialDiff", "PromoteTo", "SelectedBos", "IsHidden", "Squares"];
+		var _MUTABLE_KEYS=["Active", "NonActive", "Fen", "WCastling", "BCastling", "EnPassantBos", "HalfMove", "FullMove", "InitialFullMove", "MoveList", "CurrentMove", "IsRotated", "IsCheck", "IsCheckmate", "IsStalemate", "IsThreefold", "IsFiftyMove", "IsInsufficientMaterial", "InDraw", "MaterialDiff", "PromoteTo", "SelectedBos", "IsHidden", "Squares"];
 		
 		//---------------- utilities
 		
@@ -599,6 +599,8 @@
 				}
 			}
 			
+			that.InDraw=(that.IsStalemate || that.IsThreefold || that.IsFiftyMove || that.IsInsufficientMaterial);
+			
 			that.MaterialDiff={w:[], b:[]};
 			
 			for(i=1; i<7; i++){//1...6
@@ -1013,6 +1015,13 @@
 			//}
 			
 			if(no_errors){
+				if(that===from_board){
+					no_errors=false;
+					_consoleLog("Error[_cloneBoardFrom]: trying to self clone");
+				}
+			}
+			
+			if(no_errors){
 				_cloneBoardObjs(that, from_board);
 				
 				//that.refreshBoard(); not without autorefresh
@@ -1036,6 +1045,13 @@
 					_consoleLog("Error[_cloneBoardTo]: could not select to_board");
 				}
 			//}
+			
+			if(no_errors){
+				if(that===to_board){
+					no_errors=false;
+					_consoleLog("Error[_cloneBoardTo]: trying to self clone");
+				}
+			}
 			
 			if(no_errors){
 				_cloneBoardObjs(to_board, that);
@@ -1630,6 +1646,7 @@
 				target.IsThreefold=null;
 				target.IsFiftyMove=null;
 				target.IsInsufficientMaterial=null;
+				target.InDraw=null;
 				target.MaterialDiff=null;
 				target.PromoteTo=null;
 				target.SelectedBos=null;
