@@ -20,11 +20,10 @@
   "license": "MIT",
   "dependencies": {
     "jquery": ">=3.3.1",
-    "isepic-chess": ">=2.9.2"
+    "isepic-chess": ">=3.0.0"
   },
   "bugs": {
     "url": "https://github.com/ajax333221/isepic-chess-ui/issues"
   },
-  "homepage": "https://github.com/ajax333221/isepic-chess-ui#readme",
-  "private": true
+  "homepage": "https://github.com/ajax333221/isepic-chess-ui#readme"
 }
