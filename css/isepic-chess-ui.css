@@ -37,12 +37,6 @@ body{
 	font-size : 13px;
 }
 
-#ic_id_main pre{
-	display : inline;
-	margin : 0;
-	padding : 0;
-}
-
 #ic_id_main .ic_inlineb{
 	display : inline-block;
 }
@@ -51,47 +45,11 @@ body{
 	color : #808080;
 }
 
-#ic_id_main .ic_dangerbox{
-	color : #721c24;
-	background : #f8d7da;
-}
-
-#ic_id_main .ic_successbox{
-	color : #155724;
-	background : #d4edda;
-}
-
 #ic_id_main hr{
 	margin : 15px 0 0 0;
 	padding : 0;
 	border : 0;
 	border-top : 1px solid #ccc;
-}
-
-#ic_id_main.ic_tests{
-	text-align : center;
-}
-
-#ic_id_main.ic_tests em{
-	font-size : 11px;
-}
-
-#ic_id_main.ic_tests table, #ic_id_main.ic_tests tr, #ic_id_main.ic_tests th, #ic_id_main.ic_tests td{
-	margin : 0;
-	padding : 0;
-}
-
-#ic_id_main.ic_tests table{
-	border-collapse : collapse;
-	margin : 0 auto;
-	text-align : center;
-	background : #fbfbfb;
-}
-
-#ic_id_main.ic_tests th, #ic_id_main.ic_tests td{
-	vertical-align : middle;
-	border : 1px solid #c0c0c0;
-	padding : 8px 16px;
 }
 
 #ic_id_board table, #ic_id_board tr, #ic_id_board td{
@@ -283,54 +241,4 @@ body{
 
 #ic_id_objinfo strong{
 	color : #735d62;
-}
-
-#ic_id_overall_results{
-	line-height : 20px;
-	padding : 10px;
-	font-size : 18px;
-}
-
-#ic_id_overall_results.ic_with_fails{
-	color : #721c24;
-}
-
-#ic_id_overall_results.ic_all_passed{
-	color : #155724;
-}
-
-.ic_icon_holder{
-	display : inline-block;
-	box-sizing : border-box;
-	position : relative;
-	height : 20px;
-	width : 20px;
-	margin : 0;
-	padding : 0;
-}
-
-.ic_icon_holder .ic_icon_sprites{
-	position : absolute;
-	top : 50%;
-	background : url('./images/sprites_50x50.png') no-repeat;
-}
-
-.ic_icon_holder .ic_sm_icon {
-	left : 0;
-	width : 20px;
-	height : 20px;
-	background-size : 40px 40px;
-	margin-top : -10px;
-}
-
-.ic_icon_holder .ic_sm_correct{
-	background-position : 0 0;
-}
-
-.ic_icon_holder .ic_sm_incorrect{
-	background-position : -20px 0;
-}
-
-.ic_icon_holder .ic_sm_selected{
-	background-position-y : -20px;
 }
