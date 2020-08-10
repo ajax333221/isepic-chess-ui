@@ -4,7 +4,7 @@
 
 (function(win, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.3.0";
+		var _VERSION="1.3.1";
 		var _ANIMATE_DURATION=300;
 		
 		function _navHelper(move_index){
@@ -17,7 +17,7 @@
 			diff=(move_index-that.CurrentMove);
 			is_goto=(Math.abs(diff)!==1);
 			
-			that.setCurrentMove((is_goto ? move_index : diff), is_goto);
+			return that.setCurrentMove((is_goto ? move_index : diff), is_goto);
 		}
 		
 		function navFirst(){
@@ -25,7 +25,7 @@
 			
 			that=this;
 			
-			_navHelper.apply(that, [0]);
+			return _navHelper.apply(that, [0]);
 		}
 		
 		function navPrevious(){
@@ -33,7 +33,7 @@
 			
 			that=this;
 			
-			_navHelper.apply(that, [that.CurrentMove-1]);
+			return _navHelper.apply(that, [that.CurrentMove-1]);
 		}
 		
 		function navNext(){
@@ -41,7 +41,7 @@
 			
 			that=this;
 			
-			_navHelper.apply(that, [that.CurrentMove+1]);
+			return _navHelper.apply(that, [that.CurrentMove+1]);
 		}
 		
 		function navLast(){
@@ -49,7 +49,7 @@
 			
 			that=this;
 			
-			_navHelper.apply(that, [that.MoveList.length-1]);
+			return _navHelper.apply(that, [that.MoveList.length-1]);
 		}
 		
 		function navLinkMove(move_index){
@@ -57,10 +57,10 @@
 			
 			that=this;
 			
-			_navHelper.apply(that, [move_index]);
+			return _navHelper.apply(that, [move_index]);
 		}
 		
-		function refreshBoard(animate_move){
+		function refreshBoard(animation_type){
 			var that, temp, is_reversed, from_bos, to_bos, initial_val, final_val, piece_class, promotion_class, is_new_html;
 			
 			that=this;
@@ -362,8 +362,8 @@
 					$("#ic_id_board .ic_captureds").html(captured_html);
 				})();
 				
-				if(animate_move){
-					is_reversed=(animate_move<0);
+				if(animation_type){
+					is_reversed=(animation_type<0);
 					
 					if((that.CurrentMove!==0 || is_reversed) && (that.CurrentMove!==(that.MoveList.length-1) || !is_reversed)){
 						temp=that.MoveList[that.CurrentMove+is_reversed];
