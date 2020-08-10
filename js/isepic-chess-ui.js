@@ -4,7 +4,61 @@
 
 (function(win, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.2.0";
+		var _VERSION="1.3.0";
+		var _ANIMATE_DURATION=300;
+		
+		function _navHelper(move_index){
+			var that, is_goto, diff;
+			
+			that=this;
+			
+			move_index=Ic.utilityMisc.toInt(move_index);
+			
+			diff=(move_index-that.CurrentMove);
+			is_goto=(Math.abs(diff)!==1);
+			
+			that.setCurrentMove((is_goto ? move_index : diff), is_goto);
+		}
+		
+		function navFirst(){
+			var that;
+			
+			that=this;
+			
+			_navHelper.apply(that, [0]);
+		}
+		
+		function navPrevious(){
+			var that;
+			
+			that=this;
+			
+			_navHelper.apply(that, [that.CurrentMove-1]);
+		}
+		
+		function navNext(){
+			var that;
+			
+			that=this;
+			
+			_navHelper.apply(that, [that.CurrentMove+1]);
+		}
+		
+		function navLast(){
+			var that;
+			
+			that=this;
+			
+			_navHelper.apply(that, [that.MoveList.length-1]);
+		}
+		
+		function navLinkMove(move_index){
+			var that;
+			
+			that=this;
+			
+			_navHelper.apply(that, [move_index]);
+		}
 		
 		function refreshBoard(animate_move){
 			var that, temp, is_reversed, from_bos, to_bos, initial_val, final_val, piece_class, promotion_class, is_new_html;
@@ -36,7 +90,7 @@
 					"top" : new_offset.top,
 					"left" : new_offset.left
 				}, {
-					duration : 300,
+					duration : _ANIMATE_DURATION,
 					always : function(){
 						piece_elm.show();
 						temp.remove();
@@ -253,35 +307,19 @@
 				});
 				
 				$("#ic_id_nav_first").unbind("click").click(function(){
-					var is_goto;
-					
-					is_goto=(that.CurrentMove!==1);
-					
-					if(that.setCurrentMove((is_goto ? 0 : -1), is_goto)){
-						refreshBoard.apply(that, [is_goto ? 0 : -1]);
-					}
+					navFirst.apply(that, []);
 				});
 				
 				$("#ic_id_nav_previous").unbind("click").click(function(){
-					if(that.setCurrentMove(-1, false)){
-						refreshBoard.apply(that, [-1]);
-					}
+					navPrevious.apply(that, []);
 				});
 				
 				$("#ic_id_nav_next").unbind("click").click(function(){
-					if(that.setCurrentMove(1, false)){
-						refreshBoard.apply(that, [1]);
-					}
+					navNext.apply(that, []);
 				});
 				
 				$("#ic_id_nav_last").unbind("click").click(function(){
-					var is_goto;
-					
-					is_goto=(that.CurrentMove!==(that.MoveList.length-2));
-					
-					if(that.setCurrentMove((is_goto ? 10000 : 1), is_goto)){
-						refreshBoard.apply(that, [is_goto ? 0 : 1]);
-					}
+					navLast.apply(that, []);
 				});
 				
 				$("#ic_id_rotate").unbind("click").click(function(){
@@ -325,7 +363,7 @@
 				})();
 				
 				if(animate_move){
-					is_reversed=(animate_move===-1);
+					is_reversed=(animate_move<0);
 					
 					if((that.CurrentMove!==0 || is_reversed) && (that.CurrentMove!==(that.MoveList.length-1) || !is_reversed)){
 						temp=that.MoveList[that.CurrentMove+is_reversed];
@@ -385,15 +423,7 @@
 				})());
 				
 				$(".ic_pgn_link").unbind("click").click(function(){
-					var data_val, diff, is_goto;
-					
-					data_val=Ic.utilityMisc.toInt($(this).attr("data-index"));
-					diff=(data_val-that.CurrentMove);
-					is_goto=(Math.abs(diff)!==1);
-					
-					if(that.setCurrentMove((is_goto ? data_val : diff), is_goto)){
-						refreshBoard.apply(that, [is_goto ? 0 : diff]);
-					}
+					navLinkMove.apply(that, [$(this).attr("data-index")]);
 				});
 				
 				$("#ic_id_fen").val(that.Fen);
@@ -412,6 +442,11 @@
 		
 		return {
 			version : _VERSION,
+			navFirst : navFirst,
+			navPrevious : navPrevious,
+			navNext : navNext,
+			navLast : navLast,
+			navLinkMove : navLinkMove,
 			refreshBoard : refreshBoard
 		};
 	})();
