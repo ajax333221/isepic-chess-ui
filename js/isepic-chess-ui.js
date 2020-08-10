@@ -4,8 +4,87 @@
 
 (function(win, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.3.1";
+		var _VERSION="1.3.2";
 		var _ANIMATE_DURATION=300;
+		
+		function _refreshDebug(){
+			var i, j, that, temp, current_square, current_row, new_html;
+			
+			that=this;
+			
+			if(!that.IsHidden){
+				new_html="<li><strong>Selected board:</strong> <span>"+that.BoardName+"</span></li>";
+				new_html+="<li><strong>Is rotated?:</strong> <span>"+that.IsRotated+"</span></li>";
+				new_html+="<li><strong>Is check?:</strong> <span>"+that.IsCheck+"</span></li>";
+				new_html+="<li><strong>Is checkmate?:</strong> <span>"+that.IsCheckmate+"</span></li>";
+				new_html+="<li><strong>Is stalemate?:</strong> <span>"+that.IsStalemate+"</span></li>";
+				new_html+="<li><strong>Is threefold repetition?:</strong> <span>"+that.IsThreefold+"</span></li>";
+				new_html+="<li><strong>Is fifty-move rule?:</strong> <span>"+that.IsFiftyMove+"</span></li>";
+				new_html+="<li><strong>Is insufficient material?:</strong> <span>"+that.IsInsufficientMaterial+"</span></li>";
+				new_html+="<li><strong>In draw?:</strong> <span>"+that.InDraw+"</span></li>";
+				new_html+="<li><strong>En Passant square:</strong> <span>"+(that.EnPassantBos || "-")+"</span></li>";
+				
+				new_html+="<li>";
+				new_html+="<strong>Active</strong>";
+				new_html+="<ul>";
+				new_html+="<li><strong>isBlack?:</strong> <span>"+that.Active.isBlack+"</span></li>";
+				new_html+="<li><strong>sign:</strong> <span>("+(that.Active.sign>0 ? "+" : "-")+")</span></li>";
+				new_html+="<li><strong>king square:</strong> <span>"+that.Active.kingBos+"</span></li>";
+				new_html+="<li><strong>checks:</strong> <span>"+that.Active.checks+"</span></li>";
+				new_html+="</ul>";
+				new_html+="</li>";
+				
+				new_html+="<li>";
+				new_html+="<strong>Non Active</strong>";
+				new_html+="<ul>";
+				new_html+="<li><strong>isBlack?:</strong> <span>"+that.NonActive.isBlack+"</span></li>";
+				new_html+="<li><strong>sign:</strong> <span>("+(that.NonActive.sign>0 ? "+" : "-")+")</span></li>";
+				new_html+="<li><strong>king square:</strong> <span>"+that.NonActive.kingBos+"</span></li>";
+				new_html+="<li><strong>checks:</strong> <span>"+that.NonActive.checks+"</span></li>";
+				new_html+="</ul>";
+				new_html+="</li>";
+				
+				new_html+="<li><strong>White castling:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.WCastling).toUpperCase() || "-")+"</span></li>";
+				new_html+="<li><strong>Black castling:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.BCastling) || "-")+"</span></li>";
+				new_html+="<li><strong>Half moves:</strong> <span>"+that.HalfMove+"</span></li>";
+				new_html+="<li><strong>Full moves:</strong> <span>"+that.FullMove+"</span></li>";
+				new_html+="<li><strong>Current move:</strong> <span>"+that.CurrentMove+"</span></li>";
+				new_html+="<li><strong>Initial full move:</strong> <span>"+that.InitialFullMove+"</span></li>";
+				new_html+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.PromoteTo*Ic.getSign(that.Active.isBlack))+"</span></li>";
+				new_html+="<li><strong>Selected square:</strong> <span>"+(that.SelectedBos || "-")+"</span></li>";
+				new_html+="<li><strong>Material difference:</strong> <span>{w:["+that.MaterialDiff.w.join(", ")+"], b:["+that.MaterialDiff.b.join(", ")+"]}</span></li>";
+				
+				new_html+="<li>";
+				new_html+="<strong>Squares</strong>";
+				new_html+="<ul>";
+				
+				for(i=0; i<8; i++){//0...7
+					current_row=[];
+					
+					for(j=0; j<8; j++){//0...7
+						current_square=that.getSquare([i, j]);
+						
+						temp=""+current_square.val;
+						
+						if(temp.length===1){
+							temp=" "+temp;
+						}
+						
+						current_row.push("<span title='"+(current_square.bos.toUpperCase()+" = "+(current_square.className || "empty"))+"'>"+temp+"</span>");
+					}
+					
+					new_html+="<li><strong>A"+(8-i)+"-H"+(8-i)+":</strong> "+current_row.join(" | ")+"</li>";
+				}
+				
+				new_html+="</ul>";
+				new_html+="</li>";
+				
+				new_html+="<li><strong>FEN:</strong> <span>"+that.Fen+"</span></li>";
+				new_html+="<li><strong>Version:</strong> <span>[Ic_v"+Ic.version+"] [IcUi_v"+_VERSION+"]</span></li>";
+				
+				$("#ic_id_objinfo").html(new_html);
+			}
+		}
 		
 		function _navHelper(move_index){
 			var that, is_goto, diff;
@@ -98,80 +177,6 @@
 				});
 			}
 			
-			function _getObjInfoHTML(){
-				var i, j, temp, current_square, current_row, rtn;
-				
-				rtn="<li><strong>Selected board:</strong> <span>"+that.BoardName+"</span></li>";
-				rtn+="<li><strong>Is rotated?:</strong> <span>"+that.IsRotated+"</span></li>";
-				rtn+="<li><strong>Is check?:</strong> <span>"+that.IsCheck+"</span></li>";
-				rtn+="<li><strong>Is checkmate?:</strong> <span>"+that.IsCheckmate+"</span></li>";
-				rtn+="<li><strong>Is stalemate?:</strong> <span>"+that.IsStalemate+"</span></li>";
-				rtn+="<li><strong>Is threefold repetition?:</strong> <span>"+that.IsThreefold+"</span></li>";
-				rtn+="<li><strong>Is fifty-move rule?:</strong> <span>"+that.IsFiftyMove+"</span></li>";
-				rtn+="<li><strong>Is insufficient material?:</strong> <span>"+that.IsInsufficientMaterial+"</span></li>";
-				rtn+="<li><strong>In draw?:</strong> <span>"+that.InDraw+"</span></li>";
-				rtn+="<li><strong>En Passant square:</strong> <span>"+(that.EnPassantBos || "-")+"</span></li>";
-				
-				rtn+="<li>";
-				rtn+="<strong>Active</strong>";
-				rtn+="<ul>";
-				rtn+="<li><strong>isBlack?:</strong> <span>"+that.Active.isBlack+"</span></li>";
-				rtn+="<li><strong>sign:</strong> <span>("+(that.Active.sign>0 ? "+" : "-")+")</span></li>";
-				rtn+="<li><strong>king square:</strong> <span>"+that.Active.kingBos+"</span></li>";
-				rtn+="<li><strong>checks:</strong> <span>"+that.Active.checks+"</span></li>";
-				rtn+="</ul>";
-				rtn+="</li>";
-				
-				rtn+="<li>";
-				rtn+="<strong>Non Active</strong>";
-				rtn+="<ul>";
-				rtn+="<li><strong>isBlack?:</strong> <span>"+that.NonActive.isBlack+"</span></li>";
-				rtn+="<li><strong>sign:</strong> <span>("+(that.NonActive.sign>0 ? "+" : "-")+")</span></li>";
-				rtn+="<li><strong>king square:</strong> <span>"+that.NonActive.kingBos+"</span></li>";
-				rtn+="<li><strong>checks:</strong> <span>"+that.NonActive.checks+"</span></li>";
-				rtn+="</ul>";
-				rtn+="</li>";
-				
-				rtn+="<li><strong>White castling:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.WCastling).toUpperCase() || "-")+"</span></li>";
-				rtn+="<li><strong>Black castling:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.BCastling) || "-")+"</span></li>";
-				rtn+="<li><strong>Half moves:</strong> <span>"+that.HalfMove+"</span></li>";
-				rtn+="<li><strong>Full moves:</strong> <span>"+that.FullMove+"</span></li>";
-				rtn+="<li><strong>Current move:</strong> <span>"+that.CurrentMove+"</span></li>";
-				rtn+="<li><strong>Initial full move:</strong> <span>"+that.InitialFullMove+"</span></li>";
-				rtn+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.PromoteTo*Ic.getSign(that.Active.isBlack))+"</span></li>";
-				rtn+="<li><strong>Selected square:</strong> <span>"+(that.SelectedBos || "-")+"</span></li>";
-				rtn+="<li><strong>Material difference:</strong> <span>{w:["+that.MaterialDiff.w.join(", ")+"], b:["+that.MaterialDiff.b.join(", ")+"]}</span></li>";
-				
-				rtn+="<li>";
-				rtn+="<strong>Squares</strong>";
-				rtn+="<ul>";
-				
-				for(i=0; i<8; i++){//0...7
-					current_row=[];
-					
-					for(j=0; j<8; j++){//0...7
-						current_square=that.getSquare([i, j]);
-						
-						temp=""+current_square.val;
-						
-						if(temp.length===1){
-							temp=" "+temp;
-						}
-						
-						current_row.push("<span title='"+(current_square.bos.toUpperCase()+" = "+(current_square.className || "empty"))+"'>"+temp+"</span>");
-					}
-					
-					rtn+="<li><strong>A"+(8-i)+"-H"+(8-i)+":</strong> "+current_row.join(" | ")+"</li>";
-				}
-				
-				rtn+="</ul>";
-				rtn+="</li>";
-				
-				rtn+="<li><strong>FEN:</strong> <span>"+that.Fen+"</span></li>";
-				
-				return rtn;
-			}
-			
 			if(!that.IsHidden){
 				is_new_html=!$("#ic_id_main").length;
 				
@@ -227,7 +232,7 @@
 						
 						if(Ic.sameSquare(that.SelectedBos, current_bos)){
 							that.SelectedBos="";
-							$("#ic_id_objinfo").html(_getObjInfoHTML());
+							_refreshDebug.apply(that, []);
 							need_highlight=false;
 						}else{
 							if(that.moveCaller(that.SelectedBos, current_bos)){
@@ -253,7 +258,7 @@
 							}
 						}
 						
-						$("#ic_id_objinfo").html(_getObjInfoHTML());
+						_refreshDebug.apply(that, []);
 					}
 				});
 				
@@ -324,15 +329,13 @@
 				
 				$("#ic_id_rotate").unbind("click").click(function(){
 					that.toggleIsRotated();
-					refreshBoard.apply(that, [0]);
 				});
 				
 				$("#ic_id_promote").unbind("change").change(function(){
 					that.setPromoteTo($(this).val());
-					$("#ic_id_objinfo").html(_getObjInfoHTML());
 				});
 				
-				(function(){//reset piece classes
+				(function(){//update piece classes and material difference
 					var i, j, len, current_square, current_diff, captured_html, new_class, square_class;
 					
 					for(i=0; i<8; i++){//0...7
@@ -435,8 +438,7 @@
 				}
 				
 				that.SelectedBos="";
-				
-				$("#ic_id_objinfo").html(_getObjInfoHTML());
+				_refreshDebug.apply(that, []);
 			}
 		}
 		
