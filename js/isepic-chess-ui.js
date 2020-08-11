@@ -2,10 +2,12 @@
 
 /*jshint indent:4, quotmark:double, onevar:true, undef:true, unused:true, trailing:true, jquery:true, curly:true, latedef:nofunc, bitwise:false, sub:true, eqeqeq:true, esversion:6 */
 
-(function(win, $, Ic){
+(function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.3.2";
+		var _VERSION="1.3.3";
 		var _ANIMATE_DURATION=300;
+		
+		//---------------- (apply) utilities
 		
 		function _refreshDebug(){
 			var i, j, that, temp, current_square, current_row, new_html;
@@ -98,6 +100,8 @@
 			
 			return that.setCurrentMove((is_goto ? move_index : diff), is_goto);
 		}
+		
+		//---------------- ic ui
 		
 		function navFirst(){
 			var that;
@@ -442,7 +446,7 @@
 			}
 		}
 		
-		return {
+		return (($!==null && Ic!==null) ? {
 			version : _VERSION,
 			navFirst : navFirst,
 			navPrevious : navPrevious,
@@ -450,10 +454,12 @@
 			navLast : navLast,
 			navLinkMove : navLinkMove,
 			refreshBoard : refreshBoard
-		};
+		} : null);
 	})();
 	
-	if(!win.IcUi){
-		win.IcUi=IcUi;
+	if(windw!==null){
+		if(!windw.IcUi){
+			windw.IcUi=IcUi;
+		}
 	}
-})(window, jQuery, Ic);
+})(((typeof window)!=="undefined" ? window : null), ((typeof jQuery)!=="undefined" ? jQuery : null), ((typeof Ic)!=="undefined" ? Ic : null));
