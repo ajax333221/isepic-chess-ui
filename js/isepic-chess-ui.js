@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.3.4";
+		var _VERSION="1.4.0";
 		var _ANIMATE_DURATION=300;
 		
 		//---------------- utilities
@@ -87,7 +87,7 @@
 				current_board=Ic.selectBoard(current_board_name);
 				
 				if(Ic.boardExists(current_board)){
-					if(current_board.IsHidden){
+					if(current_board.isHidden){
 						new_html+="<em class='ic_disabled'>"+current_board_name+"</em>";
 					}else if(current_board_name===board_name){
 						new_html+="<em>"+current_board_name+"</em>";
@@ -162,7 +162,7 @@
 			
 			move_index=Ic.utilityMisc.toInt(move_index);
 			
-			diff=(move_index-that.CurrentMove);
+			diff=(move_index-that.currentMove);
 			is_goto=(Math.abs(diff)!==1);
 			
 			return that.setCurrentMove((is_goto ? move_index : diff), is_goto);
@@ -173,8 +173,8 @@
 			
 			that=this;
 			
-			if((that.CurrentMove!==0 || is_reversed) && (that.CurrentMove!==(that.MoveList.length-1) || !is_reversed)){
-				temp=that.MoveList[that.CurrentMove+is_reversed];
+			if((that.currentMove!==0 || is_reversed) && (that.currentMove!==(that.moveList.length-1) || !is_reversed)){
+				temp=that.moveList[that.currentMove+is_reversed];
 				
 				initial_val=(is_reversed ? temp.FinalVal : temp.InitialVal);
 				final_val=(is_reversed ? temp.InitialVal : temp.FinalVal);
@@ -251,7 +251,7 @@
 			});
 		}
 		
-		function _reBindSquares(){
+		function _reBindsquares(){
 			var that;
 			
 			that=this;
@@ -262,20 +262,20 @@
 				need_highlight=true;
 				current_bos=$(this).attr("data-bos");
 				
-				if(that.SelectedBos){
+				if(that.selectedBos){
 					$(".ic_highlight").removeClass("ic_highlight");
 					$(".ic_currpiece").removeClass("ic_currpiece");
 					
-					if(Ic.sameSquare(that.SelectedBos, current_bos)){
-						that.SelectedBos="";
+					if(Ic.sameSquare(that.selectedBos, current_bos)){
+						that.selectedBos="";
 						_refreshDebug.apply(that, []);
 						need_highlight=false;
 					}else{
-						if(that.moveCaller(that.SelectedBos, current_bos)){
+						if(that.moveCaller(that.selectedBos, current_bos)){
 							refreshBoard.apply(that, [1]);
 							need_highlight=false;
 						}else{
-							that.SelectedBos="";
+							that.selectedBos="";
 							need_highlight=true;
 						}
 					}
@@ -286,7 +286,7 @@
 					len=legal_moves.length;
 					
 					if(len){
-						that.SelectedBos=current_bos;
+						that.selectedBos=current_bos;
 						$(this).addClass("ic_currpiece");
 						
 						for(i=0; i<len; i++){//0<len
@@ -307,7 +307,7 @@
 			for(i=0; i<8; i++){//0...7
 				for(j=0; j<8; j++){//0...7
 					new_class=((i+j)%2 ? "ic_bs" : "ic_ws");
-					current_square=that.getSquare(that.IsRotated ? [(7-i), (7-j)] : [i, j]);
+					current_square=that.getSquare(that.isRotated ? [(7-i), (7-j)] : [i, j]);
 					
 					square_class=current_square.className;
 					square_class=(square_class ? (" ic_"+square_class) : "");
@@ -325,7 +325,7 @@
 			captured_html="";
 			
 			for(i=0; i<2; i++){//0...1
-				current_diff=(that.IsRotated===!i ? that.MaterialDiff.w : that.MaterialDiff.b);
+				current_diff=(that.isRotated===!i ? that.materialDiff.w : that.materialDiff.b);
 				captured_html+=(i ? "<hr>" : "");
 				
 				for(j=0, len=current_diff.length; j<len; j++){//0<len
@@ -341,20 +341,20 @@
 			
 			that=this;
 			
-			move_list=that.MoveList;
+			move_list=that.moveList;
 			black_starts=Ic.utilityMisc.strContains(move_list[0].Fen, " b ");
 			
 			new_html="";
 			
 			for(i=1, len=move_list.length; i<len; i++){//1<len
 				new_html+=(i!==1 ? " " : "");
-				new_html+=(black_starts===!(i%2) ? ("<span class='ic_pgn_number'>"+(that.InitialFullMove+Math.floor((i+black_starts-1)/2))+".</span>") : "");
-				new_html+="<span class='"+(i!==that.CurrentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"'>"+move_list[i].PGNmove+"</span>";
+				new_html+=(black_starts===!(i%2) ? ("<span class='ic_pgn_number'>"+(that.initialFullMove+Math.floor((i+black_starts-1)/2))+".</span>") : "");
+				new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"'>"+move_list[i].PGNmove+"</span>";
 				new_html+=(move_list[i].PGNend ? (" <span class='ic_pgn_result'>"+move_list[i].PGNend+"</span>") : "");
 			}
 			
 			if(black_starts && new_html){
-				new_html="<span class='ic_pgn_number'>"+that.InitialFullMove+"...</span>"+new_html;
+				new_html="<span class='ic_pgn_number'>"+that.initialFullMove+"...</span>"+new_html;
 			}
 			
 			$("#ic_id_movelist").html(new_html || "...");
@@ -366,45 +366,45 @@
 			that=this;
 			
 			new_html="<li><strong>Selected board:</strong> <span>"+that.BoardName+"</span></li>";
-			new_html+="<li><strong>Is rotated?:</strong> <span>"+that.IsRotated+"</span></li>";
-			new_html+="<li><strong>Is check?:</strong> <span>"+that.IsCheck+"</span></li>";
-			new_html+="<li><strong>Is checkmate?:</strong> <span>"+that.IsCheckmate+"</span></li>";
-			new_html+="<li><strong>Is stalemate?:</strong> <span>"+that.IsStalemate+"</span></li>";
-			new_html+="<li><strong>Is threefold repetition?:</strong> <span>"+that.IsThreefold+"</span></li>";
-			new_html+="<li><strong>Is fifty-move rule?:</strong> <span>"+that.IsFiftyMove+"</span></li>";
-			new_html+="<li><strong>Is insufficient material?:</strong> <span>"+that.IsInsufficientMaterial+"</span></li>";
-			new_html+="<li><strong>In draw?:</strong> <span>"+that.InDraw+"</span></li>";
-			new_html+="<li><strong>En Passant square:</strong> <span>"+(that.EnPassantBos || "-")+"</span></li>";
+			new_html+="<li><strong>Is rotated?:</strong> <span>"+that.isRotated+"</span></li>";
+			new_html+="<li><strong>Is check?:</strong> <span>"+that.isCheck+"</span></li>";
+			new_html+="<li><strong>Is checkmate?:</strong> <span>"+that.isCheckmate+"</span></li>";
+			new_html+="<li><strong>Is stalemate?:</strong> <span>"+that.isStalemate+"</span></li>";
+			new_html+="<li><strong>Is threefold repetition?:</strong> <span>"+that.isThreefold+"</span></li>";
+			new_html+="<li><strong>Is fifty-move rule?:</strong> <span>"+that.isFiftyMove+"</span></li>";
+			new_html+="<li><strong>Is insufficient material?:</strong> <span>"+that.isInsufficientMaterial+"</span></li>";
+			new_html+="<li><strong>In draw?:</strong> <span>"+that.inDraw+"</span></li>";
+			new_html+="<li><strong>En Passant square:</strong> <span>"+(that.enPassantBos || "-")+"</span></li>";
 			
 			new_html+="<li>";
 			new_html+="<strong>Active</strong>";
 			new_html+="<ul>";
-			new_html+="<li><strong>isBlack?:</strong> <span>"+that.Active.isBlack+"</span></li>";
-			new_html+="<li><strong>sign:</strong> <span>("+(that.Active.sign>0 ? "+" : "-")+")</span></li>";
-			new_html+="<li><strong>king square:</strong> <span>"+that.Active.kingBos+"</span></li>";
-			new_html+="<li><strong>checks:</strong> <span>"+that.Active.checks+"</span></li>";
+			new_html+="<li><strong>isBlack?:</strong> <span>"+that.active.isBlack+"</span></li>";
+			new_html+="<li><strong>sign:</strong> <span>("+(that.active.sign>0 ? "+" : "-")+")</span></li>";
+			new_html+="<li><strong>king square:</strong> <span>"+that.active.kingBos+"</span></li>";
+			new_html+="<li><strong>checks:</strong> <span>"+that.active.checks+"</span></li>";
 			new_html+="</ul>";
 			new_html+="</li>";
 			
 			new_html+="<li>";
 			new_html+="<strong>Non Active</strong>";
 			new_html+="<ul>";
-			new_html+="<li><strong>isBlack?:</strong> <span>"+that.NonActive.isBlack+"</span></li>";
-			new_html+="<li><strong>sign:</strong> <span>("+(that.NonActive.sign>0 ? "+" : "-")+")</span></li>";
-			new_html+="<li><strong>king square:</strong> <span>"+that.NonActive.kingBos+"</span></li>";
-			new_html+="<li><strong>checks:</strong> <span>"+that.NonActive.checks+"</span></li>";
+			new_html+="<li><strong>isBlack?:</strong> <span>"+that.nonActive.isBlack+"</span></li>";
+			new_html+="<li><strong>sign:</strong> <span>("+(that.nonActive.sign>0 ? "+" : "-")+")</span></li>";
+			new_html+="<li><strong>king square:</strong> <span>"+that.nonActive.kingBos+"</span></li>";
+			new_html+="<li><strong>checks:</strong> <span>"+that.nonActive.checks+"</span></li>";
 			new_html+="</ul>";
 			new_html+="</li>";
 			
-			new_html+="<li><strong>White castling:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.WCastling).toUpperCase() || "-")+"</span></li>";
-			new_html+="<li><strong>Black castling:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.BCastling) || "-")+"</span></li>";
-			new_html+="<li><strong>Half moves:</strong> <span>"+that.HalfMove+"</span></li>";
-			new_html+="<li><strong>Full moves:</strong> <span>"+that.FullMove+"</span></li>";
-			new_html+="<li><strong>Current move:</strong> <span>"+that.CurrentMove+"</span></li>";
-			new_html+="<li><strong>Initial full move:</strong> <span>"+that.InitialFullMove+"</span></li>";
-			new_html+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.PromoteTo*Ic.getSign(that.Active.isBlack))+"</span></li>";
-			new_html+="<li><strong>Selected square:</strong> <span>"+(that.SelectedBos || "-")+"</span></li>";
-			new_html+="<li><strong>Material difference:</strong> <span>{w:["+that.MaterialDiff.w.join(", ")+"], b:["+that.MaterialDiff.b.join(", ")+"]}</span></li>";
+			new_html+="<li><strong>White castling:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.wCastling).toUpperCase() || "-")+"</span></li>";
+			new_html+="<li><strong>Black castling:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.bCastling) || "-")+"</span></li>";
+			new_html+="<li><strong>Half moves:</strong> <span>"+that.halfMove+"</span></li>";
+			new_html+="<li><strong>Full moves:</strong> <span>"+that.fullMove+"</span></li>";
+			new_html+="<li><strong>Current move:</strong> <span>"+that.currentMove+"</span></li>";
+			new_html+="<li><strong>Initial full move:</strong> <span>"+that.initialFullMove+"</span></li>";
+			new_html+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.promoteTo*Ic.getSign(that.active.isBlack))+"</span></li>";
+			new_html+="<li><strong>Selected square:</strong> <span>"+(that.selectedBos || "-")+"</span></li>";
+			new_html+="<li><strong>Material difference:</strong> <span>{w:["+that.materialDiff.w.join(", ")+"], b:["+that.materialDiff.b.join(", ")+"]}</span></li>";
 			
 			new_html+="<li>";
 			new_html+="<strong>Squares</strong>";
@@ -431,7 +431,7 @@
 			new_html+="</ul>";
 			new_html+="</li>";
 			
-			new_html+="<li><strong>FEN:</strong> <span>"+that.Fen+"</span></li>";
+			new_html+="<li><strong>FEN:</strong> <span>"+that.fen+"</span></li>";
 			new_html+="<li><strong>Version:</strong> <span>[Ic_v"+Ic.version+"] [IcUi_v"+_VERSION+"]</span></li>";
 			
 			$("#ic_id_objinfo").html(new_html);
@@ -452,7 +452,7 @@
 			
 			that=this;
 			
-			return _navHelper.apply(that, [that.CurrentMove-1]);
+			return _navHelper.apply(that, [that.currentMove-1]);
 		}
 		
 		function navNext(){
@@ -460,7 +460,7 @@
 			
 			that=this;
 			
-			return _navHelper.apply(that, [that.CurrentMove+1]);
+			return _navHelper.apply(that, [that.currentMove+1]);
 		}
 		
 		function navLast(){
@@ -468,7 +468,7 @@
 			
 			that=this;
 			
-			return _navHelper.apply(that, [that.MoveList.length-1]);
+			return _navHelper.apply(that, [that.moveList.length-1]);
 		}
 		
 		function navLinkMove(move_index){
@@ -484,21 +484,21 @@
 			
 			that=this;
 			
-			if(!that.IsHidden){
+			if(!that.isHidden){
 				_cancelAnimations();
 				
-				that.SelectedBos="";
+				that.selectedBos="";
 				
 				just_appended=_appendOnceToBody();
 				
-				if(just_appended || $("#ic_id_board .ic_tableb").hasClass("ic_rotated")!==that.IsRotated){
-					_refreshTable(that.IsRotated);
+				if(just_appended || $("#ic_id_board .ic_tableb").hasClass("ic_rotated")!==that.isRotated){
+					_refreshTable(that.isRotated);
 				}
 				
-				_reBindSquares.apply(that, []);
+				_reBindsquares.apply(that, []);
 				
-				$("#ic_id_fen").val(that.Fen);
-				$("#ic_id_promote").val(that.PromoteTo);
+				$("#ic_id_fen").val(that.fen);
+				$("#ic_id_promote").val(that.promoteTo);
 				
 				_refreshDebug.apply(that, []);
 				
@@ -516,15 +516,15 @@
 				_refreshMoveList.apply(that, []);
 				_reBindPgnLinks.apply(that, []);
 				
-				_refreshActiveDot(that.Active.isBlack);
+				_refreshActiveDot(that.active.isBlack);
 				
 				if(animation_type){
 					_animateCaller.apply(that, [animation_type<0]);
 				}
 				
-				if(that.CurrentMove!==0){
-					$("#ic_id_"+that.MoveList[that.CurrentMove].FromBos).addClass("ic_lastmove");
-					$("#ic_id_"+that.MoveList[that.CurrentMove].ToBos).addClass("ic_lastmove");
+				if(that.currentMove!==0){
+					$("#ic_id_"+that.moveList[that.currentMove].FromBos).addClass("ic_lastmove");
+					$("#ic_id_"+that.moveList[that.currentMove].ToBos).addClass("ic_lastmove");
 				}
 			}
 		}
