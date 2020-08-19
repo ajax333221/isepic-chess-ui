@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.4.0";
+		var _VERSION="1.5.0";
 		var _ANIMATE_DURATION=300;
 		
 		//---------------- utilities
@@ -365,7 +365,7 @@
 			
 			that=this;
 			
-			new_html="<li><strong>Selected board:</strong> <span>"+that.BoardName+"</span></li>";
+			new_html="<li><strong>Selected board:</strong> <span>"+that.boardName+"</span></li>";
 			new_html+="<li><strong>Is rotated?:</strong> <span>"+that.isRotated+"</span></li>";
 			new_html+="<li><strong>Is check?:</strong> <span>"+that.isCheck+"</span></li>";
 			new_html+="<li><strong>Is checkmate?:</strong> <span>"+that.isCheckmate+"</span></li>";
@@ -502,7 +502,7 @@
 				
 				_refreshDebug.apply(that, []);
 				
-				_refreshBoardTabs(that.BoardName);
+				_refreshBoardTabs(that.boardName);
 				_reBindBoardLinks();
 				
 				_reBindButtons.apply(that, []);
