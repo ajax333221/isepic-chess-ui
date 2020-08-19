@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.5.0";
+		var _VERSION="1.5.1";
 		var _ANIMATE_DURATION=300;
 		
 		//---------------- utilities
@@ -251,7 +251,7 @@
 			});
 		}
 		
-		function _reBindsquares(){
+		function _reBindSquares(){
 			var that;
 			
 			that=this;
@@ -495,7 +495,7 @@
 					_refreshTable(that.isRotated);
 				}
 				
-				_reBindsquares.apply(that, []);
+				_reBindSquares.apply(that, []);
 				
 				$("#ic_id_fen").val(that.fen);
 				$("#ic_id_promote").val(that.promoteTo);
