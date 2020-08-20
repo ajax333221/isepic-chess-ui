@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.5.1";
+		var _VERSION="1.5.2";
 		var _ANIMATE_DURATION=300;
 		
 		//---------------- utilities
@@ -375,24 +375,26 @@
 			new_html+="<li><strong>Is insufficient material?:</strong> <span>"+that.isInsufficientMaterial+"</span></li>";
 			new_html+="<li><strong>In draw?:</strong> <span>"+that.inDraw+"</span></li>";
 			new_html+="<li><strong>En Passant square:</strong> <span>"+(that.enPassantBos || "-")+"</span></li>";
+			new_html+="<li><strong>Active color:</strong> <span>"+that.activeColor+"</span></li>";
+			new_html+="<li><strong>Non active color:</strong> <span>"+that.nonActiveColor+"</span></li>";
 			
 			new_html+="<li>";
-			new_html+="<strong>Active</strong>";
+			new_html+="<strong>W</strong>";
 			new_html+="<ul>";
-			new_html+="<li><strong>isBlack?:</strong> <span>"+that.active.isBlack+"</span></li>";
-			new_html+="<li><strong>sign:</strong> <span>("+(that.active.sign>0 ? "+" : "-")+")</span></li>";
-			new_html+="<li><strong>king square:</strong> <span>"+that.active.kingBos+"</span></li>";
-			new_html+="<li><strong>checks:</strong> <span>"+that.active.checks+"</span></li>";
+			new_html+="<li><strong>isBlack?:</strong> <span>"+that.w.isBlack+"</span></li>";
+			new_html+="<li><strong>sign:</strong> <span>("+(that.w.sign>0 ? "+" : "-")+")</span></li>";
+			new_html+="<li><strong>king square:</strong> <span>"+that.w.kingBos+"</span></li>";
+			new_html+="<li><strong>checks:</strong> <span>"+that.w.checks+"</span></li>";
 			new_html+="</ul>";
 			new_html+="</li>";
 			
 			new_html+="<li>";
-			new_html+="<strong>Non Active</strong>";
+			new_html+="<strong>B</strong>";
 			new_html+="<ul>";
-			new_html+="<li><strong>isBlack?:</strong> <span>"+that.nonActive.isBlack+"</span></li>";
-			new_html+="<li><strong>sign:</strong> <span>("+(that.nonActive.sign>0 ? "+" : "-")+")</span></li>";
-			new_html+="<li><strong>king square:</strong> <span>"+that.nonActive.kingBos+"</span></li>";
-			new_html+="<li><strong>checks:</strong> <span>"+that.nonActive.checks+"</span></li>";
+			new_html+="<li><strong>isBlack?:</strong> <span>"+that.b.isBlack+"</span></li>";
+			new_html+="<li><strong>sign:</strong> <span>("+(that.b.sign>0 ? "+" : "-")+")</span></li>";
+			new_html+="<li><strong>king square:</strong> <span>"+that.b.kingBos+"</span></li>";
+			new_html+="<li><strong>checks:</strong> <span>"+that.b.checks+"</span></li>";
 			new_html+="</ul>";
 			new_html+="</li>";
 			
@@ -402,7 +404,7 @@
 			new_html+="<li><strong>Full moves:</strong> <span>"+that.fullMove+"</span></li>";
 			new_html+="<li><strong>Current move:</strong> <span>"+that.currentMove+"</span></li>";
 			new_html+="<li><strong>Initial full move:</strong> <span>"+that.initialFullMove+"</span></li>";
-			new_html+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.promoteTo*Ic.getSign(that.active.isBlack))+"</span></li>";
+			new_html+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.promoteTo*that[that.activeColor].sign)+"</span></li>";
 			new_html+="<li><strong>Selected square:</strong> <span>"+(that.selectedBos || "-")+"</span></li>";
 			new_html+="<li><strong>Material difference:</strong> <span>{w:["+that.materialDiff.w.join(", ")+"], b:["+that.materialDiff.b.join(", ")+"]}</span></li>";
 			
@@ -516,7 +518,7 @@
 				_refreshMoveList.apply(that, []);
 				_reBindPgnLinks.apply(that, []);
 				
-				_refreshActiveDot(that.active.isBlack);
+				_refreshActiveDot(that[that.activeColor].isBlack);
 				
 				if(animation_type){
 					_animateCaller.apply(that, [animation_type<0]);
