@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.5.3";
+		var _VERSION="1.5.4";
 		var _ANIMATE_DURATION=300;
 		
 		//---------------- utilities
@@ -367,6 +367,7 @@
 			
 			new_html="<li><strong>Selected board:</strong> <span>"+that.boardName+"</span></li>";
 			new_html+="<li><strong>Is rotated?:</strong> <span>"+that.isRotated+"</span></li>";
+			new_html+="<li><strong>Number of checks:</strong> <span>"+that.checks+"</span></li>";
 			new_html+="<li><strong>Is check?:</strong> <span>"+that.isCheck+"</span></li>";
 			new_html+="<li><strong>Is checkmate?:</strong> <span>"+that.isCheckmate+"</span></li>";
 			new_html+="<li><strong>Is stalemate?:</strong> <span>"+that.isStalemate+"</span></li>";
@@ -381,22 +382,20 @@
 			new_html+="<li>";
 			new_html+="<strong>W</strong>";
 			new_html+="<ul>";
-			new_html+="<li><strong>isBlack?:</strong> <span>"+that.w.isBlack+"</span></li>";
+			new_html+="<li><strong>Is black?:</strong> <span>"+that.w.isBlack+"</span></li>";
 			new_html+="<li><strong>sign:</strong> <span>("+(that.w.sign>0 ? "+" : "-")+")</span></li>";
 			new_html+="<li><strong>king square:</strong> <span>"+that.w.kingBos+"</span></li>";
 			new_html+="<li><strong>castling rights:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.w.castling).toUpperCase() || "-")+"</span></li>";
-			new_html+="<li><strong>checks:</strong> <span>"+that.w.checks+"</span></li>";
 			new_html+="</ul>";
 			new_html+="</li>";
 			
 			new_html+="<li>";
 			new_html+="<strong>B</strong>";
 			new_html+="<ul>";
-			new_html+="<li><strong>isBlack?:</strong> <span>"+that.b.isBlack+"</span></li>";
+			new_html+="<li><strong>Is black?:</strong> <span>"+that.b.isBlack+"</span></li>";
 			new_html+="<li><strong>sign:</strong> <span>("+(that.b.sign>0 ? "+" : "-")+")</span></li>";
 			new_html+="<li><strong>king square:</strong> <span>"+that.b.kingBos+"</span></li>";
 			new_html+="<li><strong>castling rights:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.b.castling) || "-")+"</span></li>";
-			new_html+="<li><strong>checks:</strong> <span>"+that.b.checks+"</span></li>";
 			new_html+="</ul>";
 			new_html+="</li>";
 			
