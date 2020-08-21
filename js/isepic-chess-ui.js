@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.5.2";
+		var _VERSION="1.5.3";
 		var _ANIMATE_DURATION=300;
 		
 		//---------------- utilities
@@ -384,6 +384,7 @@
 			new_html+="<li><strong>isBlack?:</strong> <span>"+that.w.isBlack+"</span></li>";
 			new_html+="<li><strong>sign:</strong> <span>("+(that.w.sign>0 ? "+" : "-")+")</span></li>";
 			new_html+="<li><strong>king square:</strong> <span>"+that.w.kingBos+"</span></li>";
+			new_html+="<li><strong>castling rights:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.w.castling).toUpperCase() || "-")+"</span></li>";
 			new_html+="<li><strong>checks:</strong> <span>"+that.w.checks+"</span></li>";
 			new_html+="</ul>";
 			new_html+="</li>";
@@ -394,12 +395,11 @@
 			new_html+="<li><strong>isBlack?:</strong> <span>"+that.b.isBlack+"</span></li>";
 			new_html+="<li><strong>sign:</strong> <span>("+(that.b.sign>0 ? "+" : "-")+")</span></li>";
 			new_html+="<li><strong>king square:</strong> <span>"+that.b.kingBos+"</span></li>";
+			new_html+="<li><strong>castling rights:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.b.castling) || "-")+"</span></li>";
 			new_html+="<li><strong>checks:</strong> <span>"+that.b.checks+"</span></li>";
 			new_html+="</ul>";
 			new_html+="</li>";
 			
-			new_html+="<li><strong>White castling:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.wCastling).toUpperCase() || "-")+"</span></li>";
-			new_html+="<li><strong>Black castling:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.bCastling) || "-")+"</span></li>";
 			new_html+="<li><strong>Half moves:</strong> <span>"+that.halfMove+"</span></li>";
 			new_html+="<li><strong>Full moves:</strong> <span>"+that.fullMove+"</span></li>";
 			new_html+="<li><strong>Current move:</strong> <span>"+that.currentMove+"</span></li>";

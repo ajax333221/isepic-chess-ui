@@ -1,6 +1,6 @@
 {
   "name": "isepic-chess-ui",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "title": "isepic-chess-ui.js",
   "description": "UI of isepic-chess.js",
   "main": "js/isepic-chess-ui.js",
@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "jquery": ">=3.3.1",
-    "isepic-chess": ">=3.6.1"
+    "isepic-chess": ">=3.7.0"
   },
   "bugs": {
     "url": "https://github.com/ajax333221/isepic-chess-ui/issues"
