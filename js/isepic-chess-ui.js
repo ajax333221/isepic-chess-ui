@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.5.4";
+		var _VERSION="1.5.5";
 		var _ANIMATE_DURATION=300;
 		
 		//---------------- utilities
@@ -337,24 +337,25 @@
 		}
 		
 		function _refreshMoveList(){
-			var i, len, that, move_list, black_starts, new_html;
+			var i, len, that, move_list, black_starts, initial_full_move, new_html;
 			
 			that=this;
 			
 			move_list=that.moveList;
 			black_starts=Ic.utilityMisc.strContains(move_list[0].Fen, " b ");
+			initial_full_move=(that.fullMove-Math.floor((that.currentMove+black_starts-1)/2)+(black_starts===!(that.currentMove%2))-1);
 			
 			new_html="";
 			
 			for(i=1, len=move_list.length; i<len; i++){//1<len
 				new_html+=(i!==1 ? " " : "");
-				new_html+=(black_starts===!(i%2) ? ("<span class='ic_pgn_number'>"+(that.initialFullMove+Math.floor((i+black_starts-1)/2))+".</span>") : "");
+				new_html+=(black_starts===!(i%2) ? ("<span class='ic_pgn_number'>"+(initial_full_move+Math.floor((i+black_starts-1)/2))+".</span>") : "");
 				new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"'>"+move_list[i].PGNmove+"</span>";
 				new_html+=(move_list[i].PGNend ? (" <span class='ic_pgn_result'>"+move_list[i].PGNend+"</span>") : "");
 			}
 			
 			if(black_starts && new_html){
-				new_html="<span class='ic_pgn_number'>"+that.initialFullMove+"...</span>"+new_html;
+				new_html="<span class='ic_pgn_number'>"+initial_full_move+"...</span>"+new_html;
 			}
 			
 			$("#ic_id_movelist").html(new_html || "...");
@@ -402,7 +403,6 @@
 			new_html+="<li><strong>Half moves:</strong> <span>"+that.halfMove+"</span></li>";
 			new_html+="<li><strong>Full moves:</strong> <span>"+that.fullMove+"</span></li>";
 			new_html+="<li><strong>Current move:</strong> <span>"+that.currentMove+"</span></li>";
-			new_html+="<li><strong>Initial full move:</strong> <span>"+that.initialFullMove+"</span></li>";
 			new_html+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.promoteTo*that[that.activeColor].sign)+"</span></li>";
 			new_html+="<li><strong>Selected square:</strong> <span>"+(that.selectedBos || "-")+"</span></li>";
 			new_html+="<li><strong>Material difference:</strong> <span>{w:["+that.materialDiff.w.join(", ")+"], b:["+that.materialDiff.b.join(", ")+"]}</span></li>";
