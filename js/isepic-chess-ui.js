@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.5.7";
+		var _VERSION="1.5.8";
 		
 		var _ANIMATE_DURATION=300;
 		
@@ -301,18 +301,19 @@
 		}
 		
 		function _refreshPieceClasses(){
-			var i, j, that, current_square, square_class;
+			var i, j, that, reset_class, current_square, square_class;
 			
 			that=this;
 			
 			for(i=0; i<8; i++){//0...7
 				for(j=0; j<8; j++){//0...7
+					reset_class=((i+j)%2 ? "ic_bs" : "ic_ws");
 					current_square=that.getSquare(that.isRotated ? [(7-i), (7-j)] : [i, j]);
 					
 					square_class=current_square.className;
 					square_class=(square_class ? (" ic_"+square_class) : "");
 					
-					$("#ic_id_"+current_square.bos).html("<div class='"+("ic_piece_holder"+square_class)+"'></div>");
+					$("#ic_id_"+current_square.bos).attr("class", reset_class).html("<div class='"+("ic_piece_holder"+square_class)+"'></div>");
 				}
 			}
 		}
@@ -518,8 +519,6 @@
 				if(animation_type){
 					_animateCaller.apply(that, [animation_type<0]);
 				}
-				
-				$(".ic_lastmove").removeClass("ic_lastmove");
 				
 				if(that.currentMove!==0){
 					$("#ic_id_"+that.moveList[that.currentMove].FromBos).addClass("ic_lastmove");
