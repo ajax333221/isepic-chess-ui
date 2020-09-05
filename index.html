@@ -28,8 +28,8 @@
 					promoteTo : "b"
 				});
 				
-				//you can initialize a board without assigning to any variable
-				//and create a reference later on with Ic.selectBoard()
+				//you can initialize a board without assigning it to a variable
+				//and later create a reference to it with Ic.selectBoard()
 				Ic.initBoard({boardName : "other_copy"});
 				oc_board=Ic.selectBoard("other_copy");
 				
@@ -48,18 +48,32 @@
 				});
 				
 				other_board.moveCaller("f2", "f4");
+				
+				//you can call a board method from Ic.selectBoard(string) too (but if you typo
+				//the name you will be calling null.<boardMethod>(...) and crashing errors will happen,
+				//the safe way is to check if the board is !== than null before calling board methods)
 				Ic.selectBoard("other").moveCaller("e7", "e6");
-				other_board.moveCaller([6, 6], [4, 6]);//[6, 6]="g2", [4, 6]="g4"
+				
+				//you can pass other types of squares too ([6, 6]="g2")
+				other_board.moveCaller([6, 6], other_board.getSquare("g4"));
+				
+				//Ic.selectBoard(board_obj) pointless but works
 				Ic.selectBoard(other_board).moveCaller("d8", "h4");
-				other_board.setCurrentMove(-1, false);//go to previous move "2.g4"
 				
-				oc_board.cloneBoardFrom(other_board);//alternatively -> other_board.cloneBoardTo(oc_board);
+				//alternatively -> other_board.setCurrentMove(0, true)
+				other_board.navFirst();
 				
+				//alternatively -> other_board.cloneBoardTo(oc_board)
+				//the parameter can accept a board name (string) too
+				oc_board.cloneBoardFrom(other_board);
+				
+				//tip: instead of toggle you can set a specific value by passing
+				//boolean true = set rotated and boolean false = set not rotated
 				rff_board.toggleIsRotated();
 				
-				Ic.utilityMisc.consoleLog(main_board.ascii());//text diagram board
-				
-				main_board.refreshBoard();//if the UI is not included, this line will be silently ignored
+				//refresh the board to change to it
+				//many methods refresh the boards, to be safe on which will be displayed just refresh it again
+				main_board.refreshBoard();
 			});
 		</script>
 	</head>
