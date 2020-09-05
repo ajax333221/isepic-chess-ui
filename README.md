@@ -43,7 +43,28 @@ $(function(){
 ```
 <sub>**Note:** Documentation for `Ic.initBoard()` can be found [here](https://github.com/ajax333221/isepic-chess#documentation).</sub>
 
-3. Open the **.html** file.
+3. Add the elements you need (don't add them more than once) inside `<body>`.
+```
+<div id="ic_id_board"></div>
+<div id="ic_id_captureds"></div>
+<input id="ic_id_fen" value="" type="text">
+<input id="ic_id_nav_first" value="|<" type="button">
+<input id="ic_id_nav_previous" value="<" type="button">
+<input id="ic_id_nav_next" value=">" type="button">
+<input id="ic_id_nav_last" value=">|" type="button">
+<input id="ic_id_rotate" value="rotate" type="button">
+<select id="ic_id_promote">
+	<option value="5" selected="selected">queen</option>
+	<option value="4">rook</option>
+	<option value="3">bishop</option>
+	<option value="2">knight</option>
+</select>
+<div id="ic_id_tabs"></div>
+<div id="ic_id_movelist"></div>
+```
+<sub>**Note:** there are classes that enhance them (no documentation for this yet, see `index.html` and `isepic-chess-ui.css` for help).</sub>
+
+4. Open the **.html** file.
 
 Demo
 -------------
@@ -88,7 +109,6 @@ To do
 - Adaptable board size
 - Create, rename and delete boards through the UI
 - Set-up position mode
-- Break down components for customizability
 - Variety of themes and chess-fonts
 
 Copyright and license

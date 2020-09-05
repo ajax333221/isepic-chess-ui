@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.6.0";
+		var _VERSION="1.6.1";
 		
 		var _ANIMATE_DURATION=300;
 		
@@ -66,10 +66,12 @@
 				temp.attr("data-binded", "1");
 				
 				temp.click(function(){
-					$(this).text("Debug "+($("#ic_id_objinfo").is(":visible") ? "▲" : "▼"));
-					$("#ic_id_objinfo").toggle();
+					$(this).text("Debug "+($("#ic_id_debug").is(":visible") ? "▲" : "▼"));
+					$("#ic_id_debug").toggle();
 					
-					return false;
+					if($(this).prop("tagName")==="A"){
+						return false;
+					}
 				});
 			}
 		}
@@ -94,7 +96,9 @@
 					refreshBoard.apply(board, [0]);
 				}
 				
-				return false;
+				if($(this).prop("tagName")==="A"){
+					return false;
+				}
 			});
 		}
 		
@@ -137,7 +141,7 @@
 			
 			if($("#ic_id_board").length){
 				new_html="<table cellpadding='0' cellspacing='0'>";
-				new_html+="<tr><td class='ic_label ic_top_border ic_left_border'></td><td class='ic_label ic_top_border'>"+(is_rotated ? "hgfedcba" : "abcdefgh").split("").join("</td><td class='ic_label ic_top_border'>")+"</td><td class='"+("ic_label ic_top_border ic_right_border ic_dot "+(is_rotated ? "ic_wside" : "ic_bside"))+"'>◘</td><td class='ic_captureds' rowspan='10'></td></tr>";
+				new_html+="<tr><td class='ic_label ic_top_border ic_left_border'></td><td class='ic_label ic_top_border'>"+(is_rotated ? "hgfedcba" : "abcdefgh").split("").join("</td><td class='ic_label ic_top_border'>")+"</td><td class='"+("ic_label ic_top_border ic_right_border ic_dot "+(is_rotated ? "ic_wside" : "ic_bside"))+"'>◘</td></tr>";
 				
 				for(i=0; i<8; i++){//0...7
 					rank_bos=(is_rotated ? (i+1) : (8-i));
@@ -239,22 +243,42 @@
 			
 			$("#ic_id_nav_first").unbind("click").click(function(){
 				navFirst.apply(that, []);
+				
+				if($(this).prop("tagName")==="A"){
+					return false;
+				}
 			});
 			
 			$("#ic_id_nav_previous").unbind("click").click(function(){
 				navPrevious.apply(that, []);
+				
+				if($(this).prop("tagName")==="A"){
+					return false;
+				}
 			});
 			
 			$("#ic_id_nav_next").unbind("click").click(function(){
 				navNext.apply(that, []);
+				
+				if($(this).prop("tagName")==="A"){
+					return false;
+				}
 			});
 			
 			$("#ic_id_nav_last").unbind("click").click(function(){
 				navLast.apply(that, []);
+				
+				if($(this).prop("tagName")==="A"){
+					return false;
+				}
 			});
 			
 			$("#ic_id_rotate").unbind("click").click(function(){
 				that.toggleIsRotated();
+				
+				if($(this).prop("tagName")==="A"){
+					return false;
+				}
 			});
 		}
 		
@@ -327,23 +351,27 @@
 		}
 		
 		function _refreshMaterialDifference(){
-			var i, j, len, that, current_side, captured_html;
+			var i, j, len, that, temp, current_side, captured_html;
 			
 			that=this;
 			
-			if($("#ic_id_board .ic_captureds").length){
+			if($("#ic_id_captureds").length){
 				captured_html="";
 				
 				for(i=0; i<2; i++){//0...1
 					current_side=(that.isRotated===!i ? that.materialDiff.w : that.materialDiff.b);
 					captured_html+=(i ? "<hr>" : "");
 					
+					temp="";
+					
 					for(j=0, len=current_side.length; j<len; j++){//0<len
-						captured_html+="<img src='"+("./css/images/"+Ic.toClassName(current_side[j])+".png")+"' width='20' height='20'>";
+						temp+="<img src='"+("./css/images/"+Ic.toClassName(current_side[j])+".png")+"' width='20' height='20'>";
 					}
+					
+					captured_html+=(temp || "-");
 				}
 				
-				$("#ic_id_board .ic_captureds").html(captured_html);
+				$("#ic_id_captureds").html(captured_html);
 			}
 		}
 		
@@ -370,7 +398,9 @@
 					new_html="<span class='ic_pgn_number'>"+initial_full_move+"...</span>"+new_html;
 				}
 				
-				$("#ic_id_movelist").html(new_html || "...");
+				new_html=(new_html || "-");
+				
+				$("#ic_id_movelist").html(new_html);
 			}
 		}
 		
@@ -379,8 +409,9 @@
 			
 			that=this;
 			
-			if($("#ic_id_objinfo").length){
-				new_html="<li><strong>Selected board:</strong> <span>"+that.boardName+"</span></li>";
+			if($("#ic_id_debug").length){
+				new_html="<ul>";
+				new_html+="<li><strong>Selected board:</strong> <span>"+that.boardName+"</span></li>";
 				new_html+="<li><strong>Is rotated?:</strong> <span>"+that.isRotated+"</span></li>";
 				new_html+="<li><strong>Number of checks:</strong> <span>"+that.checks+"</span></li>";
 				new_html+="<li><strong>Is check?:</strong> <span>"+that.isCheck+"</span></li>";
@@ -444,8 +475,9 @@
 				
 				new_html+="<li><strong>FEN:</strong> <span>"+that.fen+"</span></li>";
 				new_html+="<li><strong>Version:</strong> <span>[Ic_v"+Ic.version+"] [IcUi_v"+_VERSION+"]</span></li>";
+				new_html+="</ul>";
 				
-				$("#ic_id_objinfo").html(new_html);
+				$("#ic_id_debug").html(new_html);
 			}
 		}
 		
