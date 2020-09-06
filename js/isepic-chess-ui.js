@@ -4,9 +4,10 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.6.1";
+		var _VERSION="1.7.0";
 		
 		var _ANIMATE_DURATION=300;
+		var _MATERIAL_DIFF_PX=15;
 		
 		//---------------- utilities
 		
@@ -15,13 +16,16 @@
 		}
 		
 		function _animatePiece(from_bos, to_bos, piece_class, promotion_class){
-			var temp, piece_elm, from_square, to_square, old_offset, new_offset;
+			var temp, piece_elm, from_square, to_square, old_offset, new_offset, old_h, old_w;
 			
 			from_square=$("#ic_id_"+from_bos);
 			to_square=$("#ic_id_"+to_bos);
 			
 			old_offset=from_square.children(".ic_piece_holder").offset();
 			new_offset=to_square.children(".ic_piece_holder").offset();
+			
+			old_h=from_square.height();
+			old_w=from_square.width();
 			
 			to_square.html("<div class='"+("ic_piece_holder"+piece_class)+"'></div>");
 			piece_elm=to_square.children(".ic_piece_holder");
@@ -32,8 +36,10 @@
 			
 			temp.css({
 				"position" : "absolute",
-				"left" : old_offset.left,
 				"top" : old_offset.top,
+				"left" : old_offset.left,
+				"height" : old_h,
+				"width" : old_w,
 				"zIndex" : 1000
 			}).animate({
 				"top" : new_offset.top,
@@ -141,12 +147,12 @@
 			
 			if($("#ic_id_board").length){
 				new_html="<table cellpadding='0' cellspacing='0'>";
-				new_html+="<tr><td class='ic_label ic_top_border ic_left_border'></td><td class='ic_label ic_top_border'>"+(is_rotated ? "hgfedcba" : "abcdefgh").split("").join("</td><td class='ic_label ic_top_border'>")+"</td><td class='"+("ic_label ic_top_border ic_right_border ic_dot "+(is_rotated ? "ic_wside" : "ic_bside"))+"'>◘</td></tr>";
+				new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_wside" : "ic_bside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
 				
 				for(i=0; i<8; i++){//0...7
 					rank_bos=(is_rotated ? (i+1) : (8-i));
 					
-					new_html+="<tr><td class='ic_label ic_left_border'>"+rank_bos+"</td>";
+					new_html+="<tr><td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>";
 					
 					for(j=0; j<8; j++){//0...7
 						current_bos=Ic.toBos(is_rotated ? [(7-i), (7-j)] : [i, j]);
@@ -154,10 +160,10 @@
 						new_html+="<td id='"+("ic_id_"+current_bos)+"' class='"+((i+j)%2 ? "ic_bs" : "ic_ws")+"' data-bos='"+current_bos+"'><div class='ic_piece_holder'></div></td>";
 					}
 					
-					new_html+="<td class='ic_label ic_right_border'>"+rank_bos+"</td></tr>";
+					new_html+="<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td></tr>";
 				}
 				
-				new_html+="<tr><td class='ic_label ic_bottom_border ic_left_border'></td><td class='ic_label ic_bottom_border'>"+(is_rotated ? "hgfedcba" : "abcdefgh").split("").join("</td><td class='ic_label ic_bottom_border'>")+"</td><td class='"+("ic_label ic_right_border ic_bottom_border ic_dot "+(is_rotated ? "ic_bside" : "ic_wside"))+"'>◘</td></tr>";
+				new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_bside" : "ic_wside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
 				new_html+="</table>";
 				
 				$("#ic_id_board").attr("class", (is_rotated ? "ic_rotated" : "")).html(new_html);
@@ -351,27 +357,27 @@
 		}
 		
 		function _refreshMaterialDifference(){
-			var i, j, len, that, temp, current_side, captured_html;
+			var i, j, len, that, temp, current_side, matdiff_html;
 			
 			that=this;
 			
-			if($("#ic_id_captureds").length){
-				captured_html="";
+			if($("#ic_id_materialdiff").length){
+				matdiff_html="";
 				
 				for(i=0; i<2; i++){//0...1
 					current_side=(that.isRotated===!i ? that.materialDiff.w : that.materialDiff.b);
-					captured_html+=(i ? "<hr>" : "");
+					matdiff_html+=(i ? "<hr>" : "");
 					
 					temp="";
 					
 					for(j=0, len=current_side.length; j<len; j++){//0<len
-						temp+="<img src='"+("./css/images/"+Ic.toClassName(current_side[j])+".png")+"' width='20' height='20'>";
+						temp+="<img src='"+("./css/images/"+Ic.toClassName(current_side[j])+".png")+"' width='"+_MATERIAL_DIFF_PX+"' height='"+_MATERIAL_DIFF_PX+"'>";
 					}
 					
-					captured_html+=(temp || "-");
+					matdiff_html+=(temp || "-");
 				}
 				
-				$("#ic_id_captureds").html(captured_html);
+				$("#ic_id_materialdiff").html(matdiff_html);
 			}
 		}
 		

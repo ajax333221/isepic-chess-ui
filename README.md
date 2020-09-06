@@ -46,7 +46,7 @@ $(function(){
 3. Add the elements you need (don't add them more than once) inside `<body>`.
 ```
 <div id="ic_id_board"></div>
-<div id="ic_id_captureds"></div>
+<div id="ic_id_materialdiff"></div>
 <input id="ic_id_fen" value="" type="text">
 <input id="ic_id_nav_first" value="|<" type="button">
 <input id="ic_id_nav_previous" value="<" type="button">
@@ -106,7 +106,7 @@ Function | Parameters | Return | Board refresh? | Description
 To do
 -------------
 
-- Adaptable board size
+- ~~Adaptable board size~~ (99% done, but labels stay the same font-size)
 - Create, rename and delete boards through the UI
 - Set-up position mode
 - Variety of themes and chess-fonts

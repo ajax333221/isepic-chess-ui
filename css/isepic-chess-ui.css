@@ -55,33 +55,30 @@ body{
 /*end(header) ---*/
 
 /*start(board) ---*/
+.ic_ui_board #ic_id_board, .ic_ui_board table, .ic_ui_board .ic_piece_holder, .ic_ui_board .ic_char{
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+
 .ic_ui_board{
 	color: #333;
 	font-size: 15px;
-	/*2020 border: 1px solid #bf817a;*/
-	/*2020 background: #f2c0bb;*/
-}
-
-.ic_ui_board table, .ic_ui_board tr, .ic_ui_board td{
-	margin: 0;
-	padding: 0;
+	border: 1px solid #ccc;
+	background: #e3e3e3;
 }
 
 .ic_ui_board td{
-	height: 39px;
-	width: 39px;
 	text-align: center;
 	vertical-align: middle;
 }
 
 .ic_ui_board .ic_piece_holder{
-	margin: 0;
-	padding: 0;
-	height: 39px;
-	width: 39px;
 	background-repeat: no-repeat;
 	background-size: 75%;
 	background-position: 50% 50%;
+	display: table;
 }
 
 .ic_ui_board .ic_ws{background-color: #93d798;}
@@ -109,24 +106,31 @@ body{
 .ic_ui_board .ic_wq{background-image: url('./images/wq.png');}
 .ic_ui_board .ic_wk{background-image: url('./images/wk.png');}
 
-.ic_ui_board .ic_top_border{border-top: 1px solid #a9a9a9;}
-.ic_ui_board .ic_right_border{border-right: 1px solid #a9a9a9;}
-.ic_ui_board .ic_bottom_border{border-bottom: 1px solid #a9a9a9;}
-.ic_ui_board .ic_left_border{border-left: 1px solid #a9a9a9;}
-
 .ic_ui_board .ic_label{
-	height: auto;
-	width: auto;
-	padding: 8px;
+	font-size: 12px;
 	font-weight: bold;
-	background: #e3e3e3;
-	color: #888;
+	color: #9bab9e;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+
+.ic_ui_board .ic_char{
+	position: relative;
+	top: 50%;
+	left: 50%;
+}
+
+.ic_ui_board .ic_char span{
+	height: 22px;
+	width: 22px;
+	line-height: 22px;
+	position: absolute;
+	top: -11px;
+	left: -11px;
 }
 
 .ic_ui_board .ic_dot{
@@ -142,8 +146,8 @@ body{
 }
 /*end(board) ---*/
 
-/*start(captureds) ---*/
-.ic_ui_captureds{
+/*start(materialdiff) ---*/
+.ic_ui_materialdiff{
 	color: #333;
 	font-size: 15px;
 	/*2020 border: 1px solid #8cd4c6;*/
@@ -151,20 +155,20 @@ body{
 	text-align: left;
 }
 
-.ic_ui_captureds hr{
+.ic_ui_materialdiff hr{
 	margin: 2px 0;
 	padding: 0;
 	border: 0;
 	border-top: 1px solid #e5e5e5;
 }
 
-.ic_ui_captureds img{
+.ic_ui_materialdiff img{
 	margin: 2px;
 	background: transparent;
 	opacity: 0.5;
 	filter: alpha(opacity=50);
 }
-/*end(captureds) ---*/
+/*end(materialdiff) ---*/
 
 /*start(controls) ---*/
 .ic_ui_controls{
