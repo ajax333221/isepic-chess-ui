@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.7.0";
+		var _VERSION="1.7.1";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -18,8 +18,8 @@
 		function _animatePiece(from_bos, to_bos, piece_class, promotion_class){
 			var temp, piece_elm, from_square, to_square, old_offset, new_offset, old_h, old_w;
 			
-			from_square=$("#ic_id_"+from_bos);
-			to_square=$("#ic_id_"+to_bos);
+			from_square=$("#ic_ui_"+from_bos);
+			to_square=$("#ic_ui_"+to_bos);
 			
 			old_offset=from_square.children(".ic_piece_holder").offset();
 			new_offset=to_square.children(".ic_piece_holder").offset();
@@ -30,7 +30,7 @@
 			to_square.html("<div class='"+("ic_piece_holder"+piece_class)+"'></div>");
 			piece_elm=to_square.children(".ic_piece_holder");
 			
-			temp=piece_elm.clone().appendTo("#ic_id_board");
+			temp=piece_elm.clone().appendTo("#ic_ui_board");
 			
 			piece_elm.hide().attr("class", ("ic_piece_holder"+(promotion_class || piece_class)));
 			
@@ -56,7 +56,7 @@
 		function _bindOnce(){
 			var temp;
 			
-			temp=$("#ic_id_fen");
+			temp=$("#ic_ui_fen");
 			
 			if(temp.length && !temp.attr("data-binded")){
 				temp.attr("data-binded", "1");
@@ -66,14 +66,14 @@
 				});
 			}
 			
-			temp=$("#ic_id_debug_toggle");
+			temp=$("#ic_ui_debug_toggle");
 			
 			if(temp.length && !temp.attr("data-binded")){
 				temp.attr("data-binded", "1");
 				
 				temp.click(function(){
-					$(this).text("Debug "+($("#ic_id_debug").is(":visible") ? "▲" : "▼"));
-					$("#ic_id_debug").toggle();
+					$(this).text("Debug "+($("#ic_ui_debug").is(":visible") ? "▲" : "▼"));
+					$("#ic_ui_debug").toggle();
 					
 					if($(this).prop("tagName")==="A"){
 						return false;
@@ -116,7 +116,7 @@
 		function _refreshBoardTabs(board_name){
 			var i, len, current_board, current_board_name, board_list, new_html;
 			
-			if($("#ic_id_tabs").length){
+			if($("#ic_ui_tabs").length){
 				board_list=Ic.getBoardNames();
 				new_html="<strong>Board list:</strong> ";
 				
@@ -138,14 +138,14 @@
 					}
 				}
 				
-				$("#ic_id_tabs").html(new_html);
+				$("#ic_ui_tabs").html(new_html);
 			}
 		}
 		
 		function _refreshTable(is_rotated){
 			var i, j, rank_bos, current_bos, new_html;
 			
-			if($("#ic_id_board").length){
+			if($("#ic_ui_board").length){
 				new_html="<table cellpadding='0' cellspacing='0'>";
 				new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_wside" : "ic_bside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
 				
@@ -157,7 +157,7 @@
 					for(j=0; j<8; j++){//0...7
 						current_bos=Ic.toBos(is_rotated ? [(7-i), (7-j)] : [i, j]);
 						
-						new_html+="<td id='"+("ic_id_"+current_bos)+"' class='"+((i+j)%2 ? "ic_bs" : "ic_ws")+"' data-bos='"+current_bos+"'><div class='ic_piece_holder'></div></td>";
+						new_html+="<td id='"+("ic_ui_"+current_bos)+"' class='"+((i+j)%2 ? "ic_bs" : "ic_ws")+"' data-bos='"+current_bos+"'><div class='ic_piece_holder'></div></td>";
 					}
 					
 					new_html+="<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td></tr>";
@@ -166,7 +166,7 @@
 				new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_bside" : "ic_wside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
 				new_html+="</table>";
 				
-				$("#ic_id_board").attr("class", (is_rotated ? "ic_rotated" : "")).html(new_html);
+				$("#ic_ui_board").attr("class", (is_rotated ? "ic_rotated" : "")).html(new_html);
 			}
 		}
 		
@@ -227,7 +227,7 @@
 			
 			that=this;
 			
-			$("#ic_id_promote").unbind("change").change(function(){
+			$("#ic_ui_promote").unbind("change").change(function(){
 				that.setPromoteTo($(this).val());
 			});
 		}
@@ -247,7 +247,7 @@
 			
 			that=this;
 			
-			$("#ic_id_nav_first").unbind("click").click(function(){
+			$("#ic_ui_nav_first").unbind("click").click(function(){
 				navFirst.apply(that, []);
 				
 				if($(this).prop("tagName")==="A"){
@@ -255,7 +255,7 @@
 				}
 			});
 			
-			$("#ic_id_nav_previous").unbind("click").click(function(){
+			$("#ic_ui_nav_previous").unbind("click").click(function(){
 				navPrevious.apply(that, []);
 				
 				if($(this).prop("tagName")==="A"){
@@ -263,7 +263,7 @@
 				}
 			});
 			
-			$("#ic_id_nav_next").unbind("click").click(function(){
+			$("#ic_ui_nav_next").unbind("click").click(function(){
 				navNext.apply(that, []);
 				
 				if($(this).prop("tagName")==="A"){
@@ -271,7 +271,7 @@
 				}
 			});
 			
-			$("#ic_id_nav_last").unbind("click").click(function(){
+			$("#ic_ui_nav_last").unbind("click").click(function(){
 				navLast.apply(that, []);
 				
 				if($(this).prop("tagName")==="A"){
@@ -279,7 +279,7 @@
 				}
 			});
 			
-			$("#ic_id_rotate").unbind("click").click(function(){
+			$("#ic_ui_rotate").unbind("click").click(function(){
 				that.toggleIsRotated();
 				
 				if($(this).prop("tagName")==="A"){
@@ -327,7 +327,7 @@
 						$(this).addClass("ic_currpiece");
 						
 						for(i=0; i<len; i++){//0<len
-							$("#ic_id_"+Ic.toBos(legal_moves[i])).addClass("ic_highlight");
+							$("#ic_ui_"+Ic.toBos(legal_moves[i])).addClass("ic_highlight");
 						}
 					}
 					
@@ -341,7 +341,7 @@
 			
 			that=this;
 			
-			if($("#ic_id_board").length){
+			if($("#ic_ui_board").length){
 				for(i=0; i<8; i++){//0...7
 					for(j=0; j<8; j++){//0...7
 						reset_class=((i+j)%2 ? "ic_bs" : "ic_ws");
@@ -350,7 +350,7 @@
 						square_class=current_square.className;
 						square_class=(square_class ? (" ic_"+square_class) : "");
 						
-						$("#ic_id_"+current_square.bos).attr("class", reset_class).html("<div class='"+("ic_piece_holder"+square_class)+"'></div>");
+						$("#ic_ui_"+current_square.bos).attr("class", reset_class).html("<div class='"+("ic_piece_holder"+square_class)+"'></div>");
 					}
 				}
 			}
@@ -361,7 +361,7 @@
 			
 			that=this;
 			
-			if($("#ic_id_materialdiff").length){
+			if($("#ic_ui_materialdiff").length){
 				matdiff_html="";
 				
 				for(i=0; i<2; i++){//0...1
@@ -377,7 +377,7 @@
 					matdiff_html+=(temp || "-");
 				}
 				
-				$("#ic_id_materialdiff").html(matdiff_html);
+				$("#ic_ui_materialdiff").html(matdiff_html);
 			}
 		}
 		
@@ -386,7 +386,7 @@
 			
 			that=this;
 			
-			if($("#ic_id_movelist").length){
+			if($("#ic_ui_movelist").length){
 				move_list=that.moveList;
 				black_starts=Ic.utilityMisc.strContains(move_list[0].Fen, " b ");
 				initial_full_move=(that.fullMove-Math.floor((that.currentMove+black_starts-1)/2)+(black_starts===!(that.currentMove%2))-1);
@@ -406,7 +406,7 @@
 				
 				new_html=(new_html || "-");
 				
-				$("#ic_id_movelist").html(new_html);
+				$("#ic_ui_movelist").html(new_html);
 			}
 		}
 		
@@ -415,7 +415,7 @@
 			
 			that=this;
 			
-			if($("#ic_id_debug").length){
+			if($("#ic_ui_debug").length){
 				new_html="<ul>";
 				new_html+="<li><strong>Selected board:</strong> <span>"+that.boardName+"</span></li>";
 				new_html+="<li><strong>Is rotated?:</strong> <span>"+that.isRotated+"</span></li>";
@@ -483,7 +483,7 @@
 				new_html+="<li><strong>Version:</strong> <span>[Ic_v"+Ic.version+"] [IcUi_v"+_VERSION+"]</span></li>";
 				new_html+="</ul>";
 				
-				$("#ic_id_debug").html(new_html);
+				$("#ic_ui_debug").html(new_html);
 			}
 		}
 		
@@ -541,14 +541,14 @@
 				
 				_bindOnce();
 				
-				if(!$("#ic_id_board").html() || $("#ic_id_board").hasClass("ic_rotated")!==that.isRotated){
+				if(!$("#ic_ui_board").html() || $("#ic_ui_board").hasClass("ic_rotated")!==that.isRotated){
 					_refreshTable(that.isRotated);
 				}
 				
 				_reBindSquares.apply(that, []);
 				
-				$("#ic_id_fen").val(that.fen);
-				$("#ic_id_promote").val(that.promoteTo);
+				$("#ic_ui_fen").val(that.fen);
+				$("#ic_ui_promote").val(that.promoteTo);
 				
 				_refreshDebug.apply(that, []);
 				
@@ -566,7 +566,7 @@
 				_refreshMoveList.apply(that, []);
 				_reBindPgnLinks.apply(that, []);
 				
-				if($("#ic_id_board").length){
+				if($("#ic_ui_board").length){
 					_refreshActiveDot(that[that.activeColor].isBlack);
 					
 					if(animation_type){
@@ -574,8 +574,8 @@
 					}
 					
 					if(that.currentMove!==0){
-						$("#ic_id_"+that.moveList[that.currentMove].FromBos).addClass("ic_lastmove");
-						$("#ic_id_"+that.moveList[that.currentMove].ToBos).addClass("ic_lastmove");
+						$("#ic_ui_"+that.moveList[that.currentMove].FromBos).addClass("ic_lastmove");
+						$("#ic_ui_"+that.moveList[that.currentMove].ToBos).addClass("ic_lastmove");
 					}
 				}
 			}
