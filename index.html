@@ -72,7 +72,8 @@
 				rff_board.toggleIsRotated();
 				
 				//refresh the board to change to it
-				//many methods refresh the boards, to be safe on which will be displayed just refresh it again
+				//many methods refresh the boards (so it is best to make one last refresh
+				//to make sure that this board will be the one displayed and without animations)
 				main_board.refreshBoard();
 			});
 		</script>
