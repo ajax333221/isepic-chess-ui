@@ -12,12 +12,19 @@
 		
 		<script>
 			$(function(){
-				var main_board, other_board, oc_board, h_board, rff_board;
+				var main_board, unlabeled_board, other_board, oc_board, h_board, rff_board;
 				
 				Ic.setSilentMode(false);
 				
 				main_board=Ic.initBoard({
 					boardName : "main"
+				});
+				
+				//you can remove the board labels with "isUnlabeled : true" (optional, default false)
+				//to not show "ABCDEFGH 12345678 / HGFEDCBA 87654321" around this specific board
+				unlabeled_board=Ic.initBoard({
+					boardName : "no_labels",
+					isUnlabeled : true
 				});
 				
 				//you can rotate the board with "isRotated : true" (optional, default false)

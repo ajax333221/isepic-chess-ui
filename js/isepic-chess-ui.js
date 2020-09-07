@@ -1,10 +1,10 @@
 /** Copyright (c) 2020 Ajax Isepic (ajax333221) Licensed MIT */
 
-/*jshint indent:4, quotmark:double, onevar:true, undef:true, unused:true, trailing:true, jquery:true, curly:true, latedef:nofunc, bitwise:false, sub:true, eqeqeq:true, esversion:6 */
+/* jshint indent:4, quotmark:double, onevar:true, undef:true, unused:true, trailing:true, jquery:true, curly:true, latedef:nofunc, bitwise:false, sub:true, eqeqeq:true, esversion:6 */
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.7.1";
+		var _VERSION="1.7.2";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -142,17 +142,36 @@
 			}
 		}
 		
-		function _refreshTable(is_rotated){
-			var i, j, rank_bos, current_bos, new_html;
+		function _refreshTable(is_rotated, is_unlabeled){
+			var i, j, temp, rank_bos, current_bos, new_class, new_html;
 			
 			if($("#ic_ui_board").length){
+				temp=[];
+				
+				if(is_rotated){
+					temp.push("ic_rotated");
+				}
+				
+				if(is_unlabeled){
+					temp.push("ic_unlabeled");
+				}
+				
+				new_class=temp.join(" ");
+				
 				new_html="<table cellpadding='0' cellspacing='0'>";
-				new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_wside" : "ic_bside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
+				
+				if(!is_unlabeled){
+					new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_wside" : "ic_bside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
+				}
 				
 				for(i=0; i<8; i++){//0...7
 					rank_bos=(is_rotated ? (i+1) : (8-i));
 					
-					new_html+="<tr><td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>";
+					new_html+="<tr>";
+					
+					if(!is_unlabeled){
+						new_html+="<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>";
+					}
 					
 					for(j=0; j<8; j++){//0...7
 						current_bos=Ic.toBos(is_rotated ? [(7-i), (7-j)] : [i, j]);
@@ -160,13 +179,20 @@
 						new_html+="<td id='"+("ic_ui_"+current_bos)+"' class='"+((i+j)%2 ? "ic_bs" : "ic_ws")+"' data-bos='"+current_bos+"'><div class='ic_piece_holder'></div></td>";
 					}
 					
-					new_html+="<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td></tr>";
+					if(!is_unlabeled){
+						new_html+="<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>";
+					}
+					
+					new_html+="</tr>";
 				}
 				
-				new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_bside" : "ic_wside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
+				if(!is_unlabeled){
+					new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_bside" : "ic_wside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
+				}
+				
 				new_html+="</table>";
 				
-				$("#ic_ui_board").attr("class", (is_rotated ? "ic_rotated" : "")).html(new_html);
+				$("#ic_ui_board").attr("class", new_class).html(new_html);
 			}
 		}
 		
@@ -451,7 +477,8 @@
 				new_html+="<li><strong>Full moves:</strong> <span>"+that.fullMove+"</span></li>";
 				new_html+="<li><strong>Current move:</strong> <span>"+that.currentMove+"</span></li>";
 				new_html+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.promoteTo*that[that.activeColor].sign)+"</span></li>";
-				new_html+="<li><strong>Selected square:</strong> <span>"+(that.selectedBos || "-")+"</span></li>";
+				new_html+="<li><strong>Is unlabeled? <sup>(ui-only)</sup>:</strong> <span>"+that.isUnlabeled+"</span></li>";
+				new_html+="<li><strong>Selected square <sup>(ui-only)</sup>:</strong> <span>"+(that.selectedBos || "-")+"</span></li>";
 				new_html+="<li><strong>Material difference:</strong> <span>{w:["+that.materialDiff.w.join(", ")+"], b:["+that.materialDiff.b.join(", ")+"]}</span></li>";
 				
 				new_html+="<li>";
@@ -541,8 +568,8 @@
 				
 				_bindOnce();
 				
-				if(!$("#ic_ui_board").html() || $("#ic_ui_board").hasClass("ic_rotated")!==that.isRotated){
-					_refreshTable(that.isRotated);
+				if(!$("#ic_ui_board").html() || $("#ic_ui_board").hasClass("ic_rotated")!==that.isRotated || $("#ic_ui_board").hasClass("ic_unlabeled")!==that.isUnlabeled){
+					_refreshTable(that.isRotated, that.isUnlabeled);
 				}
 				
 				_reBindSquares.apply(that, []);
