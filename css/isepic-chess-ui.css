@@ -55,7 +55,7 @@ body{
 /*end(header) ---*/
 
 /*start(board) ---*/
-.ic_ui_board #ic_ui_board, .ic_ui_board table, .ic_ui_board .ic_piece_holder, .ic_ui_board .ic_char{
+.ic_ui_board, .ic_ui_board #ic_ui_board, .ic_ui_board table, .ic_ui_board .ic_piece_holder, .ic_ui_board .ic_char{
 	margin: 0;
 	padding: 0;
 	height: 100%;
