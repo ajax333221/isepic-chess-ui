@@ -36,8 +36,6 @@ $(function(){
 	var board = Ic.initBoard({
 		boardName : "main"
 	});
-	
-	board.refreshBoard();
 });
 </script>
 ```
