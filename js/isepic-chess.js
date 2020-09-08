@@ -239,6 +239,8 @@
 											}
 										}
 									}
+								}else{
+									_consoleLog("Error[_cloneBoardObjs]: unexpected primitive data type");
 								}
 							}
 						}
