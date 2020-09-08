@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.7.3";
+		var _VERSION="1.7.4";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -383,7 +383,7 @@
 		}
 		
 		function _refreshMaterialDifference(){
-			var i, j, len, that, temp, current_side, matdiff_html;
+			var i, that, temp, current_side, matdiff_html;
 			
 			that=this;
 			
@@ -391,14 +391,12 @@
 				matdiff_html="";
 				
 				for(i=0; i<2; i++){//0...1
-					current_side=(that.isRotated===!i ? that.materialDiff.w : that.materialDiff.b);
+					current_side=(that.isRotated===!i ? that.w : that.b);
 					matdiff_html+=(i ? "<hr>" : "");
 					
-					temp="";
-					
-					for(j=0, len=current_side.length; j<len; j++){//0<len
-						temp+="<img src='"+("./css/images/"+Ic.toClassName(current_side[j])+".png")+"' width='"+_MATERIAL_DIFF_PX+"' height='"+_MATERIAL_DIFF_PX+"'>";
-					}
+					temp=current_side.materialDiff.map(
+						x => "<img src='"+("./css/images/"+Ic.toClassName(x)+".png")+"' width='"+_MATERIAL_DIFF_PX+"' height='"+_MATERIAL_DIFF_PX+"'>"
+					).join("");
 					
 					matdiff_html+=(temp || "-");
 				}
@@ -462,6 +460,7 @@
 				new_html+="<ul>";
 				new_html+="<li><strong>king square:</strong> <span>"+that.w.kingBos+"</span></li>";
 				new_html+="<li><strong>castling rights:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.w.castling).toUpperCase() || "-")+"</span></li>";
+				new_html+="<li><strong>material difference:</strong> <span>["+that.w.materialDiff.join(", ")+"]</span></li>";
 				new_html+="</ul>";
 				new_html+="</li>";
 				
@@ -470,6 +469,7 @@
 				new_html+="<ul>";
 				new_html+="<li><strong>king square:</strong> <span>"+that.b.kingBos+"</span></li>";
 				new_html+="<li><strong>castling rights:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.b.castling) || "-")+"</span></li>";
+				new_html+="<li><strong>material difference:</strong> <span>["+that.b.materialDiff.join(", ")+"]</span></li>";
 				new_html+="</ul>";
 				new_html+="</li>";
 				
@@ -479,7 +479,6 @@
 				new_html+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.promoteTo*that[that.activeColor].sign)+"</span></li>";
 				new_html+="<li><strong>Is unlabeled? <sup>(ui-only)</sup>:</strong> <span>"+that.isUnlabeled+"</span></li>";
 				new_html+="<li><strong>Selected square <sup>(ui-only)</sup>:</strong> <span>"+(that.selectedBos || "-")+"</span></li>";
-				new_html+="<li><strong>Material difference:</strong> <span>{w:["+that.materialDiff.w.join(", ")+"], b:["+that.materialDiff.b.join(", ")+"]}</span></li>";
 				
 				new_html+="<li>";
 				new_html+="<strong>Squares</strong>";
