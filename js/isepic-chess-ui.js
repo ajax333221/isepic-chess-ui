@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.7.4";
+		var _VERSION="1.7.5";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -383,7 +383,7 @@
 		}
 		
 		function _refreshMaterialDifference(){
-			var i, that, temp, current_side, matdiff_html;
+			var i, j, len, that, temp, current_side, matdiff_html;
 			
 			that=this;
 			
@@ -394,9 +394,11 @@
 					current_side=(that.isRotated===!i ? that.w : that.b);
 					matdiff_html+=(i ? "<hr>" : "");
 					
-					temp=current_side.materialDiff.map(
-						x => "<img src='"+("./css/images/"+Ic.toClassName(x)+".png")+"' width='"+_MATERIAL_DIFF_PX+"' height='"+_MATERIAL_DIFF_PX+"'>"
-					).join("");
+					temp="";
+					
+					for(j=0, len=current_side.materialDiff.length; j<len; j++){//0<len
+						temp+="<img src='"+("./css/images/"+Ic.toClassName(current_side.materialDiff[j])+".png")+"' width='"+_MATERIAL_DIFF_PX+"' height='"+_MATERIAL_DIFF_PX+"'>";
+					}
 					
 					matdiff_html+=(temp || "-");
 				}
