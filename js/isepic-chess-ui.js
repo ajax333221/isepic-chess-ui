@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.7.5";
+		var _VERSION="1.8.0";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -264,7 +264,7 @@
 			that=this;
 			
 			$(".ic_pgn_link").unbind("click").click(function(){
-				navLinkMove.apply(that, [$(this).attr("data-index")]);
+				that.navLinkMove($(this).attr("data-index"));
 			});
 		}
 		
@@ -274,7 +274,7 @@
 			that=this;
 			
 			$("#ic_ui_nav_first").unbind("click").click(function(){
-				navFirst.apply(that, []);
+				that.navFirst();
 				
 				if($(this).prop("tagName")==="A"){
 					return false;
@@ -282,7 +282,7 @@
 			});
 			
 			$("#ic_ui_nav_previous").unbind("click").click(function(){
-				navPrevious.apply(that, []);
+				that.navPrevious();
 				
 				if($(this).prop("tagName")==="A"){
 					return false;
@@ -290,7 +290,7 @@
 			});
 			
 			$("#ic_ui_nav_next").unbind("click").click(function(){
-				navNext.apply(that, []);
+				that.navNext();
 				
 				if($(this).prop("tagName")==="A"){
 					return false;
@@ -298,7 +298,7 @@
 			});
 			
 			$("#ic_ui_nav_last").unbind("click").click(function(){
-				navLast.apply(that, []);
+				that.navLast();
 				
 				if($(this).prop("tagName")==="A"){
 					return false;
@@ -517,46 +517,6 @@
 		
 		//---------------- ic ui (this=apply)
 		
-		function navFirst(){
-			var that;
-			
-			that=this;
-			
-			return _navHelper.apply(that, [0]);
-		}
-		
-		function navPrevious(){
-			var that;
-			
-			that=this;
-			
-			return _navHelper.apply(that, [that.currentMove-1]);
-		}
-		
-		function navNext(){
-			var that;
-			
-			that=this;
-			
-			return _navHelper.apply(that, [that.currentMove+1]);
-		}
-		
-		function navLast(){
-			var that;
-			
-			that=this;
-			
-			return _navHelper.apply(that, [that.moveList.length-1]);
-		}
-		
-		function navLinkMove(move_index){
-			var that;
-			
-			that=this;
-			
-			return _navHelper.apply(that, [move_index]);
-		}
-		
 		function refreshBoard(animation_type){
 			var that;
 			
@@ -611,11 +571,6 @@
 		
 		return (($!==null && Ic!==null) ? {
 			version : _VERSION,
-			navFirst : navFirst,
-			navPrevious : navPrevious,
-			navNext : navNext,
-			navLast : navLast,
-			navLinkMove : navLinkMove,
 			refreshBoard : refreshBoard
 		} : null);
 	})();
