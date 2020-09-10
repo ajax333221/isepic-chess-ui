@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.8.0";
+		var _VERSION="1.8.1";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -197,19 +197,6 @@
 		}
 		
 		//---------------- utilities (this=apply)
-		
-		function _navHelper(move_index){
-			var that, is_goto, diff;
-			
-			that=this;
-			
-			move_index=Ic.utilityMisc.toInt(move_index);
-			
-			diff=(move_index-that.currentMove);
-			is_goto=(Math.abs(diff)!==1);
-			
-			return that.setCurrentMove((is_goto ? move_index : diff), is_goto);
-		}
 		
 		function _animateCaller(is_reversed){
 			var that, temp, initial_val, final_val, from_bos, to_bos, piece_class, promotion_class;
