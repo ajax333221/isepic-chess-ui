@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.8.1";
+		var _VERSION="1.8.2";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -408,7 +408,7 @@
 				
 				for(i=1, len=move_list.length; i<len; i++){//1<len
 					new_html+=(i!==1 ? " " : "");
-					new_html+=(black_starts===!(i%2) ? ("<span class='ic_pgn_number'>"+(initial_full_move+Math.floor((i+black_starts-1)/2))+".</span>") : "");
+					new_html+=(black_starts===!(i%2) ? ("<span class='ic_pgn_number'>"+(initial_full_move+Math.floor((i+black_starts-1)/2))+". </span>") : "");
 					new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"'>"+move_list[i].PGNmove+"</span>";
 					new_html+=(move_list[i].PGNend ? (" <span class='ic_pgn_result'>"+move_list[i].PGNend+"</span>") : "");
 				}
