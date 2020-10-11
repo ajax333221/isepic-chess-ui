@@ -12,7 +12,7 @@
 		
 		<script>
 			$(function(){
-				var sloppy_pgn, main_board, unlabeled_board, other_board, oc_board, h_board, rff_board, pgn_board;
+				var main_board, unlabeled_board, other_board, oc_board, h_board, rff_board, pgn_board, sloppy_pgn;
 				
 				Ic.setSilentMode(false);
 				
@@ -68,12 +68,15 @@ e6 19. Rc2 Be7 20. Rac1 Bg5 21. Rd1 Rb8 22. Rc5 Nd5 23. Ra5
 Rb7 24. Rd3 Bd8 25. Rb3   Rxb3   Rxa7+	 Nc7  -+  axb3 Bf6
 28. Rb7   {	If  28  Ra4 Nb5! }  28 ...Bxd4 29. Rb8 Bxb2 30. h3 f5
 31. Kf1 Nd5 32. Kg2 +-- Be5 33. Ra8++ Nf4-- 34 . Kh2-+++ Nd3+--- 35 .Kg1--++ Ne1 ++--
-366666 ..... Ra7+!? Bc7# o -  1`;
+366666 ..... Ra7+!? Bc7 o -  1`;
 				
-				//init from a PGN (unfinished feature)
+				//load game from a PGN
+				//"validOrBreak : true" (optional, default false) forces a return of null on error or the
+				//full parsed game. Remove it to allow partial parsing up until the last recognized move
 				pgn_board=Ic.initBoard({
 					boardName : "pgn_loaded",
-					pgn : sloppy_pgn
+					pgn : sloppy_pgn,
+					validOrBreak : true
 				});
 				
 				other_board.moveCaller("f2", "f4");
