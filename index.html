@@ -107,6 +107,37 @@ Rb7 24. Rd3 Bd8 25. Rb3   Rxb3   Rxa7+	 Nc7  -+  axb3 Bf6
 				//many methods refresh the boards (so it is best to make one last refresh
 				//to make sure that this board will be the one displayed and without animations)
 				main_board.refreshBoard();
+				
+				//this is not part of the UI library (might be in the future)
+				$("#ic_ui_smaller").click(function(){
+					var elm;
+					
+					elm=$("#ic_ui_board").parent();
+					
+					elm.css({
+						"width" : Math.max(200, Math.ceil(elm.width()*0.8)),
+						"height" : Math.max(200, Math.ceil(elm.height()*0.8))
+					});
+					
+					if($(this).prop("tagName")==="A"){
+						return false;
+					}
+				});
+				
+				$("#ic_ui_bigger").click(function(){
+					var elm;
+					
+					elm=$("#ic_ui_board").parent();
+					
+					elm.css({
+						"width" : Math.min(800, Math.ceil(elm.width()*1.2)),
+						"height" : Math.min(800, Math.ceil(elm.height()*1.2))
+					});
+					
+					if($(this).prop("tagName")==="A"){
+						return false;
+					}
+				});
 			});
 		</script>
 	</head>
@@ -117,6 +148,8 @@ Rb7 24. Rd3 Bd8 25. Rb3   Rxb3   Rxa7+	 Nc7  -+  axb3 Bf6
 			</div>
 			
 			<hr>
+			
+			<p>Change board size: <a id="ic_ui_smaller" href="#">[ - ]</a> <a id="ic_ui_bigger" href="#">[ + ]</a></p>
 			
 			<!-- this inline-style of 400x400 is overwritting a default 100%x100% -->
 			<!-- remove only when wrapped inside a NxN-squared parent with defined height and width -->

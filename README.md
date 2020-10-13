@@ -75,10 +75,10 @@ Features
 - Highlight legal moves / last move
 - Navigation buttons
 - Jump to move from the move list
+- Adaptable board size
 - Pawn promotion dropdown menu
 - Visual material difference
 - Piece displacement animation
-- ~~Drag-and-drop pieces~~ (currently disabled)
 - Chess-font by ajax333221 <img src="./css/images/wk.png" width="20"><img src="./css/images/wq.png" width="20"><img src="./css/images/wr.png" width="20"><img src="./css/images/wb.png" width="20"><img src="./css/images/wn.png" width="20"><img src="./css/images/wp.png" width="20"><img src="./css/images/bk.png" width="20"><img src="./css/images/bq.png" width="20"><img src="./css/images/br.png" width="20"><img src="./css/images/bb.png" width="20"><img src="./css/images/bn.png" width="20"><img src="./css/images/bp.png" width="20">
 
 Documentation
@@ -99,7 +99,7 @@ Function | Parameters | Return | Board refresh? | Description
 To do
 -------------
 
-- ~~Adaptable board size~~ (99% done, but labels stay the same font-size)
+- Drag-and-drop pieces
 - Create, rename and delete boards through the UI
 - Set-up position mode
 - Variety of themes and chess-fonts
