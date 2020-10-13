@@ -116,21 +116,21 @@ body{
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	top: 0%;
+	left: 0%;
 }
 
 .ic_ui_board .ic_char{
 	position: relative;
-	top: 50%;
-	left: 50%;
 }
 
 .ic_ui_board .ic_char span{
-	height: 22px;
-	width: 22px;
-	line-height: 22px;
+	height: 50%;
+	width: 50%;
+	line-height: 20px;
 	position: absolute;
-	top: -11px;
-	left: -11px;
+	top: 25%;
+	left: 25%;
 }
 
 .ic_ui_board .ic_dot{
