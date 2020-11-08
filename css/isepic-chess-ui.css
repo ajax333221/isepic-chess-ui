@@ -26,7 +26,7 @@ body{
 }
 
 .ic_ui_main p{
-	font-size: 2.1vmin;
+	font-size: 15px;
 	color: #777;
 }
 
@@ -41,7 +41,7 @@ body{
 /*start(header) ---*/
 .ic_ui_header{
 	color: #333;
-	font-size: 2.2vmin;
+	font-size: 15px;
 	/*2020 border: 1px solid #c7c56d;*/
 	/*2020 background: #edeb9f;*/
 }
@@ -49,13 +49,13 @@ body{
 .ic_ui_header h3{
 	margin: 0;
 	padding: 0;
-	font-size: 2.7vmin;
+	font-size: 17px;
 	color: #696969;
 }
 
 .ic_ui_header h3 a{
 	padding: 0 9px;
-	font-size: 2.2vmin;
+	font-size: 15px;
 }
 /*end(header) ---*/
 
@@ -69,7 +69,7 @@ body{
 
 .ic_ui_board{
 	color: #333;
-	font-size: 2.6vmin;
+	font-size: 16px;
 	border: 1px solid #ccc;
 	background: #e3e3e3;
 }
@@ -153,7 +153,7 @@ body{
 /*start(materialdiff) ---*/
 .ic_ui_materialdiff{
 	color: #333;
-	font-size: 2.6vmin;
+	font-size: 16px;
 	/*2020 border: 1px solid #8cd4c6;*/
 	/*2020 background: #c1f5eb;*/
 	text-align: left;
@@ -177,19 +177,19 @@ body{
 /*start(controls) ---*/
 .ic_ui_controls{
 	color: #333;
-	font-size: 2.6vmin;
+	font-size: 16px;
 	/*2020 border: 1px solid #8cd4c6;*/
 	/*2020 background: #c1f5eb;*/
 }
 
 .ic_ui_controls select{
 	padding: 5px;
-	font-size: 2.2vmin;
+	font-size: 15px;
 }
 
 .ic_ui_controls input{
 	padding: 9px;
-	font-size: 2.2vmin;
+	font-size: 15px;
 	border: 1px solid #ccc;
 	background: #fafafa;
 	cursor: pointer;
@@ -209,7 +209,7 @@ body{
 
 .ic_ui_tabs{
 	color: #333;
-	font-size: 2.6vmin;
+	font-size: 16px;
 	/*2020 border: 1px solid #b281c7;*/
 	/*2020 background: #e4c9f0;*/
 }
@@ -222,7 +222,7 @@ body{
 
 .ic_ui_movelist{
 	color: #333;
-	font-size: 3vmin;
+	font-size: 17px;
 	/*2020 border: 1px solid #c4cca7;*/
 	/*2020 background: #eef2df;*/
 }
@@ -255,7 +255,7 @@ body{
 /*start(debug) ---*/
 .ic_ui_debug{
 	color: #333;
-	font-size: 2.6vmin;
+	font-size: 16px;
 	/*2020 border: 1px solid #b2c8cf;*/
 	/*2020 background: #e9f4f7;*/
 }

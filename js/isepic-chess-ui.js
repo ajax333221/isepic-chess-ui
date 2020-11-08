@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.8.4";
+		var _VERSION="1.9.0";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -340,7 +340,7 @@
 						$(this).addClass("ic_currpiece");
 						
 						for(i=0; i<len; i++){//0<len
-							$("#ic_ui_"+Ic.toBos(legal_moves[i])).addClass("ic_highlight");
+							$("#ic_ui_"+legal_moves[i]).addClass("ic_highlight");
 						}
 					}
 					
