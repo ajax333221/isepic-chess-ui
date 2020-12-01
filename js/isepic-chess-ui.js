@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.10.0";
+		var _VERSION="1.11.0";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -332,7 +332,7 @@
 				}
 				
 				if(need_highlight){
-					legal_moves=that.legalMoves(current_bos);
+					legal_moves=that.legalMoves(current_bos, {toSquareOnly:true});
 					len=legal_moves.length;
 					
 					if(len){
