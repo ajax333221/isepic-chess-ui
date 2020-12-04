@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.11.1";
+		var _VERSION="1.11.2";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -90,15 +90,16 @@
 				
 				//if(no_errors){
 					board_name=$(this).attr("data-boardname");
-					board=Ic.selectBoard(board_name);
 					
-					if(!Ic.boardExists(board)){
+					if(!Ic.boardExists(board_name)){
 						no_errors=false;
 						Ic.utilityMisc.consoleLog("Error[.ic_changeboard]: \""+board_name+"\" is not defined");
 					}
 				//}
 				
 				if(no_errors){
+					board=Ic.selectBoard(board_name);
+					
 					refreshBoard.apply(board, [0]);
 				}
 				
@@ -123,9 +124,10 @@
 				for(i=0, len=board_list.length; i<len; i++){//0<len
 					new_html+=(i ? " | " : "");
 					current_board_name=board_list[i];
-					current_board=Ic.selectBoard(current_board_name);
 					
-					if(Ic.boardExists(current_board)){
+					if(Ic.boardExists(current_board_name)){
+						current_board=Ic.selectBoard(current_board_name);
+						
 						if(current_board.isHidden){
 							new_html+="<em class='ic_disabled'>"+current_board_name+"</em>";
 						}else if(current_board_name===board_name){
