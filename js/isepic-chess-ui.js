@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.11.2";
+		var _VERSION="1.12.0";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -323,7 +323,7 @@
 						_refreshDebug.apply(that, []);
 						need_highlight=false;
 					}else{
-						if(that.moveCaller([that.selectedBos, current_bos])){
+						if(that.playMove([that.selectedBos, current_bos])){
 							refreshBoard.apply(that, [1]);
 							need_highlight=false;
 						}else{
