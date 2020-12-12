@@ -32,11 +32,11 @@ How to use?
 
 ```
 <script>
-$(function(){
-	var board = Ic.initBoard({
-		boardName : "main"
-	});
-});
+  $(function(){
+    var board = Ic.initBoard({
+      boardName : "main"
+    });
+  });
 </script>
 ```
 <sub>**Note:** Documentation for `Ic.initBoard()` can be found [here](https://github.com/ajax333221/isepic-chess#documentation).</sub>
@@ -52,10 +52,10 @@ $(function(){
 <input id="ic_ui_nav_last" value=">|" type="button">
 <input id="ic_ui_rotate" value="rotate" type="button">
 <select id="ic_ui_promote">
-	<option value="5" selected="selected">queen</option>
-	<option value="4">rook</option>
-	<option value="3">bishop</option>
-	<option value="2">knight</option>
+  <option value="5" selected="selected">queen</option>
+  <option value="4">rook</option>
+  <option value="3">bishop</option>
+  <option value="2">knight</option>
 </select>
 <div id="ic_ui_tabs"></div>
 <div id="ic_ui_movelist"></div>

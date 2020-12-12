@@ -69,18 +69,74 @@
 					validOrBreak : true
 				});
 				
-				other_board.playMove(["f2", "f4"]);
+				//you can call board methods from the board objects
+				other_board.playMove("f2-f4");
 				
-				//you can call a board method from Ic.selectBoard(string) too (but if you typo
-				//the name you will be calling null.<boardMethod>(...) and crashing errors will happen,
-				//the safe way is to check if the board is !== than null before calling board methods)
-				Ic.selectBoard("other").playMove(["e7", "e6"]);
+				//you can call a board method from Ic.selectBoard(string) too (but it is risky
+				//because you will be calling null.<boardMethod>(...) if you typo the board name
+				//which crashes the page, so a good idea would be to wrap it around a Ic.boardExists(...)
+				//when not working with direct references)
+				if(Ic.boardExists("other")){
+					Ic.selectBoard("other").playMove("e7-e6");
+				}
 				
-				//you can pass other types of squares too ([6, 6]="g2")
-				other_board.playMove([[6, 6], other_board.getSquare("g4")]);
+				//Ic.selectBoard(board_obj) is pointless but it works too
+				Ic.selectBoard(other_board).playMove("a2-a3");
 				
-				//Ic.selectBoard(board_obj) pointless but works
-				Ic.selectBoard(other_board).playMove(["d8", "h4"]);
+				//you can pass SAN moves too
+				other_board.playMove("Bxa3");
+				other_board.playMove("Nc3");
+				
+				//you can change the default delimiter of a joined move to any
+				//single character as long as it appears only once
+				other_board.playMove("g8_h6", {delimiter : "_"});
+				
+				//there is also a [initial_qos, final_qos] notation
+				//the square-type can be mixed in here
+				other_board.playMove(["c3", [4, 4]]);
+				
+				//the SAN is fexible, allowing lower-case Os and 0s when castling
+				//also the extra spaces are removed
+				other_board.playMove(" 0 - 0  ");
+				
+				//everything insde {}s gets removed
+				other_board.playMove("Nf3 {hi}");
+				
+				//from inside ()s too
+				other_board.playMove("b5 (bye)");
+				
+				//you can't use "Ng5" in here because of the ambiguity with the other knight
+				other_board.playMove("Ng5");//returns false and is not played
+				
+				//the correct SAN to move f3-g5 is "Nfg5"
+				//but "N3g5" and "Nf3g5" work too
+				other_board.playMove("Nfg5");//returns true and is played
+				
+				other_board.playMove("b4");
+				other_board.playMove("bxa3");
+				other_board.playMove("b3");
+				other_board.playMove("Ra2");
+				other_board.playMove("b2");
+				other_board.playMove("Nxh7");
+				
+				//the order of precedence when promoting a pawn is:
+				//1) {promoteTo : X} optional key (if found)
+				//2) "=X" from a SAN move (if found)
+				//3) board.promoteTo board property (or default value of 5 = queen)
+				//examples:
+				//b.playMove("b2-b1") records "b1=B" because #3
+				//b.playMove("b2-b1", {promoteTo : "R"}) records "b1=R" because #1
+				//b.playMove("b1=Q") records "b1=Q" because #2
+				//currently it is NOT possible to specify a "=X" on a joined (e.g "b2-b1=R")
+				other_board.playMove("b1=R", {promoteTo : "n"});//true, the move is "b1=N" because #1
+				
+				other_board.playMove("g4");
+				other_board.playMove("Kxh7");
+				other_board.playMove("Nd6");
+				
+				//you can safely omit check/checkmate symbols and the move will
+				//still be recognized: "Qh4+", "Qh4++" and "Qh4#"
+				other_board.playMove("Qh4");
 				
 				//alternatively -> other_board.setCurrentMove(0, true)
 				other_board.navFirst();
@@ -98,7 +154,7 @@
 				//to make sure that this board will be the one displayed and without animations)
 				main_board.refreshBoard();
 				
-				//this is not part of the UI library (might be in the future)
+				//this is not part of the UI library, just some jQuery
 				$("#ic_ui_smaller").click(function(){
 					var elm;
 					
@@ -114,6 +170,7 @@
 					}
 				});
 				
+				//and some more jQuery...
 				$("#ic_ui_bigger").click(function(){
 					var elm;
 					
