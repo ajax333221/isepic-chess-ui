@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.12.0";
+		var _VERSION="1.13.0";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -91,15 +91,15 @@
 				//if(no_errors){
 					board_name=$(this).attr("data-boardname");
 					
-					if(!Ic.boardExists(board_name)){
+					board=Ic.getBoard(board_name);
+					
+					if(board===null){
 						no_errors=false;
 						Ic.utilityMisc.consoleLog("Error[.ic_changeboard]: \""+board_name+"\" is not defined");
 					}
 				//}
 				
 				if(no_errors){
-					board=Ic.selectBoard(board_name);
-					
 					refreshBoard.apply(board, [0]);
 				}
 				
@@ -125,18 +125,20 @@
 					new_html+=(i ? " | " : "");
 					current_board_name=board_list[i];
 					
-					if(Ic.boardExists(current_board_name)){
-						current_board=Ic.selectBoard(current_board_name);
-						
-						if(current_board.isHidden){
-							new_html+="<em class='ic_disabled'>"+current_board_name+"</em>";
-						}else if(current_board_name===board_name){
-							new_html+="<em>"+current_board_name+"</em>";
-						}else{
-							new_html+="<a class='ic_changeboard' data-boardname='"+current_board_name+"' href='#'>"+current_board_name+"</a>";
-						}
-					}else{
+					current_board=Ic.getBoard(current_board_name);
+					
+					if(current_board===null){
 						Ic.utilityMisc.consoleLog("Warning[_refreshBoardTabs]: \""+current_board_name+"\" is not defined");
+						
+						continue;
+					}
+					
+					if(current_board.isHidden){
+						new_html+="<em class='ic_disabled'>"+current_board_name+"</em>";
+					}else if(current_board_name===board_name){
+						new_html+="<em>"+current_board_name+"</em>";
+					}else{
+						new_html+="<a class='ic_changeboard' data-boardname='"+current_board_name+"' href='#'>"+current_board_name+"</a>";
 					}
 				}
 				

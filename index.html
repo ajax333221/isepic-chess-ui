@@ -12,7 +12,7 @@
 		
 		<script>
 			$(function(){
-				var main_board, unlabeled_board, other_board, oc_board, h_board, rff_board, pgn_board, sloppy_pgn;
+				var temp, main_board, unlabeled_board, other_board, oc_board, h_board, rff_board, pgn_board, sloppy_pgn;
 				
 				Ic.setSilentMode(false);
 				
@@ -36,9 +36,9 @@
 				});
 				
 				//you can initialize a board without assigning it to a variable
-				//and later create a reference to it with Ic.selectBoard()
+				//and later create a reference to it with Ic.getBoard()
 				Ic.initBoard({boardName : "other_copy"});
-				oc_board=Ic.selectBoard("other_copy");
+				oc_board=Ic.getBoard("other_copy");
 				
 				//if you don't want a board to accidentally perform any DOM interactions
 				//consider using "isHidden : true" (optional, default false)
@@ -72,16 +72,16 @@
 				//you can call board methods from the board objects
 				other_board.playMove("f2-f4");
 				
-				//you can call a board method from Ic.selectBoard(string) too (but it is risky
-				//because you will be calling null.<boardMethod>(...) if you typo the board name
-				//which crashes the page, so a good idea would be to wrap it around a Ic.boardExists(...)
-				//when not working with direct references)
-				if(Ic.boardExists("other")){
-					Ic.selectBoard("other").playMove("e7-e6");
+				//it is risky to call Ic.getBoard(string).<boardMethod>() directly
+				//because if you typo the board name you would be calling null.<boardMethod>()
+				temp=Ic.getBoard("other");
+				
+				if(temp!==null){
+					temp.playMove("e7-e6");
 				}
 				
-				//Ic.selectBoard(board_obj) is pointless but it works too
-				Ic.selectBoard(other_board).playMove("a2-a3");
+				//Ic.getBoard(board_obj) is pointless but it works too
+				Ic.getBoard(other_board).playMove("a2-a3");
 				
 				//you can pass SAN moves too
 				other_board.playMove("Bxa3");
