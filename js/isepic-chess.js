@@ -2188,8 +2188,6 @@
 			return rtn;
 		}
 		
-		//isEqualMove()
-		
 		function isInsideBoard(qos){
 			return (toPos(qos)!==null);
 		}
