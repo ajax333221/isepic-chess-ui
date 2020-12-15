@@ -21,7 +21,7 @@ How to use?
 
 1. Add the necessary files (the order of the **.js** files is important):
 
-```
+```html
 <link rel="stylesheet" href="./css/isepic-chess-ui.css">
 <script src="./js/jquery-3.3.1.min.js"></script>
 <script src="./js/isepic-chess.js"></script>
@@ -30,7 +30,7 @@ How to use?
 
 2. Wrap your code inside `$(function(){...});` to wait for the DOM to be ready.
 
-```
+```html
 <script>
   $(function(){
     var board = Ic.initBoard({
@@ -42,7 +42,7 @@ How to use?
 <sub>**Note:** Documentation for `Ic.initBoard()` can be found [here](https://github.com/ajax333221/isepic-chess#documentation).</sub>
 
 3. Add the elements you need (don't add them more than once) inside `<body>`.
-```
+```html
 <div id="ic_ui_board"></div>
 <div id="ic_ui_materialdiff"></div>
 <input id="ic_ui_fen" value="" type="text">
