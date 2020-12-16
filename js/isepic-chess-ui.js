@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.14.0";
+		var _VERSION="1.14.1";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -454,8 +454,8 @@
 				new_html+="<li><strong>Is checkmate?:</strong> <span>"+that.isCheckmate+"</span></li>";
 				new_html+="<li><strong>Is stalemate?:</strong> <span>"+that.isStalemate+"</span></li>";
 				new_html+="<li><strong>Is threefold repetition?:</strong> <span>"+that.isThreefold+"</span></li>";
-				new_html+="<li><strong>Is fifty-move rule?:</strong> <span>"+that.isFiftyMove+"</span></li>";
 				new_html+="<li><strong>Is insufficient material?:</strong> <span>"+that.isInsufficientMaterial+"</span></li>";
+				new_html+="<li><strong>Is fifty-move rule?:</strong> <span>"+that.isFiftyMove+"</span></li>";
 				new_html+="<li><strong>In draw?:</strong> <span>"+that.inDraw+"</span></li>";
 				new_html+="<li><strong>En Passant square:</strong> <span>"+(that.enPassantBos || "-")+"</span></li>";
 				new_html+="<li><strong>Active color:</strong> <span>"+that.activeColor+"</span></li>";
