@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.13.0";
+		var _VERSION="1.14.0";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -399,14 +399,18 @@
 		}
 		
 		function _refreshMoveList(){
-			var i, len, that, move_list, black_starts, initial_full_move, new_html;
+			var i, len, that, move_list, black_starts, initial_full_move, manual_termination, new_html;
 			
 			that=this;
 			
 			if($("#ic_ui_movelist").length){
 				move_list=that.moveList;
+				
 				black_starts=Ic.utilityMisc.strContains(move_list[0].Fen, " b ");
+				
 				initial_full_move=(that.fullMove-Math.floor((that.currentMove+black_starts-1)/2)+(black_starts===!(that.currentMove%2))-1);
+				
+				manual_termination=(that.manualResult!=="*");
 				
 				new_html="";
 				
@@ -414,11 +418,20 @@
 					new_html+=(i!==1 ? " " : "");
 					new_html+=(black_starts===!(i%2) ? ("<span class='ic_pgn_number'>"+(initial_full_move+Math.floor((i+black_starts-1)/2))+". </span>") : "");
 					new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"'>"+move_list[i].PGNmove+"</span>";
-					new_html+=(move_list[i].PGNend ? (" <span class='ic_pgn_result'>"+move_list[i].PGNend+"</span>") : "");
+					
+					if(!manual_termination && move_list[i].PGNend){
+						new_html+=" <span class='ic_pgn_result'>"+move_list[i].PGNend+"</span>";
+					}
 				}
 				
-				if(black_starts && new_html){
-					new_html="<span class='ic_pgn_number'>"+initial_full_move+"...</span>"+new_html;
+				if(new_html){
+					if(black_starts){
+						new_html="<span class='ic_pgn_number'>"+initial_full_move+"...</span>"+new_html;
+					}
+					
+					if(manual_termination){
+						new_html+=" <span class='ic_pgn_result'>"+that.manualResult+"</span>";
+					}
 				}
 				
 				new_html=(new_html || "-");
@@ -470,6 +483,7 @@
 				new_html+="<li><strong>Full moves:</strong> <span>"+that.fullMove+"</span></li>";
 				new_html+="<li><strong>Current move:</strong> <span>"+that.currentMove+"</span></li>";
 				new_html+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.promoteTo*that[that.activeColor].sign)+"</span></li>";
+				new_html+="<li><strong>Manual result:</strong> <span>"+that.manualResult+"</span></li>";
 				new_html+="<li><strong>Is unlabeled? <sup>(ui-only)</sup>:</strong> <span>"+that.isUnlabeled+"</span></li>";
 				new_html+="<li><strong>Selected square <sup>(ui-only)</sup>:</strong> <span>"+(that.selectedBos || "-")+"</span></li>";
 				
