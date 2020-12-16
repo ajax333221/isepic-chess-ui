@@ -12,7 +12,7 @@
 		
 		<script>
 			$(function(){
-				var temp, main_board, unlabeled_board, other_board, oc_board, h_board, rff_board, pgn_board, sloppy_pgn;
+				var temp, main_board, unlabeled_board, other_board, oc_board, h_board, rff_board, pgn_board, pgn_example;
 				
 				Ic.setSilentMode(false);
 				
@@ -54,22 +54,17 @@
 					fen : "r5k1/pp3ppp/7n/8/2P2P1K/3P1q2/P1PBb2P/R5QR b - - 3 22"
 				});
 				
-				sloppy_pgn=`1. Nf3 g6 2. a3 Nf6 3. Nd4 Bh6 4. Nc6 Nd5 5. Na5 Nb6 6. Nb3 Nc4 7. Nd4 Ne5
-8. Ne6 Ng4 9. Ng5 Nf6 10. Nh3 Bg5 11. Nf4 Bh6 12. Nh3 Be3 13. Nf4 Bd4 14.
-Nh5 Rf8 15. Ng3 Nd5 16. Ne4 Nc3 17. Nc5 Na4 18. Na6 Nb6 19. Nb4 Nd5 20. Nd3
-Bc5 21. Nf4 Nf6 22. Nh5 Ng4 23. Nf4 Ne3 24. Ne6 Nd5 25. Nd4 Nb4 26. Nb3
-N4a6 27. Na5 Bb4 28. Nc4 Ba5 29. Ne5 Bb6 30. Ng4 Nb4 31. Nh6 Bc5 32. Nf5
-N4a6 33. Ne3 Bd6 34. Nc4 Nc5 35. Nb6 Na4 36. Nc4 Nc5 37. Ne3 Ne6 38. Nf5
-Bc5 39. Nh4 Bb6 40. Nf3 Nd4 41. Ng5 Ba5 42. Ne6 Bc3 43. Nc5 Bb4 44. Ne4 Bd6
-45. Ng3 Ndc6 46. Ne4 Bb4 47. Ng5 Ba5 48. Nf3 Nb4 49. Nh4 N4a6 50. Nf5 Bb6
-51. Nc3 Bc5`;
+				pgn_example=`[Event "test"]
+[SetUp "1"]
+[FEN "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5Q2/PPPP1PPP/RNB1KBNR w KQkq - 2 3"]
+3. Bc4 d6 4. Qxf7# 1-0`;
 				
 				//load game from a PGN
 				//"validOrBreak : true" (optional, default false) forces a return of null on error or the
 				//full parsed game. Remove it to allow partial parsing up until the last recognized move
 				pgn_board=Ic.initBoard({
 					boardName : "pgn_loaded",
-					pgn : sloppy_pgn,
+					pgn : pgn_example,
 					validOrBreak : true
 				});
 				
