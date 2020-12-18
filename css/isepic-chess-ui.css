@@ -231,9 +231,20 @@ body{
 	font-weight: bold;
 }
 
+.ic_ui_movelist .ic_pgn_comment{
+	font-style: italic;
+	color: #b873ba;
+}
+
+.ic_ui_movelist .ic_pgn_comment_current{
+	font-style: italic;
+	color: #662;
+	background: #fefe9b;
+}
+
 .ic_ui_movelist .ic_pgn_result{
 	font-style: italic;
-	color: #777;
+	color: #555;
 }
 
 .ic_ui_movelist .ic_pgn_current{
