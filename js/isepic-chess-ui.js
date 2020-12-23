@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="1.15.0";
+		var _VERSION="2.0.0";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -399,7 +399,7 @@
 		}
 		
 		function _refreshMoveList(){
-			var i, len, that, move_list, black_starts, initial_full_move, manual_termination, new_html;
+			var i, len, that, result_tag_ow, move_list, black_starts, initial_full_move, new_html;
 			
 			that=this;
 			
@@ -410,7 +410,7 @@
 				
 				initial_full_move=(that.fullMove-Math.floor((that.currentMove+black_starts-1)/2)+(black_starts===!(that.currentMove%2))-1);
 				
-				manual_termination=(that.manualResult!=="*");
+				result_tag_ow="*";
 				
 				new_html="";
 				
@@ -425,9 +425,13 @@
 						new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_comment" : "ic_pgn_comment_current")+"'> "+move_list[i].Comment+"</span>";
 					}
 					
-					if(!manual_termination && move_list[i].MoveResult){
-						new_html+=" <span class='ic_pgn_result'>"+move_list[i].MoveResult+"</span>";
+					if(move_list[i].MoveResult){
+						result_tag_ow=move_list[i].MoveResult;
 					}
+				}
+				
+				if(that.manualResult!=="*"){
+					result_tag_ow=that.manualResult;
 				}
 				
 				if(new_html){
@@ -435,8 +439,8 @@
 						new_html="<span class='ic_pgn_number'>"+initial_full_move+"...</span>"+new_html;
 					}
 					
-					if(manual_termination){
-						new_html+=" <span class='ic_pgn_result'>"+that.manualResult+"</span>";
+					if(result_tag_ow!=="*"){
+						new_html+=" <span class='ic_pgn_result'>"+result_tag_ow+"</span>";
 					}
 				}
 				
