@@ -107,6 +107,6 @@ To do
 Copyright and license
 -------------
 
-Copyright © 2020 Ajax Isepic (ajax333221)
+Copyright © 2021 Ajax Isepic (ajax333221)
 
 Licensed under MIT License: http://opensource.org/licenses/mit-license.php
