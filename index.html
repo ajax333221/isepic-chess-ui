@@ -54,42 +54,33 @@
 					fen : "r5k1/pp3ppp/7n/8/2P2P1K/3P1q2/P1PBb2P/R5QR b - - 3 22"
 				});
 				
-				pgn_example=`[Event "7th Sunway Sitges 2020"]
-[Site "Sitges ESP"]
-[Date "2020.12.13"]
-[Round "1.4"]
-[White "Martin Barcelo, Carles"]
-[Black "Lagarde, Maxime"]
-[Result "1/2-1/2"]
-[BlackTitle "GM"]
-[WhiteElo "2179"]
-[BlackElo "2651"]
-[ECO "B29"]
-[Opening "Sicilian"]
-[Variation "Nimzovich-Rubinstein variation"]
-[WhiteFideId "24561444"]
-[BlackFideId "662399"]
-[EventDate "2020.12.13"]
+				pgn_example=`[Event "New Orleans"]
+[Site "New Orleans, LA USA"]
+[Date "1920.??.??"]
+[EventDate "?"]
+[Round "?"]
+[Result "1-0"]
+[White "Edwin Ziegler Adams"]
+[Black "Carlos Torre Repetto"]
+[ECO "C41"]
+[WhiteElo "?"]
+[BlackElo "?"]
+[PlyCount "45"]
 
-1. e4 c5 2. Nf3 Nf6 3. e5 Nd5 4. Nc3 Nxc3 5. dxc3 Nc6 6. Bd3 Qc7 7. Qe2 e6 8.
-Bf4 h6 9. h4 a6 10. O-O b5 11. c4 b4 12. Bg3 Bb7 13. Be4 Ne7 14. Nd2 Bxe4 15.
-Nxe4 Nf5 16. Rfd1 Be7 17. h5 Nxg3 18. Nxg3 O-O 19. Rd3 d6 20. Rad1 Rad8 21. exd6
-Bxd6 22. Ne4 Bh2+ 23. Kh1 Rxd3 24. Rxd3 Be5 25. b3 Bd4 26. Nd2 Qf4 27. Nf3 Bc3
-28. g3 Qg4 29. Ng1 Qg5 30. Kg2 a5 31. Nh3 Qe7 32. Qe4 Bd4 33. Nf4 Qg5 34. Ne2 e5
-35. Nxd4 exd4 36. Rf3 Qxh5 37. Qf5 Qg6 38. Qxc5 Qxc2 39. Qxd4 Qxa2 40. Qa7 a4
-41. Qxa4 Qxa4 42. bxa4 Ra8 43. c5 Rxa4 44. c6 Ra6 45. Rb3 Rxc6 46. Rxb4 Kh7 47.
-Rf4 Rc7 48. Kf3 g5 49. Rf6 Kg7 50. Ra6 h5 51. Rb6 f6 52. Rb8 Kg6 53. Rb6 Rc5 54.
-Rb8 Kf5 55. Rb4 Ke5 56. Re4+ Kf5 57. Rb4 Rc3+ 58. Kg2 Rd3 59. Ra4 Rd8 60. Kf3
-Rh8 61. Ra5+ Kg6 62. Ra4 h4 63. gxh4 gxh4 64. Kg4 h3 65. Ra1 h2 66. Rh1 Rh5 67.
-Kg3 Kf5 68. Rxh2 Rxh2 69. Kxh2 Ke4 70. Kg3 f5 71. f4 Ke3 72. Kg2 Kxf4 73. Kf2
-Ke4 74. Ke2 f4 75. Kf2 f3 76. Kf1 1/2-1/2`;
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Qxd4 Nc6 5. Bb5 Bd7 6. Bxc6
+Bxc6 7. Nc3 Nf6 8. O-O Be7 9. Nd5 Bxd5 10. exd5 O-O 11. Bg5 c6
+12. c4 cxd5 13. cxd5 Re8 14. Rfe1 a5 15. Re2 Rc8 16. Rae1 Qd7
+17. Bxf6 Bxf6 18. Qg4 Qb5 19. Qc4 Qd7 20. Qc7 Qb5 21. a4 Qxa4
+22. Re4 Qb5 23. Qxb7 1-0`;
 				
 				//load game from a PGN
 				//"validOrBreak : true" (optional, default false) forces a return of null on error or the
 				//full parsed game. Remove it to allow partial parsing up until the last recognized move
+				//"moveIndex : 0" (optional, default (moveListLen-1)) sets the current move after parsing
 				pgn_board=Ic.initBoard({
 					boardName : "pgn_loaded",
 					pgn : pgn_example,
+					moveIndex : 35,
 					validOrBreak : true
 				});
 				
