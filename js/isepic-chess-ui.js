@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.0.2";
+		var _VERSION="2.1.0";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -100,7 +100,7 @@
 				//}
 				
 				if(no_errors){
-					refreshBoard.apply(board, [0]);
+					refreshUi.apply(board, [0]);
 				}
 				
 				if($(this).prop("tagName")==="A"){
@@ -326,7 +326,7 @@
 						need_highlight=false;
 					}else{
 						if(that.playMove([that.selectedBos, current_bos])){
-							refreshBoard.apply(that, [1]);
+							refreshUi.apply(that, [1]);
 							need_highlight=false;
 						}else{
 							that.selectedBos="";
@@ -538,7 +538,7 @@
 		
 		//---------------- ic ui (this=apply)
 		
-		function refreshBoard(animation_type){
+		function refreshUi(animation_type){
 			var that;
 			
 			that=this;
@@ -592,7 +592,7 @@
 		
 		return (($!==null && Ic!==null) ? {
 			version : _VERSION,
-			refreshBoard : refreshBoard
+			refreshUi : refreshUi
 		} : null);
 	})();
 	

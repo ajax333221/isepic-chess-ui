@@ -92,9 +92,9 @@ You should first read the [isepic-chess.js Documentation](https://github.com/aja
 
 Boards created by `Ic.initBoard()` have the following available UI methods.
 
-Function | Parameters | Return | Board refresh? | Description
+Function | Parameters | Return | UI refresh? | Description
 -------- | ---------- | ------ | ---------------- | -----------
-**refreshBoard**(<br>*animationType*<br>) | <ul><li>:eight_pointed_black_star:animationType (Number)</li></ul><hr>:eight_pointed_black_star:Optional Parameter | - | Yes | When refreshing a **non-hidden board** <sup>(nothing will take place if called on a **board** with `board.isHidden = true`)</sup>, this method will:<ul><li>Refresh the HTML of all the components (if any) to reflect the internal state of the board.</li><li>Re-bind everything to point to this board.</li><li>Finish any ongoing piece animations.</li><li>Start the current animation (if any).</li></ul>If `animationType` is a falsy-value, no animation will happen.<br><br>If `animationType` is a **positive number**, the board will be refreshed with an animation as if the last move was just played.<br><br>If `animationType` is a **negative number**, the board will be refreshed with an animation as if we just made a takeback move from the next move.
+**refreshUi**(<br>*animationType*<br>) | <ul><li>:eight_pointed_black_star:animationType (Number)</li></ul><hr>:eight_pointed_black_star:Optional Parameter | - | Yes | This method will:<ul><li>Refresh the HTML of all the components (if any) to reflect the internal state of the board.</li><li>Re-bind all the components (if any) to point to this board.</li><li>Finish any ongoing piece animations.</li><li>Start the current animation (if any).</li></ul>If `animationType` is a falsy-value, no animation will happen.<br><br>If `animationType` is a **positive number**, the board will be refreshed with an animation as if the last move was just played.<br><br>If `animationType` is a **negative number**, the board will be refreshed with an animation as if we just made a takeback move from the next move.
 
 To do
 -------------

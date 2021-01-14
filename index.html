@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Isepic Chess - Demo</title>
+		<title>Isepic Chess UI - Demo</title>
 		
 		<link rel="stylesheet" href="./css/isepic-chess-ui.css">
 		
@@ -14,6 +14,8 @@
 			$(function(){
 				var temp, main_board, unlabeled_board, other_board, oc_board, h_board, rff_board, pgn_board, pgn_example;
 				
+				//turn the silent mode Off to enable warnings and errors to be sent to the console
+				//by default the silent mode is On and will not print to the console
 				Ic.setSilentMode(false);
 				
 				main_board=Ic.initBoard({
@@ -164,10 +166,9 @@ Bxc6 7. Nc3 Nf6 8. O-O Be7 9. Nd5 Bxd5 10. exd5 O-O 11. Bg5 c6
 				//boolean true = set rotated and boolean false = set not rotated
 				rff_board.toggleIsRotated();
 				
-				//refresh the board to change to it
-				//many methods refresh the boards (so it is best to make one last refresh
-				//to make sure that this board will be the one displayed and without animations)
-				main_board.refreshBoard();
+				//many internal methods refresh the UI (so it is best to make one last refresh to make
+				//sure that this board will be the one displayed and the components get point to it)
+				main_board.refreshUi();
 				
 				//this is not part of the UI library, just some jQuery
 				$("#ic_ui_smaller").click(function(){
