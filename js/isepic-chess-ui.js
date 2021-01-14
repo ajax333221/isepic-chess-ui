@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.1.0";
+		var _VERSION="2.1.1";
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -326,7 +326,6 @@
 						need_highlight=false;
 					}else{
 						if(that.playMove([that.selectedBos, current_bos])){
-							refreshUi.apply(that, [1]);
 							need_highlight=false;
 						}else{
 							that.selectedBos="";
