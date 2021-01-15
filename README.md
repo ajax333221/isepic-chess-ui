@@ -1,4 +1,4 @@
-<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui#isepic-chess-ui"><img width="100" src="./css/images/ic_ui_logo.png" alt="IcUi logo"></a></p>
+<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui"><img width="100" src="./css/images/ic_ui_logo.png" alt="IcUi logo"></a></p>
 
 <h1 align="center">isepic-chess-ui</h1>
 
@@ -8,14 +8,14 @@ Isepic Chess UI is the user interface for [isepic-chess.js (GitHub repo)](https:
 -------------
 
 - [isepic-chess-ui](https://github.com/ajax333221/isepic-chess-ui#isepic-chess-ui)
-- [Table of contents](https://github.com/ajax333221/isepic-chess-ui#table-of-contents)
-- [How to use?](https://github.com/ajax333221/isepic-chess-ui#how-to-use)
-- [Demo](https://github.com/ajax333221/isepic-chess-ui#demo)
-- [Features](https://github.com/ajax333221/isepic-chess-ui#features)
-- [Documentation](https://github.com/ajax333221/isepic-chess-ui#documentation)
+- [Table of contents](https://github.com/ajax333221/isepic-chess-ui#pushpin-table-of-contents)
+- [How to use?](https://github.com/ajax333221/isepic-chess-ui#computer_mouse-how-to-use)
+- [Demo](https://github.com/ajax333221/isepic-chess-ui#eye-demo)
+- [Features](https://github.com/ajax333221/isepic-chess-ui#rocket-features)
+- [Documentation](https://github.com/ajax333221/isepic-chess-ui#book-documentation)
 	- [Board UI methods](https://github.com/ajax333221/isepic-chess-ui#list-of-boarduimethods)
-- [To do](https://github.com/ajax333221/isepic-chess-ui#to-do)
-- [Copyright and license](https://github.com/ajax333221/isepic-chess-ui#copyright-and-license)
+- [To do](https://github.com/ajax333221/isepic-chess-ui#telescope-to-do)
+- [Copyright and license](https://github.com/ajax333221/isepic-chess-ui#page_facing_up-copyright-and-license)
 
 :computer_mouse: How to use?
 -------------
