@@ -1,8 +1,8 @@
-<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui"><img width="100" src="./css/images/ic_ui_logo.png" alt="IcUi logo"></a></p>
+<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui"><img width="100" src="https://github.com/ajax333221/isepic-chess-ui/raw/master/css/images/ic_ui_logo.png" alt="IcUi logo"></a></p>
 
 <h1 align="center">isepic-chess-ui</h1>
 
-Isepic Chess UI is the user interface for [isepic-chess.js (GitHub repo)](https://github.com/ajax333221/isepic-chess). It uses jQuery for DOM manipulation and animations.
+Isepic Chess UI is the user interface for [isepic-chess.js](https://github.com/ajax333221/isepic-chess). It uses jQuery for DOM manipulation and animations.
 
 :pushpin: Table of contents
 -------------
