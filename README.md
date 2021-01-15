@@ -1,9 +1,10 @@
-isepic-chess-ui
-================
+<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui#isepic-chess-ui"><img width="100" src="./css/images/ic_ui_logo.png" alt="IcUi logo"></a></p>
+
+<h1 align="center">isepic-chess-ui</h1>
 
 Isepic Chess UI is the user interface for [isepic-chess.js (GitHub repo)](https://github.com/ajax333221/isepic-chess). It uses jQuery for DOM manipulation and animations.
 
-Table of contents
+:pushpin: Table of contents
 -------------
 
 - [isepic-chess-ui](https://github.com/ajax333221/isepic-chess-ui#isepic-chess-ui)
@@ -16,7 +17,7 @@ Table of contents
 - [To do](https://github.com/ajax333221/isepic-chess-ui#to-do)
 - [Copyright and license](https://github.com/ajax333221/isepic-chess-ui#copyright-and-license)
 
-How to use?
+:computer_mouse: How to use?
 -------------
 
 1. Add the necessary files (the order of the **.js** files is important):
@@ -64,12 +65,12 @@ How to use?
 
 4. Open the **.html** file.
 
-Demo
+:eye: Demo
 -------------
 
 https://ajax333221.github.io/isepic-chess-ui/
 
-Features
+:rocket: Features
 -------------
 
 - Highlight legal moves / last move
@@ -81,7 +82,7 @@ Features
 - Piece displacement animation
 - Chess-font by ajax333221 <img src="./css/images/wk.png" width="20"><img src="./css/images/wq.png" width="20"><img src="./css/images/wr.png" width="20"><img src="./css/images/wb.png" width="20"><img src="./css/images/wn.png" width="20"><img src="./css/images/wp.png" width="20"><img src="./css/images/bk.png" width="20"><img src="./css/images/bq.png" width="20"><img src="./css/images/br.png" width="20"><img src="./css/images/bb.png" width="20"><img src="./css/images/bn.png" width="20"><img src="./css/images/bp.png" width="20">
 
-Documentation
+:book: Documentation
 -------------
 
 You should first read the [isepic-chess.js Documentation](https://github.com/ajax333221/isepic-chess#documentation).
@@ -96,7 +97,7 @@ Function | Parameters | Return | UI refresh? | Description
 -------- | ---------- | ------ | ---------------- | -----------
 **refreshUi**(<br>*animationType*<br>) | <ul><li>:eight_pointed_black_star:animationType (Number)</li></ul><hr>:eight_pointed_black_star:Optional Parameter | - | Yes | This method will:<ul><li>Refresh the HTML of all the components (if any) to reflect the internal state of the board.</li><li>Re-bind all the components (if any) to point to this board.</li><li>Finish any ongoing piece animations.</li><li>Start the current animation (if any).</li></ul>If `animationType` is a **falsy-value**, no animation will happen.<br><br>If `animationType` is a **positive number**, the board will be refreshed with an animation as if the last move was played.<br><br>If `animationType` is a **negative number**, the board will be refreshed with an animation as if the next move was reverted.
 
-To do
+:telescope: To do
 -------------
 
 - Drag-and-drop pieces
@@ -104,7 +105,7 @@ To do
 - Set-up position mode
 - Variety of themes and chess-fonts
 
-Copyright and license
+:page_facing_up: Copyright and license
 -------------
 
 Copyright © 2021 Ajax Isepic (ajax333221)
