@@ -6,271 +6,155 @@
 		
 		<link rel="stylesheet" href="./css/isepic-chess-ui.css">
 		
+		<style>
+			html, body, .flex_wrapper{
+				height: 100%;
+				padding: 0;
+				margin: 0;
+			}
+			
+			.flex_wrapper{
+				display: flex;
+				align-items: stretch;
+				justify-content: space-around;
+				width: 100%;
+			}
+			
+			.flex_child{
+				min-height: 100%;
+				width: 100%;
+			}
+			
+			.ic_ui_main{
+				min-width: 100%; /*this is an overwrite*/
+			}
+			
+			.ic_ui_materialdiff{
+				display: inline-block; /*this is an overwrite*/
+			}
+			
+			.ic_ui_board{
+				margin:0 auto; /*this is an overwrite*/
+			}
+			
+			.ic_ui_debug{
+				font-size: 12px; /*this is an overwrite*/
+				max-height: 200px;
+				overflow-x: hidden;
+				overflow-y: auto;
+			}
+			
+			.padded{padding: 20px 50px;}
+			
+			#left_elm{background: #f0f0f0;}
+			#right_elm{background: #f9f9f9;}
+		</style>
+		
 		<script src="./js/jquery-3.3.1.min.js"></script>
 		<script src="./js/isepic-chess.js"></script>
 		<script src="./js/isepic-chess-ui.js"></script>
 		
 		<script>
-			$(function(){
-				var temp, main_board, unlabeled_board, other_board, oc_board, h_board, rff_board, pgn_board, pgn_example;
+			function stretch_board(){
+				var elm_flex_wrapper, w_temp, h_temp;
 				
-				//turn the silent mode Off to enable warnings and errors to be sent to the console
-				//by default the silent mode is On and will not print to the console
+				elm_flex_wrapper=$("#right_elm");
+				
+				w_temp=elm_flex_wrapper.width();
+				h_temp=elm_flex_wrapper.height();
+				
+				$("#ic_ui_board").parent().css({
+					"width" : Math.min(w_temp, h_temp),
+					"height" : Math.min(w_temp, h_temp)
+				});
+			}
+			
+			function display_debug(){
+				if(!$(".ic_ui_debug").length){
+					$("#right_elm .padded").first().append("<br><hr><br><div class='ic_ui_debug'><div><a id='ic_ui_debug_toggle' href='#'>Debug ▲</a></div><div id='ic_ui_debug' style='display:none'></div>");
+					
+					if(Ic.getBoard("main")){
+						Ic.getBoard("main").refreshUi();
+					}
+				}
+			}
+			
+			$(function(){
+				var Debug_clic;
+				
 				Ic.setSilentMode(false);
 				
-				main_board=Ic.initBoard({
+				Ic.initBoard({
 					boardName : "main"
 				});
 				
-				//you can remove the board labels with "isUnlabeled : true" (optional, default false)
-				//to not show "ABCDEFGH 12345678 / HGFEDCBA 87654321" around this specific board
-				unlabeled_board=Ic.initBoard({
-					boardName : "no_labels",
-					isUnlabeled : true
-				});
+				$(window).on("resize", stretch_board);
 				
-				//you can rotate the board with "isRotated : true" (optional, default false)
-				//and change the pawn promotion value "promoteTo" to "n", "b", "r", "q" (optional, default "q")
-				other_board=Ic.initBoard({
-					boardName : "other",
-					isRotated : true,
-					promoteTo : "b"
-				});
+				stretch_board();
 				
-				//you can initialize a board without assigning it to a variable
-				//and later create a reference to it with Ic.getBoard()
-				Ic.initBoard({boardName : "other_copy"});
-				oc_board=Ic.getBoard("other_copy");
-				
-				//if you don't want a board to accidentally perform any DOM interactions
-				//consider using "isHidden : true" (optional, default false)
-				h_board=Ic.initBoard({
-					boardName : "hidden_board",
-					isHidden : true
-				});
-				
-				//John William Schulten vs Paul Morphy, New York (1857)
-				//you can start a board from a fen position too
-				rff_board=Ic.initBoard({
-					boardName : "resume_from_fen",
-					fen : "r5k1/pp3ppp/7n/8/2P2P1K/3P1q2/P1PBb2P/R5QR b - - 3 22"
-				});
-				
-				pgn_example=`[Event "New Orleans"]
-[Site "New Orleans, LA USA"]
-[Date "1920.??.??"]
-[EventDate "?"]
-[Round "?"]
-[Result "1-0"]
-[White "Edwin Ziegler Adams"]
-[Black "Carlos Torre Repetto"]
-[ECO "C41"]
-[WhiteElo "?"]
-[BlackElo "?"]
-[PlyCount "45"]
-
-1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Qxd4 Nc6 5. Bb5 Bd7 6. Bxc6
-Bxc6 7. Nc3 Nf6 8. O-O Be7 9. Nd5 Bxd5 10. exd5 O-O 11. Bg5 c6
-12. c4 cxd5 13. cxd5 Re8 14. Rfe1 a5 15. Re2 Rc8 16. Rae1 Qd7
-17. Bxf6 Bxf6 18. Qg4 Qb5 19. Qc4 Qd7 20. Qc7 Qb5 21. a4 Qxa4
-22. Re4 Qb5 23. Qxb7 1-0`;
-				
-				//load game from a PGN
-				//"validOrBreak : true" (optional, default false) forces a return of null on error or the
-				//full parsed game. Remove it to allow partial parsing up until the last recognized move
-				//"moveIndex : 0" (optional, default (moveListLen-1)) sets the current move after parsing
-				pgn_board=Ic.initBoard({
-					boardName : "pgn_loaded",
-					pgn : pgn_example,
-					moveIndex : 35,
-					validOrBreak : true
-				});
-				
-				//you can call board methods from the board objects
-				other_board.playMove("f2-f4");
-				
-				//it is risky to call Ic.getBoard(string).<boardMethod>() directly
-				//because if you typo the board name you would be calling null.<boardMethod>()
-				temp=Ic.getBoard("other");
-				
-				if(temp!==null){
-					temp.playMove("e7-e6");
-				}
-				
-				//Ic.getBoard(board_obj) is pointless but it works too
-				Ic.getBoard(other_board).playMove("a2-a3");
-				
-				//you can pass SAN moves too
-				other_board.playMove("Bxa3");
-				other_board.playMove("Nc3");
-				
-				//you can change the default delimiter of a joined move to any
-				//single character as long as it appears only once
-				other_board.playMove("g8_h6", {delimiter : "_"});
-				
-				//there is also a [initial_qos, final_qos] notation
-				//the square-type can be mixed in here
-				other_board.playMove(["c3", [4, 4]]);
-				
-				//the SAN is fexible, allowing lower-case Os and 0s when castling
-				//also the extra spaces are removed
-				other_board.playMove(" 0 - 0  ");
-				
-				//everything insde {}s gets removed
-				other_board.playMove("Nf3 {hi}");
-				
-				//from inside ()s too
-				other_board.playMove("b5 (bye)");
-				
-				//you can't use "Ng5" in here because of the ambiguity with the other knight
-				other_board.playMove("Ng5");//returns false and is not played
-				
-				//the correct SAN to move f3-g5 is "Nfg5"
-				//but "N3g5" and "Nf3g5" work too
-				other_board.playMove("Nfg5");//returns true and is played
-				
-				other_board.playMove("b4");
-				other_board.playMove("bxa3");
-				other_board.playMove("b3");
-				other_board.playMove("Ra2");
-				other_board.playMove("b2");
-				other_board.playMove("Nxh7");
-				
-				//the order of precedence when promoting a pawn is:
-				//1) {promoteTo : X} optional key (if found)
-				//2) "=X" from a SAN move (if found)
-				//3) board.promoteTo board property (or default value of 5 = queen)
-				//examples:
-				//b.playMove("b2-b1") records "b1=B" because #3
-				//b.playMove("b2-b1", {promoteTo : "R"}) records "b1=R" because #1
-				//b.playMove("b1=Q") records "b1=Q" because #2
-				//currently it is NOT possible to specify a "=X" on a joined (e.g "b2-b1=R")
-				other_board.playMove("b1=R", {promoteTo : "n"});//true, the move is "b1=N" because #1
-				
-				other_board.playMove("g4");
-				other_board.playMove("Kxh7");
-				other_board.playMove("Nd6");
-				
-				//you can safely omit check/checkmate symbols and the move will
-				//still be recognized: "Qh4+", "Qh4++" and "Qh4#"
-				other_board.playMove("Qh4");
-				
-				//alternatively -> other_board.setCurrentMove(0, true)
-				other_board.navFirst();
-				
-				//alternatively -> other_board.cloneBoardTo(oc_board)
-				//the parameter can accept a board name (string) too
-				oc_board.cloneBoardFrom(other_board);
-				
-				//tip: instead of toggle you can set a specific value by passing
-				//boolean true = set rotated and boolean false = set not rotated
-				rff_board.toggleIsRotated();
-				
-				//many internal methods refresh the UI (so it is best to make one last refresh to make
-				//sure that this board will be the one displayed and the components point to it)
-				main_board.refreshUi();
-				
-				//this is not part of the UI library, just some jQuery
-				$("#ic_ui_smaller").click(function(){
-					var elm;
+				$(".ic_ui_header h3").click(function(){
+					Debug_clic=((Debug_clic*1 || 0)+1);
 					
-					elm=$("#ic_ui_board").parent();
-					
-					elm.css({
-						"width" : Math.max(200, Math.ceil(elm.width()*0.8)),
-						"height" : Math.max(200, Math.ceil(elm.height()*0.8))
-					});
-					
-					if($(this).prop("tagName")==="A"){
-						return false;
+					if(Debug_clic>3){
+						display_debug();
 					}
 				});
 				
-				//and some more jQuery...
-				$("#ic_ui_bigger").click(function(){
-					var elm;
-					
-					elm=$("#ic_ui_board").parent();
-					
-					elm.css({
-						"width" : Math.min(800, Math.ceil(elm.width()*1.2)),
-						"height" : Math.min(800, Math.ceil(elm.height()*1.2))
-					});
-					
-					if($(this).prop("tagName")==="A"){
-						return false;
-					}
-				});
+				console.log("Note: to display the debug box call display_debug() or click the GitHub header a few times");
 			});
 		</script>
 	</head>
 	<body>
-		<div class="ic_ui_main">
-			<div class="ic_ui_header">
-				<h3>GitHub: <a href="https://github.com/ajax333221/isepic-chess">isepic-chess</a> | <a href="https://github.com/ajax333221/isepic-chess-ui">isepic-chess-ui</a></h3>
-			</div>
-			
-			<hr>
-			
-			<p>Change board size: <a id="ic_ui_smaller" href="#">[ - ]</a> <a id="ic_ui_bigger" href="#">[ + ]</a></p>
-			
-			<!-- this inline-style of 400x400 is overwritting a default 100%x100% -->
-			<!-- remove only when wrapped inside a NxN-squared parent with defined height and width -->
-			<div class="ic_ui_board" style="height:400px;width:400px">
-				<div id="ic_ui_board"></div>
-			</div>
-			
-			<hr>
-			
-			<div class="ic_ui_materialdiff">
-				<div id="ic_ui_materialdiff"></div>
-			</div>
-			
-			<hr>
-			
-			<div class="ic_ui_controls">
-				<div>
-					<input id="ic_ui_fen" value="" type="text">
+		<div class="ic_ui_main flex_wrapper">
+			<div id="left_elm" class="flex_child">
+				<div class="ic_ui_board">
+					<div id="ic_ui_board"></div>
 				</div>
-				
-				<hr>
-				
-				<div>
-					<input id="ic_ui_nav_first" value="|<" type="button">
-					<input id="ic_ui_nav_previous" value="<" type="button">
-					<input id="ic_ui_nav_next" value=">" type="button">
-					<input id="ic_ui_nav_last" value=">|" type="button">
-					<input id="ic_ui_rotate" value="rotate" type="button">
+			</div>
+			
+			<div id="right_elm" class="flex_child">
+				<div class="padded">
+					<div class="ic_ui_header">
+						<h3>GitHub: <a href="https://github.com/ajax333221/isepic-chess">isepic-chess</a> | <a href="https://github.com/ajax333221/isepic-chess-ui">isepic-chess-ui</a></h3>
+					</div>
 					
-					<select id="ic_ui_promote">
-						<option value="5" selected="selected">queen</option>
-						<option value="4">rook</option>
-						<option value="3">bishop</option>
-						<option value="2">knight</option>
-					</select>
+					<br><hr><br>
+					
+					<div class="ic_ui_controls">
+						<div>
+							<input id="ic_ui_nav_first" value="|<" type="button">
+							<input id="ic_ui_nav_previous" value="<" type="button">
+							<input id="ic_ui_nav_next" value=">" type="button">
+							<input id="ic_ui_nav_last" value=">|" type="button">
+							<input id="ic_ui_rotate" value="rotate" type="button">
+							
+							<select id="ic_ui_promote">
+								<option value="5" selected="selected">queen</option>
+								<option value="4">rook</option>
+								<option value="3">bishop</option>
+								<option value="2">knight</option>
+							</select>
+						</div>
+						
+						<br>
+						
+						<div class="ic_ui_movelist">
+							<div id="ic_ui_movelist"></div>
+						</div>
+						
+						<br>
+						
+						<div>
+							<input id="ic_ui_fen" value="" type="text">
+						</div>
+					</div>
+					
+					<br>
+					
+					<div class="ic_ui_materialdiff">
+						<div id="ic_ui_materialdiff"></div>
+					</div>
 				</div>
-				
-				<hr>
-				
-				<div class="ic_ui_tabs">
-					<div id="ic_ui_tabs"></div>
-				</div>
-				
-				<hr>
-				
-				<div class="ic_ui_movelist">
-					<div id="ic_ui_movelist"></div>
-				</div>
-			</div>
-			
-			<hr>
-			
-			<div class="ic_ui_debug">
-				<div>
-					<a id="ic_ui_debug_toggle" href="#">Debug ▲</a>
-				</div>
-				
-				<div id="ic_ui_debug" style="display:none"></div>
 			</div>
 		</div>
 	</body>

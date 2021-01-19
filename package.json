@@ -14,7 +14,8 @@
     "viewer",
     "ui",
     "interface",
-    "animated"
+    "animated",
+    "responsive"
   ],
   "author": "Ajax Isepic",
   "license": "MIT",
