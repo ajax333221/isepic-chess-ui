@@ -13,6 +13,7 @@ Isepic Chess UI is the user interface for [isepic-chess.js](https://github.com/a
 - [Demo](https://github.com/ajax333221/isepic-chess-ui#eye-demo)
 - [Features](https://github.com/ajax333221/isepic-chess-ui#rocket-features)
 - [Documentation](https://github.com/ajax333221/isepic-chess-ui#book-documentation)
+	- [IcUi methods](https://github.com/ajax333221/isepic-chess-ui#list-of-icuimethods)
 	- [Board UI methods](https://github.com/ajax333221/isepic-chess-ui#list-of-boarduimethods)
 - [To do](https://github.com/ajax333221/isepic-chess-ui#telescope-to-do)
 - [Copyright and license](https://github.com/ajax333221/isepic-chess-ui#page_facing_up-copyright-and-license)
@@ -87,6 +88,16 @@ https://ajax333221.github.io/isepic-chess-ui/
 
 You should first read the [isepic-chess.js Documentation](https://github.com/ajax333221/isepic-chess#documentation).
 
+#### List of `IcUi.<methods>(...)`:
+
+Isepic Chess UI library `isepic-chess-ui.js` has the following available methods.
+
+Function | Parameters | Return | UI refresh? | Description
+-------- | ---------- | ------ | ----------- | -----------
+**setKeyNavMode**(<br>*allowNavigation*<br>) | <ul><li>allowNavigation (Boolean)</li></ul> | - | No | Turns on/off the **key navigation mode** to allow/deny navigating with the keyboard arrows.<br><br>The **key navigation mode** is initially turned off.<br><br>:large_orange_diamond:**Important:** the scrolling via the keyboard arrows get disabled when the mode is on.<hr>Examples:<ul><li>`IcUi.setKeyNavMode(true)`</li><li>`IcUi.setKeyNavMode(false)`</li></ul>
+
+<hr>
+
 #### List of `board.<UImethods>(...)`:
 
 > **Note:** the board UI methods will automatically start working when **isepic-chess-ui.js** is present, otherwise nothing will happen when they are called.
@@ -94,8 +105,8 @@ You should first read the [isepic-chess.js Documentation](https://github.com/aja
 Boards created by `Ic.initBoard()` have the following available UI methods.
 
 Function | Parameters | Return | UI refresh? | Description
--------- | ---------- | ------ | ---------------- | -----------
-**refreshUi**(<br>*animationType*<br>) | <ul><li>:eight_pointed_black_star:animationType (Number)</li></ul><hr>:eight_pointed_black_star:Optional Parameter | - | Yes | This method will:<ul><li>Refresh the HTML of all the components (if any) to reflect the internal state of the board.</li><li>Re-bind all the components (if any) to point to this board.</li><li>Finish any ongoing piece animations.</li><li>Start the current animation (if any).</li></ul>If `animationType` is a **falsy-value**, no animation will happen.<br><br>If `animationType` is a **positive number**, the board will be refreshed with an animation as if the last move was played.<br><br>If `animationType` is a **negative number**, the board will be refreshed with an animation as if the next move was reverted.
+-------- | ---------- | ------ | ----------- | -----------
+**refreshUi**(<br>*animationType*<br>) | <ul><li>:eight_pointed_black_star:animationType (Number)</li></ul><hr>:eight_pointed_black_star:Optional Parameter | - | Yes | This method will:<ul><li>Refresh the HTML of all the components (if any) to reflect the internal state of the board.</li><li>Update the **data-attributes** of all the components (if any) to point to this **board name**.</li><li>Finish any ongoing piece animations.</li><li>Start the current animation (if any).</li></ul>If `animationType` is a **falsy-value**, no animation will happen.<br><br>If `animationType` is a **positive number**, the board will be refreshed with an animation as if the last move was played.<br><br>If `animationType` is a **negative number**, the board will be refreshed with an animation as if the next move was reverted.
 
 :telescope: To do
 -------------

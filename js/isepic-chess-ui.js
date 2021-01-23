@@ -4,7 +4,10 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.1.1";
+		var _VERSION="2.2.0";
+		
+		var _RAN_ONCE=false;
+		var _KEY_NAV_MODE=false;
 		
 		var _ANIMATE_DURATION=300;
 		var _MATERIAL_DIFF_PX=15;
@@ -54,24 +57,18 @@
 		}
 		
 		function _bindOnce(){
-			var temp;
+			var doc;
 			
-			temp=$("#ic_ui_fen");
-			
-			if(temp.length && !temp.attr("data-binded")){
-				temp.attr("data-binded", "1");
+			if(!_RAN_ONCE){
+				_RAN_ONCE=true;
 				
-				temp.click(function(){
+				doc=$(document);
+				
+				doc.off("click.icuifen").on("click.icuifen", "#ic_ui_fen", function(){
 					$(this).select();
 				});
-			}
-			
-			temp=$("#ic_ui_debug_toggle");
-			
-			if(temp.length && !temp.attr("data-binded")){
-				temp.attr("data-binded", "1");
 				
-				temp.click(function(){
+				doc.off("click.icuidebug").on("click.icuidebug", "#ic_ui_debug_toggle", function(){
 					$(this).text("Debug "+($("#ic_ui_debug").is(":visible") ? "▲" : "▼"));
 					$("#ic_ui_debug").toggle();
 					
@@ -79,34 +76,361 @@
 						return false;
 					}
 				});
-			}
-		}
-		
-		function _reBindBoardLinks(){
-			$(".ic_changeboard").unbind("click").click(function(){
-				var board, board_name, no_errors;
 				
-				no_errors=true;
-				
-				//if(no_errors){
-					board_name=$(this).attr("data-boardname");
+				doc.off("keydown.icuikeynav").on("keydown.icuikeynav", function(e){
+					var elm, current_nav;
 					
-					board=Ic.getBoard(board_name);
-					
-					if(board===null){
-						no_errors=false;
-						Ic.utilityMisc.consoleLog("Error[.ic_changeboard]: \""+board_name+"\" is not defined");
+					if(_KEY_NAV_MODE){
+						if(e.which>=37 && e.which<=40){
+							current_nav=["previous", "first", "next", "last"][e.which-37];
+							
+							elm=$("#ic_ui_nav_"+current_nav);
+						}
+						
+						if(elm && elm.length){
+							elm.trigger("click");
+							
+							return false;
+						}
 					}
-				//}
+				});
 				
-				if(no_errors){
-					refreshUi.apply(board, [0]);
-				}
+				doc.off("click.icuifirst").on("click.icuifirst", "#ic_ui_nav_first", function(){
+					var board, board_name, no_errors;
+					
+					no_errors=true;
+					
+					//if(no_errors){
+						board_name=$(this).attr("data-boardname");
+						
+						if(!board_name){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_first]: missing data-boardname");
+						}
+					//}
+					
+					if(no_errors){
+						board=Ic.getBoard(board_name);
+						
+						if(board===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_first]: \""+board_name+"\" is not defined");
+						}
+					}
+					
+					if(no_errors){
+						board.navFirst();
+					}
+					
+					if($(this).prop("tagName")==="A"){
+						return false;
+					}
+				});
 				
-				if($(this).prop("tagName")==="A"){
-					return false;
-				}
-			});
+				doc.off("click.icuiprev").on("click.icuiprev", "#ic_ui_nav_previous", function(){
+					var board, board_name, no_errors;
+					
+					no_errors=true;
+					
+					//if(no_errors){
+						board_name=$(this).attr("data-boardname");
+						
+						if(!board_name){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_previous]: missing data-boardname");
+						}
+					//}
+					
+					if(no_errors){
+						board=Ic.getBoard(board_name);
+						
+						if(board===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_previous]: \""+board_name+"\" is not defined");
+						}
+					}
+					
+					if(no_errors){
+						board.navPrevious();
+					}
+					
+					if($(this).prop("tagName")==="A"){
+						return false;
+					}
+				});
+				
+				doc.off("click.icuinext").on("click.icuinext", "#ic_ui_nav_next", function(){
+					var board, board_name, no_errors;
+					
+					no_errors=true;
+					
+					//if(no_errors){
+						board_name=$(this).attr("data-boardname");
+						
+						if(!board_name){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_next]: missing data-boardname");
+						}
+					//}
+					
+					if(no_errors){
+						board=Ic.getBoard(board_name);
+						
+						if(board===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_next]: \""+board_name+"\" is not defined");
+						}
+					}
+					
+					if(no_errors){
+						board.navNext();
+					}
+					
+					if($(this).prop("tagName")==="A"){
+						return false;
+					}
+				});
+				
+				doc.off("click.icuilast").on("click.icuilast", "#ic_ui_nav_last", function(){
+					var board, board_name, no_errors;
+					
+					no_errors=true;
+					
+					//if(no_errors){
+						board_name=$(this).attr("data-boardname");
+						
+						if(!board_name){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_last]: missing data-boardname");
+						}
+					//}
+					
+					if(no_errors){
+						board=Ic.getBoard(board_name);
+						
+						if(board===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_last]: \""+board_name+"\" is not defined");
+						}
+					}
+					
+					if(no_errors){
+						board.navLast();
+					}
+					
+					if($(this).prop("tagName")==="A"){
+						return false;
+					}
+				});
+				
+				doc.off("click.icuirotate").on("click.icuirotate", "#ic_ui_rotate", function(){
+					var board, board_name, no_errors;
+					
+					no_errors=true;
+					
+					//if(no_errors){
+						board_name=$(this).attr("data-boardname");
+						
+						if(!board_name){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_rotate]: missing data-boardname");
+						}
+					//}
+					
+					if(no_errors){
+						board=Ic.getBoard(board_name);
+						
+						if(board===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_rotate]: \""+board_name+"\" is not defined");
+						}
+					}
+					
+					if(no_errors){
+						board.toggleIsRotated();
+					}
+					
+					if($(this).prop("tagName")==="A"){
+						return false;
+					}
+				});
+				
+				doc.off("change.icuipromote").on("change.icuipromote", "#ic_ui_promote", function(){
+					var board, board_name, no_errors;
+					
+					no_errors=true;
+					
+					//if(no_errors){
+						board_name=$(this).attr("data-boardname");
+						
+						if(!board_name){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_promote]: missing data-boardname");
+						}
+					//}
+					
+					if(no_errors){
+						board=Ic.getBoard(board_name);
+						
+						if(board===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_promote]: \""+board_name+"\" is not defined");
+						}
+					}
+					
+					if(no_errors){
+						board.setPromoteTo($(this).val());
+					}
+					
+					if($(this).prop("tagName")==="A"){
+						return false;
+					}
+				});
+				
+				doc.off("click.icuichange").on("click.icuichange", ".ic_changeboard", function(){
+					var board, board_name, no_errors;
+					
+					no_errors=true;
+					
+					//if(no_errors){
+						board_name=$(this).attr("data-rebindboardname");
+						
+						if(!board_name){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[.ic_changeboard]: missing data-rebindboardname");
+						}
+					//}
+					
+					if(no_errors){
+						board=Ic.getBoard(board_name);
+						
+						if(board===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[.ic_changeboard]: \""+board_name+"\" is not defined");
+						}
+					}
+					
+					if(no_errors){
+						refreshUi.apply(board, [0]);
+					}
+					
+					if($(this).prop("tagName")==="A"){
+						return false;
+					}
+				});
+				
+				doc.off("click.icuipgnlinks").on("click.icuipgnlinks", ".ic_pgn_link", function(){
+					var pgn_index, board, board_name, no_errors;
+					
+					no_errors=true;
+					
+					//if(no_errors){
+						pgn_index=$(this).attr("data-index");
+						
+						if(!pgn_index){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[.ic_pgn_link]: missing data-index");
+						}
+					//}
+					
+					if(no_errors){
+						board_name=$(this).attr("data-boardname");
+						
+						if(!board_name){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[.ic_pgn_link]: missing data-boardname");
+						}
+					}
+					
+					if(no_errors){
+						board=Ic.getBoard(board_name);
+						
+						if(board===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[.ic_pgn_link]: \""+board_name+"\" is not defined");
+						}
+					}
+					
+					if(no_errors){
+						board.navLinkMove(pgn_index);
+					}
+					
+					if($(this).prop("tagName")==="A"){
+						return false;
+					}
+				});
+				
+				doc.off("click.icuisquares").on("click.icuisquares", ".ic_ws, .ic_bs", function(){
+					var i, len, board, board_name, current_bos, need_highlight, legal_moves, no_errors;
+					
+					no_errors=true;
+					
+					//if(no_errors){
+						current_bos=$(this).attr("data-bos");
+						
+						if(!current_bos){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_board .ic_xs]: missing data-bos");
+						}
+					//}
+					
+					if(no_errors){
+						board_name=$("#ic_ui_board").attr("data-boardname");
+						
+						if(!board_name){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_board .ic_xs]: missing data-boardname");
+						}
+					}
+					
+					if(no_errors){
+						board=Ic.getBoard(board_name);
+						
+						if(board===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_board .ic_xs]: \""+board_name+"\" is not defined");
+						}
+					}
+					
+					if(no_errors){
+						need_highlight=true;
+						
+						if(board.selectedBos){
+							$(".ic_highlight").removeClass("ic_highlight");
+							$(".ic_currpiece").removeClass("ic_currpiece");
+							
+							if(Ic.sameSquare(board.selectedBos, current_bos)){
+								board.selectedBos="";
+								_refreshDebug.apply(board, []);
+								need_highlight=false;
+							}else{
+								if(board.playMove([board.selectedBos, current_bos])){
+									need_highlight=false;
+								}else{
+									board.selectedBos="";
+									need_highlight=true;
+								}
+							}
+						}
+						
+						if(need_highlight){
+							legal_moves=board.legalMoves(current_bos);
+							len=legal_moves.length;
+							
+							if(len){
+								board.selectedBos=current_bos;
+								$(this).addClass("ic_currpiece");
+								
+								for(i=0; i<len; i++){//0<len
+									$("#ic_ui_"+legal_moves[i]).addClass("ic_highlight");
+								}
+							}
+							
+							_refreshDebug.apply(board, []);
+						}
+					}
+				});
+			}
 		}
 		
 		function _refreshActiveDot(active_is_black){
@@ -138,11 +462,27 @@
 					}else if(current_board_name===board_name){
 						new_html+="<em>"+current_board_name+"</em>";
 					}else{
-						new_html+="<a class='ic_changeboard' data-boardname='"+current_board_name+"' href='#'>"+current_board_name+"</a>";
+						new_html+="<a class='ic_changeboard' data-rebindboardname='"+current_board_name+"' href='#'>"+current_board_name+"</a>";
 					}
 				}
 				
 				$("#ic_ui_tabs").html(new_html);
+			}
+		}
+		
+		function _updateDataBoardNames(board_name){
+			var i, len, arr, elm;
+			
+			arr=["#ic_ui_board", "#ic_ui_nav_first", "#ic_ui_nav_previous", "#ic_ui_nav_next", "#ic_ui_nav_last", "#ic_ui_rotate", "#ic_ui_promote"];
+			
+			for(i=0, len=arr.length; i<len; i++){
+				elm=$(arr[i]);
+				
+				if(elm.length){
+					if(!elm.attr("data-boardname") || elm.attr("data-boardname")!==board_name){
+						elm.attr("data-boardname", board_name);
+					}
+				}
 			}
 		}
 		
@@ -239,119 +579,6 @@
 			}
 		}
 		
-		function _reBindPromotion(){
-			var that;
-			
-			that=this;
-			
-			$("#ic_ui_promote").unbind("change").change(function(){
-				that.setPromoteTo($(this).val());
-			});
-		}
-		
-		function _reBindPgnLinks(){
-			var that;
-			
-			that=this;
-			
-			$(".ic_pgn_link").unbind("click").click(function(){
-				that.navLinkMove($(this).attr("data-index"));
-			});
-		}
-		
-		function _reBindButtons(){
-			var that;
-			
-			that=this;
-			
-			$("#ic_ui_nav_first").unbind("click").click(function(){
-				that.navFirst();
-				
-				if($(this).prop("tagName")==="A"){
-					return false;
-				}
-			});
-			
-			$("#ic_ui_nav_previous").unbind("click").click(function(){
-				that.navPrevious();
-				
-				if($(this).prop("tagName")==="A"){
-					return false;
-				}
-			});
-			
-			$("#ic_ui_nav_next").unbind("click").click(function(){
-				that.navNext();
-				
-				if($(this).prop("tagName")==="A"){
-					return false;
-				}
-			});
-			
-			$("#ic_ui_nav_last").unbind("click").click(function(){
-				that.navLast();
-				
-				if($(this).prop("tagName")==="A"){
-					return false;
-				}
-			});
-			
-			$("#ic_ui_rotate").unbind("click").click(function(){
-				that.toggleIsRotated();
-				
-				if($(this).prop("tagName")==="A"){
-					return false;
-				}
-			});
-		}
-		
-		function _reBindSquares(){
-			var that;
-			
-			that=this;
-			
-			$(".ic_ws, .ic_bs").unbind("click").click(function(){
-				var i, len, current_bos, need_highlight, legal_moves;
-				
-				need_highlight=true;
-				current_bos=$(this).attr("data-bos");
-				
-				if(that.selectedBos){
-					$(".ic_highlight").removeClass("ic_highlight");
-					$(".ic_currpiece").removeClass("ic_currpiece");
-					
-					if(Ic.sameSquare(that.selectedBos, current_bos)){
-						that.selectedBos="";
-						_refreshDebug.apply(that, []);
-						need_highlight=false;
-					}else{
-						if(that.playMove([that.selectedBos, current_bos])){
-							need_highlight=false;
-						}else{
-							that.selectedBos="";
-							need_highlight=true;
-						}
-					}
-				}
-				
-				if(need_highlight){
-					legal_moves=that.legalMoves(current_bos);
-					len=legal_moves.length;
-					
-					if(len){
-						that.selectedBos=current_bos;
-						$(this).addClass("ic_currpiece");
-						
-						for(i=0; i<len; i++){//0<len
-							$("#ic_ui_"+legal_moves[i]).addClass("ic_highlight");
-						}
-					}
-					
-					_refreshDebug.apply(that, []);
-				}
-			});
-		}
-		
 		function _refreshPieceClasses(){
 			var i, j, that, reset_class, current_square, square_class;
 			
@@ -419,7 +646,7 @@
 						
 						new_html+=(black_starts===!(i%2) ? ("<span class='ic_pgn_number'>"+(initial_full_move+Math.floor((i+black_starts-1)/2))+". </span>") : "");
 						
-						new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"'>"+move_list[i].San+"</span>";
+						new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"' data-boardname='"+that.boardName+"'>"+move_list[i].San+"</span>";
 						
 						if(move_list[i].Comment){
 							new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_comment" : "ic_pgn_comment_current")+"'> "+move_list[i].Comment+"</span>";
@@ -537,6 +764,10 @@
 		
 		//---------------- ic ui (this=apply)
 		
+		function setKeyNavMode(val){
+			_KEY_NAV_MODE=!!val;
+		}
+		
 		function refreshUi(animation_type){
 			var that;
 			
@@ -545,15 +776,14 @@
 			if(!that.isHidden){
 				_cancelAnimations();
 				
-				that.selectedBos="";
-				
 				_bindOnce();
+				_updateDataBoardNames(that.boardName);
+				
+				that.selectedBos="";
 				
 				if(!$("#ic_ui_board").html() || $("#ic_ui_board").hasClass("ic_rotated")!==that.isRotated || $("#ic_ui_board").hasClass("ic_unlabeled")!==that.isUnlabeled){
 					_refreshTable(that.isRotated, that.isUnlabeled);
 				}
-				
-				_reBindSquares.apply(that, []);
 				
 				$("#ic_ui_fen").val(that.fen);
 				$("#ic_ui_promote").val(that.promoteTo);
@@ -561,18 +791,12 @@
 				_refreshDebug.apply(that, []);
 				
 				_refreshBoardTabs(that.boardName);
-				_reBindBoardLinks();
-				
-				_reBindButtons.apply(that, []);
-				
-				_reBindPromotion.apply(that, []);
 				
 				_refreshPieceClasses.apply(that, []);
 				
 				_refreshMaterialDifference.apply(that, []);
 				
 				_refreshMoveList.apply(that, []);
-				_reBindPgnLinks.apply(that, []);
 				
 				if($("#ic_ui_board").length){
 					_refreshActiveDot(that[that.activeColor].isBlack);
@@ -591,6 +815,7 @@
 		
 		return (($!==null && Ic!==null) ? {
 			version : _VERSION,
+			setKeyNavMode : setKeyNavMode,
 			refreshUi : refreshUi
 		} : null);
 	})();
