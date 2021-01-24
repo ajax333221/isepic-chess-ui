@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.2.1";
+		var _VERSION="2.2.2";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
@@ -122,23 +122,23 @@
 							board=_getBoardFromData();
 							
 							if(board!==null){
-								current_nav=["previous", "first", "next", "last"][e.which-37];
+								current_nav=["left", "up", "right", "down"][e.which-37];
 								
 								switch(current_nav){
-									case "first" :
+									case "up" :
 										board.navFirst();
 										break;
-									case "previous" :
+									case "left" :
 										board.navPrevious();
 										break;
-									case "next" :
+									case "right" :
 										board.navNext();
 										break;
-									case "last" :
+									case "down" :
 										board.navLast();
 										break;
 									default :
-										Ic.utilityMisc.consoleLog("Error[keydown.icuikeynav]: invalid nav name \""+current_nav+"\"");
+										Ic.utilityMisc.consoleLog("Error[keydown.icuikeynav]: invalid arrow name \""+current_nav+"\"");
 								}
 								
 								return false;
