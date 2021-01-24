@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.2.0";
+		var _VERSION="2.2.1";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
@@ -16,6 +16,43 @@
 		
 		function _cancelAnimations(){
 			$(".ic_piece_holder").finish();
+		}
+		
+		function _getBoardFromData(){
+			var board, board_name, board_elm, no_errors, rtn;
+			
+			rtn=null;
+			no_errors=true;
+			
+			//if(no_errors){
+				board_elm=$("#ic_ui_board");
+				
+				if(!board_elm.length){
+					no_errors=false;
+				}
+			//}
+			
+			if(no_errors){
+				board_name=board_elm.attr("data-boardname");
+				
+				if(!board_name){
+					no_errors=false;
+				}
+			}
+			
+			if(no_errors){
+				board=Ic.getBoard(board_name);
+				
+				if(board===null){
+					no_errors=false;
+				}
+			}
+			
+			if(no_errors){
+				rtn=board;
+			}
+			
+			return rtn;
 		}
 		
 		function _animatePiece(from_bos, to_bos, piece_class, promotion_class){
@@ -78,45 +115,51 @@
 				});
 				
 				doc.off("keydown.icuikeynav").on("keydown.icuikeynav", function(e){
-					var elm, current_nav;
+					var board, current_nav;
 					
 					if(_KEY_NAV_MODE){
 						if(e.which>=37 && e.which<=40){
-							current_nav=["previous", "first", "next", "last"][e.which-37];
+							board=_getBoardFromData();
 							
-							elm=$("#ic_ui_nav_"+current_nav);
-						}
-						
-						if(elm && elm.length){
-							elm.trigger("click");
-							
-							return false;
+							if(board!==null){
+								current_nav=["previous", "first", "next", "last"][e.which-37];
+								
+								switch(current_nav){
+									case "first" :
+										board.navFirst();
+										break;
+									case "previous" :
+										board.navPrevious();
+										break;
+									case "next" :
+										board.navNext();
+										break;
+									case "last" :
+										board.navLast();
+										break;
+									default :
+										Ic.utilityMisc.consoleLog("Error[keydown.icuikeynav]: invalid nav name \""+current_nav+"\"");
+								}
+								
+								return false;
+							}
 						}
 					}
 				});
 				
 				doc.off("click.icuifirst").on("click.icuifirst", "#ic_ui_nav_first", function(){
-					var board, board_name, no_errors;
+					var board, no_errors;
 					
 					no_errors=true;
 					
 					//if(no_errors){
-						board_name=$(this).attr("data-boardname");
-						
-						if(!board_name){
-							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_first]: missing data-boardname");
-						}
-					//}
-					
-					if(no_errors){
-						board=Ic.getBoard(board_name);
+						board=_getBoardFromData();
 						
 						if(board===null){
 							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_first]: \""+board_name+"\" is not defined");
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_first]: board not found");
 						}
-					}
+					//}
 					
 					if(no_errors){
 						board.navFirst();
@@ -128,27 +171,18 @@
 				});
 				
 				doc.off("click.icuiprev").on("click.icuiprev", "#ic_ui_nav_previous", function(){
-					var board, board_name, no_errors;
+					var board, no_errors;
 					
 					no_errors=true;
 					
 					//if(no_errors){
-						board_name=$(this).attr("data-boardname");
-						
-						if(!board_name){
-							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_previous]: missing data-boardname");
-						}
-					//}
-					
-					if(no_errors){
-						board=Ic.getBoard(board_name);
+						board=_getBoardFromData();
 						
 						if(board===null){
 							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_previous]: \""+board_name+"\" is not defined");
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_previous]: board not found");
 						}
-					}
+					//}
 					
 					if(no_errors){
 						board.navPrevious();
@@ -160,27 +194,18 @@
 				});
 				
 				doc.off("click.icuinext").on("click.icuinext", "#ic_ui_nav_next", function(){
-					var board, board_name, no_errors;
+					var board, no_errors;
 					
 					no_errors=true;
 					
 					//if(no_errors){
-						board_name=$(this).attr("data-boardname");
-						
-						if(!board_name){
-							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_next]: missing data-boardname");
-						}
-					//}
-					
-					if(no_errors){
-						board=Ic.getBoard(board_name);
+						board=_getBoardFromData();
 						
 						if(board===null){
 							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_next]: \""+board_name+"\" is not defined");
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_next]: board not found");
 						}
-					}
+					//}
 					
 					if(no_errors){
 						board.navNext();
@@ -192,27 +217,18 @@
 				});
 				
 				doc.off("click.icuilast").on("click.icuilast", "#ic_ui_nav_last", function(){
-					var board, board_name, no_errors;
+					var board, no_errors;
 					
 					no_errors=true;
 					
 					//if(no_errors){
-						board_name=$(this).attr("data-boardname");
-						
-						if(!board_name){
-							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_last]: missing data-boardname");
-						}
-					//}
-					
-					if(no_errors){
-						board=Ic.getBoard(board_name);
+						board=_getBoardFromData();
 						
 						if(board===null){
 							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_last]: \""+board_name+"\" is not defined");
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_last]: board not found");
 						}
-					}
+					//}
 					
 					if(no_errors){
 						board.navLast();
@@ -224,27 +240,18 @@
 				});
 				
 				doc.off("click.icuirotate").on("click.icuirotate", "#ic_ui_rotate", function(){
-					var board, board_name, no_errors;
+					var board, no_errors;
 					
 					no_errors=true;
 					
 					//if(no_errors){
-						board_name=$(this).attr("data-boardname");
-						
-						if(!board_name){
-							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_rotate]: missing data-boardname");
-						}
-					//}
-					
-					if(no_errors){
-						board=Ic.getBoard(board_name);
+						board=_getBoardFromData();
 						
 						if(board===null){
 							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_rotate]: \""+board_name+"\" is not defined");
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_rotate]: board not found");
 						}
-					}
+					//}
 					
 					if(no_errors){
 						board.toggleIsRotated();
@@ -256,27 +263,18 @@
 				});
 				
 				doc.off("change.icuipromote").on("change.icuipromote", "#ic_ui_promote", function(){
-					var board, board_name, no_errors;
+					var board, no_errors;
 					
 					no_errors=true;
 					
 					//if(no_errors){
-						board_name=$(this).attr("data-boardname");
-						
-						if(!board_name){
-							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_promote]: missing data-boardname");
-						}
-					//}
-					
-					if(no_errors){
-						board=Ic.getBoard(board_name);
+						board=_getBoardFromData();
 						
 						if(board===null){
 							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_promote]: \""+board_name+"\" is not defined");
+							Ic.utilityMisc.consoleLog("Error[#ic_ui_promote]: board not found");
 						}
-					}
+					//}
 					
 					if(no_errors){
 						board.setPromoteTo($(this).val());
@@ -320,7 +318,7 @@
 				});
 				
 				doc.off("click.icuipgnlinks").on("click.icuipgnlinks", ".ic_pgn_link", function(){
-					var pgn_index, board, board_name, no_errors;
+					var pgn_index, board, no_errors;
 					
 					no_errors=true;
 					
@@ -334,20 +332,11 @@
 					//}
 					
 					if(no_errors){
-						board_name=$(this).attr("data-boardname");
-						
-						if(!board_name){
-							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[.ic_pgn_link]: missing data-boardname");
-						}
-					}
-					
-					if(no_errors){
-						board=Ic.getBoard(board_name);
+						board=_getBoardFromData();
 						
 						if(board===null){
 							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[.ic_pgn_link]: \""+board_name+"\" is not defined");
+							Ic.utilityMisc.consoleLog("Error[.ic_pgn_link]: board not found");
 						}
 					}
 					
@@ -361,7 +350,7 @@
 				});
 				
 				doc.off("click.icuisquares").on("click.icuisquares", ".ic_ws, .ic_bs", function(){
-					var i, len, board, board_name, current_bos, need_highlight, legal_moves, no_errors;
+					var i, len, board, current_bos, need_highlight, legal_moves, no_errors;
 					
 					no_errors=true;
 					
@@ -370,25 +359,16 @@
 						
 						if(!current_bos){
 							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_board .ic_xs]: missing data-bos");
+							Ic.utilityMisc.consoleLog("Error[.ic_ws, .ic_bs]: missing data-bos");
 						}
 					//}
 					
 					if(no_errors){
-						board_name=$("#ic_ui_board").attr("data-boardname");
-						
-						if(!board_name){
-							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_board .ic_xs]: missing data-boardname");
-						}
-					}
-					
-					if(no_errors){
-						board=Ic.getBoard(board_name);
+						board=_getBoardFromData();
 						
 						if(board===null){
 							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[#ic_ui_board .ic_xs]: \""+board_name+"\" is not defined");
+							Ic.utilityMisc.consoleLog("Error[.ic_ws, .ic_bs]: board not found");
 						}
 					}
 					
@@ -470,74 +450,56 @@
 			}
 		}
 		
-		function _updateDataBoardNames(board_name){
-			var i, len, arr, elm;
-			
-			arr=["#ic_ui_board", "#ic_ui_nav_first", "#ic_ui_nav_previous", "#ic_ui_nav_next", "#ic_ui_nav_last", "#ic_ui_rotate", "#ic_ui_promote"];
-			
-			for(i=0, len=arr.length; i<len; i++){
-				elm=$(arr[i]);
-				
-				if(elm.length){
-					if(!elm.attr("data-boardname") || elm.attr("data-boardname")!==board_name){
-						elm.attr("data-boardname", board_name);
-					}
-				}
-			}
-		}
-		
 		function _refreshTable(is_rotated, is_unlabeled){
 			var i, j, temp, rank_bos, current_bos, new_class, new_html;
 			
-			if($("#ic_ui_board").length){
-				temp=[];
-				
-				if(is_rotated){
-					temp.push("ic_rotated");
-				}
-				
-				if(is_unlabeled){
-					temp.push("ic_unlabeled");
-				}
-				
-				new_class=temp.join(" ");
-				
-				new_html="<table cellpadding='0' cellspacing='0'>";
-				
-				if(!is_unlabeled){
-					new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_wside" : "ic_bside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
-				}
-				
-				for(i=0; i<8; i++){//0...7
-					rank_bos=(is_rotated ? (i+1) : (8-i));
-					
-					new_html+="<tr>";
-					
-					if(!is_unlabeled){
-						new_html+="<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>";
-					}
-					
-					for(j=0; j<8; j++){//0...7
-						current_bos=Ic.toBos(is_rotated ? [(7-i), (7-j)] : [i, j]);
-						
-						new_html+="<td id='"+("ic_ui_"+current_bos)+"' class='"+((i+j)%2 ? "ic_bs" : "ic_ws")+"' data-bos='"+current_bos+"'><div class='ic_piece_holder'></div></td>";
-					}
-					
-					if(!is_unlabeled){
-						new_html+="<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>";
-					}
-					
-					new_html+="</tr>";
-				}
-				
-				if(!is_unlabeled){
-					new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_bside" : "ic_wside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
-				}
-				
-				new_html+="</table>";
-				
-				$("#ic_ui_board").attr("class", new_class).html(new_html);
+			temp=[];
+			
+			if(is_rotated){
+				temp.push("ic_rotated");
 			}
+			
+			if(is_unlabeled){
+				temp.push("ic_unlabeled");
+			}
+			
+			new_class=temp.join(" ");
+			
+			new_html="<table cellpadding='0' cellspacing='0'>";
+			
+			if(!is_unlabeled){
+				new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_wside" : "ic_bside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
+			}
+			
+			for(i=0; i<8; i++){//0...7
+				rank_bos=(is_rotated ? (i+1) : (8-i));
+				
+				new_html+="<tr>";
+				
+				if(!is_unlabeled){
+					new_html+="<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>";
+				}
+				
+				for(j=0; j<8; j++){//0...7
+					current_bos=Ic.toBos(is_rotated ? [(7-i), (7-j)] : [i, j]);
+					
+					new_html+="<td id='"+("ic_ui_"+current_bos)+"' class='"+((i+j)%2 ? "ic_bs" : "ic_ws")+"' data-bos='"+current_bos+"'><div class='ic_piece_holder'></div></td>";
+				}
+				
+				if(!is_unlabeled){
+					new_html+="<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>";
+				}
+				
+				new_html+="</tr>";
+			}
+			
+			if(!is_unlabeled){
+				new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_bside" : "ic_wside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
+			}
+			
+			new_html+="</table>";
+			
+			$("#ic_ui_board").attr("class", new_class).html(new_html);
 		}
 		
 		//---------------- utilities (this=apply)
@@ -584,17 +546,15 @@
 			
 			that=this;
 			
-			if($("#ic_ui_board").length){
-				for(i=0; i<8; i++){//0...7
-					for(j=0; j<8; j++){//0...7
-						reset_class=((i+j)%2 ? "ic_bs" : "ic_ws");
-						current_square=that.getSquare(that.isRotated ? [(7-i), (7-j)] : [i, j]);
-						
-						square_class=current_square.className;
-						square_class=(square_class ? (" ic_"+square_class) : "");
-						
-						$("#ic_ui_"+current_square.bos).attr("class", reset_class).html("<div class='"+("ic_piece_holder"+square_class)+"'></div>");
-					}
+			for(i=0; i<8; i++){//0...7
+				for(j=0; j<8; j++){//0...7
+					reset_class=((i+j)%2 ? "ic_bs" : "ic_ws");
+					current_square=that.getSquare(that.isRotated ? [(7-i), (7-j)] : [i, j]);
+					
+					square_class=current_square.className;
+					square_class=(square_class ? (" ic_"+square_class) : "");
+					
+					$("#ic_ui_"+current_square.bos).attr("class", reset_class).html("<div class='"+("ic_piece_holder"+square_class)+"'></div>");
 				}
 			}
 		}
@@ -646,7 +606,7 @@
 						
 						new_html+=(black_starts===!(i%2) ? ("<span class='ic_pgn_number'>"+(initial_full_move+Math.floor((i+black_starts-1)/2))+". </span>") : "");
 						
-						new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"' data-boardname='"+that.boardName+"'>"+move_list[i].San+"</span>";
+						new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"'>"+move_list[i].San+"</span>";
 						
 						if(move_list[i].Comment){
 							new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_comment" : "ic_pgn_comment_current")+"'> "+move_list[i].Comment+"</span>";
@@ -769,7 +729,7 @@
 		}
 		
 		function refreshUi(animation_type){
-			var that;
+			var that, board_elm;
 			
 			that=this;
 			
@@ -777,28 +737,36 @@
 				_cancelAnimations();
 				
 				_bindOnce();
-				_updateDataBoardNames(that.boardName);
 				
 				that.selectedBos="";
 				
-				if(!$("#ic_ui_board").html() || $("#ic_ui_board").hasClass("ic_rotated")!==that.isRotated || $("#ic_ui_board").hasClass("ic_unlabeled")!==that.isUnlabeled){
-					_refreshTable(that.isRotated, that.isUnlabeled);
+				board_elm=$("#ic_ui_board");
+				
+				if(board_elm.length){
+					if(!board_elm.attr("data-boardname") || board_elm.attr("data-boardname")!==that.boardName){
+						board_elm.attr("data-boardname", that.boardName);
+					}
+					
+					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")!==that.isUnlabeled){
+						_refreshTable(that.isRotated, that.isUnlabeled);
+					}
 				}
 				
 				$("#ic_ui_fen").val(that.fen);
+				
 				$("#ic_ui_promote").val(that.promoteTo);
 				
 				_refreshDebug.apply(that, []);
 				
 				_refreshBoardTabs(that.boardName);
 				
-				_refreshPieceClasses.apply(that, []);
-				
 				_refreshMaterialDifference.apply(that, []);
 				
 				_refreshMoveList.apply(that, []);
 				
-				if($("#ic_ui_board").length){
+				if(board_elm.length){
+					_refreshPieceClasses.apply(that, []);
+					
 					_refreshActiveDot(that[that.activeColor].isBlack);
 					
 					if(animation_type){
