@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.2.2";
+		var _VERSION="2.2.3";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
