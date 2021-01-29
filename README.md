@@ -86,7 +86,7 @@ https://ajax333221.github.io/isepic-chess-ui/
 :book: Documentation
 -------------
 
-You should first read the [isepic-chess.js Documentation](https://github.com/ajax333221/isepic-chess#documentation).
+You should first read the [isepic-chess.js Documentation](https://github.com/ajax333221/isepic-chess#book-documentation).
 
 #### List of `IcUi.<methods>(...)`:
 
