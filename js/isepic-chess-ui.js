@@ -4,7 +4,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.2.3";
+		var _VERSION="2.3.0";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
@@ -512,10 +512,10 @@
 			if((that.currentMove!==0 || is_reversed) && (that.currentMove!==(that.moveList.length-1) || !is_reversed)){
 				temp=that.moveList[that.currentMove+is_reversed];
 				
-				initial_val=(is_reversed ? temp.FinalVal : temp.InitialVal);
-				final_val=(is_reversed ? temp.InitialVal : temp.FinalVal);
-				from_bos=(is_reversed ? temp.ToBos : temp.FromBos);
-				to_bos=(is_reversed ? temp.FromBos : temp.ToBos);
+				initial_val=(is_reversed ? temp.finalVal : temp.initialVal);
+				final_val=(is_reversed ? temp.initialVal : temp.finalVal);
+				from_bos=(is_reversed ? temp.toBos : temp.fromBos);
+				to_bos=(is_reversed ? temp.fromBos : temp.toBos);
 				
 				piece_class=Ic.toClassName(is_reversed ? final_val : initial_val);
 				piece_class=(piece_class ? (" ic_"+piece_class) : "");
@@ -525,11 +525,11 @@
 				
 				_animatePiece(from_bos, to_bos, piece_class, promotion_class);
 				
-				if(temp.San.slice(0, 2)==="O-"){
-					from_bos=Ic.toBos([Ic.getRankPos(temp.ToBos), (temp.San==="O-O-O" ? 0 : 7)]);
-					to_bos=Ic.toBos([Ic.getRankPos(temp.ToBos), (temp.San==="O-O-O" ? 3 : 5)]);
+				if(temp.san.slice(0, 2)==="O-"){
+					from_bos=Ic.toBos([Ic.getRankPos(temp.toBos), (temp.san==="O-O-O" ? 0 : 7)]);
+					to_bos=Ic.toBos([Ic.getRankPos(temp.toBos), (temp.san==="O-O-O" ? 3 : 5)]);
 					
-					piece_class=Ic.toClassName(Ic.toAbsVal("r")*Ic.getSign(Ic.getRankPos(temp.ToBos)===0));
+					piece_class=Ic.toClassName(Ic.toAbsVal("r")*Ic.getSign(Ic.getRankPos(temp.toBos)===0));
 					piece_class=(piece_class ? (" ic_"+piece_class) : "");
 					
 					if(is_reversed){
@@ -592,7 +592,7 @@
 			if($("#ic_ui_movelist").length){
 				move_list=that.moveList;
 				
-				black_starts=Ic.utilityMisc.strContains(move_list[0].Fen, " b ");
+				black_starts=Ic.utilityMisc.strContains(move_list[0].fen, " b ");
 				
 				initial_full_move=(that.fullMove-Math.floor((that.currentMove+black_starts-1)/2)+(black_starts===!(that.currentMove%2))-1);
 				
@@ -606,15 +606,15 @@
 						
 						new_html+=(black_starts===!(i%2) ? ("<span class='ic_pgn_number'>"+(initial_full_move+Math.floor((i+black_starts-1)/2))+". </span>") : "");
 						
-						new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"'>"+move_list[i].San+"</span>";
+						new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"'>"+move_list[i].san+"</span>";
 						
-						if(move_list[i].Comment){
-							new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_comment" : "ic_pgn_comment_current")+"'> "+move_list[i].Comment+"</span>";
+						if(move_list[i].comment){
+							new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_comment" : "ic_pgn_comment_current")+"'> "+move_list[i].comment+"</span>";
 						}
 					}
 					
-					if(move_list[i].MoveResult){
-						result_tag_ow=move_list[i].MoveResult;
+					if(move_list[i].moveResult){
+						result_tag_ow=move_list[i].moveResult;
 					}
 				}
 				
@@ -774,8 +774,8 @@
 					}
 					
 					if(that.currentMove!==0){
-						$("#ic_ui_"+that.moveList[that.currentMove].FromBos).addClass("ic_lastmove");
-						$("#ic_ui_"+that.moveList[that.currentMove].ToBos).addClass("ic_lastmove");
+						$("#ic_ui_"+that.moveList[that.currentMove].fromBos).addClass("ic_lastmove");
+						$("#ic_ui_"+that.moveList[that.currentMove].toBos).addClass("ic_lastmove");
 					}
 				}
 			}
