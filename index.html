@@ -44,7 +44,54 @@
 				overflow-y: auto;
 			}
 			
-			.padded{padding: 20px 50px;}
+			#parsebox{
+				text-align: center;
+				background: #dfdfdf;
+			}
+			
+			#parsebox p{
+				color: #555;
+				font-size: 12px;
+				margin: 0px;
+			}
+			
+			#parsebox textarea{
+				box-sizing: border-box;
+				height: 80px;
+				width: 100%;
+				padding: 15px;
+				margin-top: 10px;
+			}
+			
+			#parsebox input{
+				font-size: 15px;
+				border: 1px solid #ccc;
+				background: #fafafa;
+				cursor: pointer;
+				padding: 9px 40px;
+				margin-top: 10px;
+			}
+			
+			#parsebox input:hover{
+				color: #3e6640;
+				background: #fff;
+			}
+			
+			#parsetoggler{
+				text-align: center;
+				background: #fff;
+				border: 1px solid #d5d5d5;
+				border-left: 0px;
+				border-right: 0px;
+				cursor: pointer;
+				padding: 5px;
+			}
+			
+			#parsetoggler:hover{
+				background: #f6f6f6;
+			}
+			
+			.padded{padding: 10px 50px;}
 			
 			#left_elm{background: #f0f0f0;}
 			#right_elm{background: #f9f9f9;}
@@ -71,7 +118,7 @@
 			
 			function display_debug(){
 				if(!$(".ic_ui_debug").length){
-					$("#right_elm .padded").first().append("<br><hr><br><div class='ic_ui_debug'><div><a id='ic_ui_debug_toggle' href='#'>Debug ▲</a></div><div id='ic_ui_debug' style='display:none'></div>");
+					$("#right_elm .padded").last().append("<br><hr><br><div class='ic_ui_debug'><div><a id='ic_ui_debug_toggle' href='#'>Debug ▲</a></div><div id='ic_ui_debug' style='display:none'></div>");
 					
 					if(Ic.getBoard("main")){
 						Ic.getBoard("main").refreshUi();
@@ -93,6 +140,41 @@
 				
 				stretch_board();
 				
+				$("#parsebtn").click(function(){
+					var val, parsed_correctly;
+					
+					val=$("#parseinput").val();
+					
+					parsed_correctly=false;
+					
+					if(Ic.fenApply(val, "isLegalFen")){
+						parsed_correctly=!!Ic.initBoard({
+							boardName : "main",
+							fen : val,
+							validOrBreak : true
+						});
+					}else{
+						parsed_correctly=!!Ic.initBoard({
+							boardName : "main",
+							pgn : val,
+							validOrBreak : true
+						});
+					}
+					
+					if(parsed_correctly){
+						$("#parsetoggler").trigger("click");
+					}
+					
+					return false;
+				});
+				
+				$("#parsetoggler").click(function(){
+					$("#parsebox").toggle();
+					$(this).text($("#parsebox").is(":visible") ? "▲" : "▼");
+					
+					return false;
+				});
+				
 				$(".ic_ui_header h3").click(function(){
 					Debug_clic=((Debug_clic*1 || 0)+1);
 					
@@ -100,6 +182,8 @@
 						display_debug();
 					}
 				});
+				
+				$("#parseinput").val("1. e4 e5 2. Nf3");
 				
 				console.log("Note: to display the debug box call display_debug() or click the GitHub header a few times");
 			});
@@ -114,6 +198,20 @@
 			</div>
 			
 			<div id="right_elm" class="flex_child">
+				<div id="parsebox">
+					<div class="padded">
+						<p>Input (FEN / PGN):</p>
+						
+						<textarea id="parseinput" name="parseinput"></textarea>
+						
+						<br>
+						
+						<input id="parsebtn" value="Load" type="button">
+					</div>
+				</div>
+				
+				<div id="parsetoggler">▲</div>
+				
 				<div class="padded">
 					<div class="ic_ui_header">
 						<h3>GitHub: <a href="https://github.com/ajax333221/isepic-chess">isepic-chess</a> | <a href="https://github.com/ajax333221/isepic-chess-ui">isepic-chess-ui</a></h3>
