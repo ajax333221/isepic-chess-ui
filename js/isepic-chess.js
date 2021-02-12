@@ -387,8 +387,10 @@
 				while(rtn!==(rtn=rtn.replace(/\<[^<>]*\>/g, "\n")));
 				
 				rtn=rtn.replace(/(\t)|(\r?\n)|(\r\n?)/g, "\n");
-				rtn=rtn.replace(/;+[^\n]*(\n|$)/g, "\n").replace(/^%.*\n?/gm, "").replace(/^\n+|\n+$/g, "");
-				rtn=rtn.replace(/\n/g, " ");
+				
+				rtn=rtn.replace(/;+[^\n]*(\n|$)/g, "\n");/*to-do: keep comment*/
+				
+				rtn=rtn.replace(/^%.*\n?/gm, "").replace(/^\n+|\n+$/g, "").replace(/\n/g, " ");
 				
 				rtn=rtn.replace(/\$\d+/g, " ");/*to-do: keep NAG*/
 				rtn=rtn.replace(/[^a-h0-8nrqkxo /½=-]/gi, "");//no planned support for P and e.p.
