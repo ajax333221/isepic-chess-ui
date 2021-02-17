@@ -1358,7 +1358,7 @@
 							temp2={
 								castleToSkip : (i ? _SHORT_CASTLE : _LONG_CASTLE),
 								direction : (i ? _DIRECTION_LEFT : _DIRECTION_RIGHT),
-								stepsToWalk : (i ? 3 : 2),
+								consecutiveEmpty : (i ? 3 : 2),
 								singleFileShift : (i ? -1 : 1)
 							};
 							
@@ -1366,7 +1366,7 @@
 								continue;
 							}
 							
-							if(_candidateMoves(target_cached_square, temp2.direction, false, temp2.stepsToWalk, false).length!==temp2.stepsToWalk){
+							if(_candidateMoves(target_cached_square, temp2.direction, false, temp2.consecutiveEmpty, false).length!==temp2.consecutiveEmpty){
 								continue;
 							}
 							
