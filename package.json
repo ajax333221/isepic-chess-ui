@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "jquery": ">=3.3.1",
-    "isepic-chess": ">=5.6.4"
+    "isepic-chess": ">=5.7.0"
   },
   "bugs": {
     "url": "https://github.com/ajax333221/isepic-chess-ui/issues"
