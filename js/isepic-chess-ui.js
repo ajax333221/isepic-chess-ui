@@ -1,10 +1,12 @@
 /** Copyright (c) 2021 Ajax Isepic (ajax333221) Licensed MIT */
 
-/* jshint indent:4, quotmark:double, onevar:true, undef:true, unused:true, trailing:true, jquery:true, curly:true, latedef:nofunc, bitwise:false, sub:true, eqeqeq:true, esversion:6 */
+/* jshint quotmark:double, undef:true, unused:true, jquery:true, curly:true, latedef:nofunc, bitwise:false, eqeqeq:true, esversion:9 */
+
+/* globals Ic */
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.3.0";
+		var _VERSION="2.3.1";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
@@ -505,31 +507,33 @@
 		//---------------- utilities (this=apply)
 		
 		function _animateCaller(is_reversed){
-			var that, temp, initial_val, final_val, from_bos, to_bos, piece_class, promotion_class;
+			var that, temp, from_bos, to_bos, piece_class, promotion_class;
 			
 			that=this;
 			
 			if((that.currentMove!==0 || is_reversed) && (that.currentMove!==(that.moveList.length-1) || !is_reversed)){
 				temp=that.moveList[that.currentMove+is_reversed];
 				
-				initial_val=(is_reversed ? temp.finalVal : temp.initialVal);
-				final_val=(is_reversed ? temp.initialVal : temp.finalVal);
-				from_bos=(is_reversed ? temp.toBos : temp.fromBos);
-				to_bos=(is_reversed ? temp.fromBos : temp.toBos);
+				from_bos=temp.fromBos;
+				to_bos=temp.toBos;
 				
-				piece_class=Ic.toClassName(is_reversed ? final_val : initial_val);
+				piece_class=Ic.toClassName(Ic.toAbsVal(temp.piece)*Ic.getSign(temp.colorMoved==="b"));
 				piece_class=(piece_class ? (" ic_"+piece_class) : "");
 				
-				promotion_class=Ic.toClassName((initial_val!==final_val && !is_reversed) ? final_val : 0);
-				promotion_class=(promotion_class ? (" ic_"+promotion_class) : "");
-				
-				_animatePiece(from_bos, to_bos, piece_class, promotion_class);
+				if(is_reversed){
+					_animatePiece(to_bos, from_bos, piece_class);
+				}else{
+					promotion_class=Ic.toClassName(Ic.toAbsVal(temp.promotion)*Ic.getSign(temp.colorMoved==="b"));
+					promotion_class=(promotion_class ? (" ic_"+promotion_class) : "");
+					
+					_animatePiece(from_bos, to_bos, piece_class, promotion_class);
+				}
 				
 				if(temp.san.slice(0, 2)==="O-"){
 					from_bos=Ic.toBos([Ic.getRankPos(temp.toBos), (temp.san==="O-O-O" ? 0 : 7)]);
 					to_bos=Ic.toBos([Ic.getRankPos(temp.toBos), (temp.san==="O-O-O" ? 3 : 5)]);
 					
-					piece_class=Ic.toClassName(Ic.toAbsVal("r")*Ic.getSign(Ic.getRankPos(temp.toBos)===0));
+					piece_class=Ic.toClassName(Ic.toAbsVal("r")*Ic.getSign(temp.colorMoved==="b"));
 					piece_class=(piece_class ? (" ic_"+piece_class) : "");
 					
 					if(is_reversed){
@@ -592,7 +596,7 @@
 			if($("#ic_ui_movelist").length){
 				move_list=that.moveList;
 				
-				black_starts=Ic.utilityMisc.strContains(move_list[0].fen, " b ");
+				black_starts=(move_list[0].colorToPlay==="b");
 				
 				initial_full_move=(that.fullMove-Math.floor((that.currentMove+black_starts-1)/2)+(black_starts===!(that.currentMove%2))-1);
 				
