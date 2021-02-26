@@ -176,7 +176,7 @@
 			
 			rtn=null;
 			
-			str=_trimSpaces(str).replace(/[^a-h0-8 nbrq]/gi, "").toLowerCase();
+			str=_trimSpaces(str).replace(/[^a-h1-8 nrq]/gi, "").toLowerCase();
 			
 			if(str){
 				rtn=str.split(" ");
