@@ -141,28 +141,49 @@
 				stretch_board();
 				
 				$("#parsebtn").click(function(){
-					var val, parsed_correctly;
+					var val, animate_last_move, parsed_correctly;
 					
 					val=$("#parseinput").val();
 					
+					animate_last_move=false;
 					parsed_correctly=false;
 					
-					if(Ic.fenApply(val, "isLegalFen")){
-						parsed_correctly=!!Ic.initBoard({
-							boardName : "main",
-							fen : val,
-							validOrBreak : true
-						});
-					}else{
+					//if(!parsed_correctly){
+						if(Ic.fenApply(val, "isLegalFen")){
+							parsed_correctly=!!Ic.initBoard({
+								boardName : "main",
+								fen : val,
+								validOrBreak : true
+							});
+						}
+					//}
+					
+					if(!parsed_correctly){
 						parsed_correctly=!!Ic.initBoard({
 							boardName : "main",
 							pgn : val,
 							validOrBreak : true
 						});
+						
+						animate_last_move=parsed_correctly;
+					}
+					
+					if(!parsed_correctly){
+						parsed_correctly=!!Ic.initBoard({
+							boardName : "main",
+							uci : val,
+							validOrBreak : true
+						});
+						
+						animate_last_move=parsed_correctly;
 					}
 					
 					if(parsed_correctly){
 						$("#parsetoggler").trigger("click");
+						
+						if(animate_last_move){
+							Ic.getBoard("main").refreshUi(1);
+						}
 					}
 					
 					return false;
@@ -183,7 +204,7 @@
 					}
 				});
 				
-				$("#parseinput").val("1. e4 e5 2. Nf3");
+				$("#parseinput").val("1. e4 e5 2. Nf3 Nc6 3. Bc4 f6 4. O-O");
 				
 				console.log("Note: to display the debug box call display_debug() or click the GitHub header a few times");
 			});
@@ -200,7 +221,7 @@
 			<div id="right_elm" class="flex_child">
 				<div id="parsebox">
 					<div class="padded">
-						<p>Input (FEN / PGN):</p>
+						<p><strong>Input</strong> (<em>FEN position</em> • <em>PGN game</em> • <em>UCI move list</em>):</p>
 						
 						<textarea id="parseinput" name="parseinput"></textarea>
 						
