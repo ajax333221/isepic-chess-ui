@@ -2353,7 +2353,7 @@
 				
 				that.moveList.push({colorMoved : that.nonActiveColor, colorToPlay : that.activeColor, fen : that.fen, san : complete_san, uci : temp3, comment : autogen_comment, moveResult : move_res, canDraw : that.inDraw, fromBos : initial_cached_square.bos, toBos : final_cached_square.bos, piece : temp, promotion : temp2});/*NO push  referenced rtn_move_obj*/
 				
-				that.refreshUi((p.isInanimated ? 0 : 1));//autorefresh
+				that.refreshUi(p.isInanimated ? 0 : 1);//autorefresh
 			}
 			
 			return rtn_move_obj;
