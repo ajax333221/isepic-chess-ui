@@ -1544,7 +1544,7 @@
 		}
 		
 		function _legalSanMoves(target_qos){
-			var i, j, len, that, temp, legal_moves_all, legal_san_moves, no_errors, rtn;
+			var i, len, that, temp, legal_moves_all, legal_san_moves, no_errors, rtn;
 			
 			that=this;
 			
