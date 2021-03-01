@@ -111,7 +111,6 @@ Function | Parameters | Return | UI refresh? | Description
 :telescope: To do
 -------------
 
-- Drag-and-drop pieces
 - Create, rename and delete boards through the UI
 - Set-up position mode
 - Variety of themes and chess-fonts

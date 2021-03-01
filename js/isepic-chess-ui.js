@@ -6,18 +6,50 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.3.1";
+		var _VERSION="2.4.0";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
 		
 		var _ANIMATE_DURATION=300;
+		var _DRAGGING_REFRESH_RATE=50;
 		var _MATERIAL_DIFF_PX=15;
+		
+		var _POS_Y=0;
+		var _POS_X=0;
+		var _INTERVAL=0;
+		var _SELECTED_BOS="";
+		var _DRAGGING_BOS="";
 		
 		//---------------- utilities
 		
 		function _cancelAnimations(){
 			$(".ic_piece_holder").finish();
+		}
+		
+		function _cancelSelected(){
+			$(".ic_highlight").removeClass("ic_highlight");
+			$(".ic_currpiece").removeClass("ic_currpiece");
+			
+			_SELECTED_BOS="";
+		}
+		
+		function _cancelDragging(){
+			if(_INTERVAL){
+				clearInterval(_INTERVAL);
+				
+				_INTERVAL=0;
+			}
+			
+			if(_DRAGGING_BOS){
+				$(".ic_drag_shown").remove();
+				
+				$("#ic_ui_drag_container").hide();
+				
+				$(".ic_drag_hidden").show().removeClass("ic_drag_hidden");
+			}
+			
+			_DRAGGING_BOS="";
 		}
 		
 		function _getBoardFromData(){
@@ -53,6 +85,33 @@
 			if(no_errors){
 				rtn=board;
 			}
+			
+			return rtn;
+		}
+		
+		function _getHoverElement(x, y){
+			var rtn;
+			
+			rtn=null;
+			
+			$(".ic_ws, .ic_bs").each(function(){
+				var elm, elm_top, elm_right, elm_bottom, elm_left;
+				
+				elm=$(this);
+				
+				elm_top=elm.offset().top;
+				elm_right=(elm.offset().left+elm.width());
+				elm_bottom=(elm.offset().top+elm.height());
+				elm_left=elm.offset().left;
+				
+				if(x>=elm_left && x<=elm_right){
+					if(y>=elm_top && y<=elm_bottom){
+						rtn=elm;
+						
+						return false;
+					}
+				}
+			});
 			
 			return rtn;
 		}
@@ -93,6 +152,93 @@
 					temp.remove();
 				}
 			});
+		}
+		
+		function _dragPiece(initial_x, initial_y, square_bos){
+			var limit, dragged_elm, piece_elm, piece_h, piece_w, piece_offset_top, piece_offset_left, target_square, old_y, old_x, limit_top, limit_right, limit_bottom, limit_left;
+			
+			_cancelDragging();
+			
+			_DRAGGING_BOS=square_bos;
+			
+			limit=document.body;
+			
+			if(limit){
+				limit_top=$(limit).offset().top;
+				limit_left=$(limit).offset().left;
+				
+				limit_right=(limit_left+$(limit).innerWidth());
+				limit_bottom=(limit_top+$(limit).innerHeight());
+			}
+			
+			target_square=$("#ic_ui_"+square_bos);
+			
+			piece_h=target_square.height();
+			piece_w=target_square.width();
+			
+			piece_elm=target_square.children(".ic_piece_holder");
+			
+			dragged_elm=piece_elm.clone().appendTo("#ic_ui_board");
+			
+			piece_elm.addClass("ic_drag_hidden").hide();
+			
+			piece_offset_top=(initial_y-(piece_h/2));
+			piece_offset_left=(initial_x-(piece_w/2));
+			
+			dragged_elm.css({
+				position : "absolute",
+				top : piece_offset_top,
+				left : piece_offset_left,
+				height : piece_h,
+				width : piece_w,
+				cursor : "grabbing",
+				zIndex : 1010
+			}).addClass("ic_drag_shown").appendTo("#ic_ui_board");
+			
+			if($("#ic_ui_drag_container").length){
+				$("#ic_ui_drag_container").show();
+			}else{
+				$("<div id='ic_ui_drag_container'></div>").css({
+					position : "absolute",
+					top : "0",
+					left : "0",
+					height : ($(limit).outerHeight()+"px"),
+					width : ($(limit).outerWidth()+"px"),
+					zIndex : 1020
+				}).appendTo(limit);
+			}
+			
+			old_y=_POS_Y;
+			old_x=_POS_X;
+			
+			_INTERVAL=setInterval(function(){
+				var pos_y, pos_x;
+				
+				if(old_y!==_POS_Y || old_x!==_POS_X){
+					pos_y=(piece_offset_top-(initial_y-_POS_Y));
+					pos_x=(piece_offset_left-(initial_x-_POS_X));
+					
+					if(pos_y<limit_top && limit){
+						pos_y=limit_top;
+					}else if((pos_y+dragged_elm.innerHeight())>limit_bottom && limit){
+						pos_y=(limit_bottom-dragged_elm.outerHeight());
+					}
+					
+					if(pos_x<limit_left && limit){
+						pos_x=limit_left;
+					}else if(pos_x+dragged_elm.innerWidth()>limit_right && limit){
+						pos_x=(limit_right-dragged_elm.outerWidth());
+					}
+					
+					dragged_elm.css({
+						top : pos_y,
+						left : pos_x
+					});
+				}
+				
+				old_y=_POS_Y;
+				old_x=_POS_X;
+			}, _DRAGGING_REFRESH_RATE);
 		}
 		
 		function _bindOnce(){
@@ -351,17 +497,23 @@
 					}
 				});
 				
-				doc.off("click.icuisquares").on("click.icuisquares", ".ic_ws, .ic_bs", function(){
-					var i, len, board, current_bos, need_highlight, legal_moves, no_errors;
+				doc.off("mousemove.icuirefreshpos").on("mousemove.icuirefreshpos", function(e){
+					if(_DRAGGING_BOS){
+						_POS_Y=e.pageY;
+						_POS_X=e.pageX;
+					}
+				});
+				
+				doc.off("mouseup.icuirelease").on("mouseup.icuirelease", function(e){
+					var temp, board, current_bos, old_drg, no_errors;
 					
+					old_drg=_DRAGGING_BOS;
+					_cancelDragging();
 					no_errors=true;
 					
 					//if(no_errors){
-						current_bos=$(this).attr("data-bos");
-						
-						if(!current_bos){
+						if(!old_drg){
 							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[.ic_ws, .ic_bs]: missing data-bos");
 						}
 					//}
 					
@@ -370,45 +522,94 @@
 						
 						if(board===null){
 							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[.ic_ws, .ic_bs]: board not found");
+							Ic.utilityMisc.consoleLog("Error[mouseup]: board not found");
 						}
 					}
 					
 					if(no_errors){
-						need_highlight=true;
+						temp=_getHoverElement(e.pageX, e.pageY);
 						
-						if(board.selectedBos){
-							$(".ic_highlight").removeClass("ic_highlight");
-							$(".ic_currpiece").removeClass("ic_currpiece");
-							
-							if(Ic.sameSquare(board.selectedBos, current_bos)){
-								board.selectedBos="";
-								_refreshDebug.apply(board, []);
-								need_highlight=false;
-							}else{
-								if(board.playMove([board.selectedBos, current_bos])){
-									need_highlight=false;
-								}else{
-									board.selectedBos="";
-									need_highlight=true;
-								}
-							}
+						if(!temp){
+							no_errors=false;
 						}
+					}
+					
+					if(no_errors){
+						current_bos=temp.attr("data-bos");
 						
-						if(need_highlight){
-							legal_moves=board.legalMoves(current_bos);
-							len=legal_moves.length;
-							
-							if(len){
-								board.selectedBos=current_bos;
-								$(this).addClass("ic_currpiece");
+						if(!current_bos){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[mouseup]: missing data-bos");
+						}
+					}
+					
+					if(no_errors){
+						if(old_drg!==current_bos){
+							board.playMove([old_drg, current_bos], {isInanimated : true});
+						}
+					}
+				});
+				
+				doc.off("mousedown.icuipress").on("mousedown.icuipress", function(e){
+					var i, len, temp, legal_moves, board, square, current_bos, old_sel, no_errors;
+					
+					old_sel=_SELECTED_BOS;
+					_cancelSelected();
+					_cancelDragging();
+					no_errors=true;
+					
+					//if(no_errors){
+						board=_getBoardFromData();
+						
+						if(board===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[mousedown]: board not found");
+						}
+					//}
+					
+					if(no_errors){
+						temp=_getHoverElement(e.pageX, e.pageY);
+						
+						if(!temp){
+							no_errors=false;
+						}
+					}
+					
+					if(no_errors){
+						current_bos=temp.attr("data-bos");
+						
+						if(!current_bos){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[mousedown]: missing data-bos");
+						}
+					}
+					
+					if(no_errors){
+						square=board.getSquare(current_bos);
+						
+						if(square===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[mousedown]: square not found");
+						}
+					}
+					
+					if(no_errors){
+						if(!old_sel || (old_sel!==current_bos && !board.playMove([old_sel, current_bos]))){
+							if(square.className){
+								_SELECTED_BOS=current_bos;
 								
-								for(i=0; i<len; i++){//0<len
+								//??? _refreshDebug.apply(board, []);
+								
+								_dragPiece(e.pageX, e.pageY, current_bos);
+								
+								$("#ic_ui_"+current_bos).addClass("ic_currpiece");
+								
+								legal_moves=board.legalMoves(current_bos);
+								
+								for(i=0, len=legal_moves.length; i<len; i++){//0<len
 									$("#ic_ui_"+legal_moves[i]).addClass("ic_highlight");
 								}
 							}
-							
-							_refreshDebug.apply(board, []);
 						}
 					}
 				});
@@ -691,7 +892,6 @@
 				new_html+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.promoteTo*that[that.activeColor].sign)+"</span></li>";
 				new_html+="<li><strong>Manual result:</strong> <span>"+that.manualResult+"</span></li>";
 				new_html+="<li><strong>Is unlabeled? <sup>(ui-only)</sup>:</strong> <span>"+that.isUnlabeled+"</span></li>";
-				new_html+="<li><strong>Selected square <sup>(ui-only)</sup>:</strong> <span>"+(that.selectedBos || "-")+"</span></li>";
 				
 				new_html+="<li>";
 				new_html+="<strong>Squares</strong>";
@@ -738,11 +938,11 @@
 			that=this;
 			
 			if(!that.isHidden){
+				_cancelSelected();
+				_cancelDragging();
 				_cancelAnimations();
 				
 				_bindOnce();
-				
-				that.selectedBos="";
 				
 				board_elm=$("#ic_ui_board");
 				
