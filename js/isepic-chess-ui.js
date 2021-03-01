@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.4.0";
+		var _VERSION="2.4.1";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
@@ -136,15 +136,15 @@
 			piece_elm.hide().attr("class", ("ic_piece_holder"+(promotion_class || piece_class)));
 			
 			temp.css({
-				"position" : "absolute",
-				"top" : old_offset.top,
-				"left" : old_offset.left,
-				"height" : old_h,
-				"width" : old_w,
-				"zIndex" : 1000
+				position : "absolute",
+				top : old_offset.top,
+				left : old_offset.left,
+				height : old_h,
+				width : old_w,
+				zIndex : 1000
 			}).animate({
-				"top" : new_offset.top,
-				"left" : new_offset.left
+				top : new_offset.top,
+				left : new_offset.left
 			}, {
 				duration : _ANIMATE_DURATION,
 				always : function(){
@@ -155,7 +155,7 @@
 		}
 		
 		function _dragPiece(initial_x, initial_y, square_bos){
-			var limit, dragged_elm, piece_elm, piece_h, piece_w, piece_offset_top, piece_offset_left, target_square, old_y, old_x, limit_top, limit_right, limit_bottom, limit_left;
+			var limit, dragged_elm, piece_elm, piece_h, piece_w, piece_offset, centered_top, centered_left, target_square, old_y, old_x, limit_top, limit_right, limit_bottom, limit_left;
 			
 			_cancelDragging();
 			
@@ -178,17 +178,19 @@
 			
 			piece_elm=target_square.children(".ic_piece_holder");
 			
+			piece_offset=piece_elm.offset();
+			
 			dragged_elm=piece_elm.clone().appendTo("#ic_ui_board");
 			
 			piece_elm.addClass("ic_drag_hidden").hide();
 			
-			piece_offset_top=(initial_y-(piece_h/2));
-			piece_offset_left=(initial_x-(piece_w/2));
+			centered_top=(initial_y-(piece_h/2));
+			centered_left=(initial_x-(piece_w/2));
 			
 			dragged_elm.css({
 				position : "absolute",
-				top : piece_offset_top,
-				left : piece_offset_left,
+				top : piece_offset.top,
+				left : piece_offset.left,
 				height : piece_h,
 				width : piece_w,
 				cursor : "grabbing",
@@ -208,6 +210,9 @@
 				}).appendTo(limit);
 			}
 			
+			_POS_Y=initial_y;
+			_POS_X=initial_x;
+			
 			old_y=_POS_Y;
 			old_x=_POS_X;
 			
@@ -215,8 +220,8 @@
 				var pos_y, pos_x;
 				
 				if(old_y!==_POS_Y || old_x!==_POS_X){
-					pos_y=(piece_offset_top-(initial_y-_POS_Y));
-					pos_x=(piece_offset_left-(initial_x-_POS_X));
+					pos_y=(centered_top-(initial_y-_POS_Y));
+					pos_x=(centered_left-(initial_x-_POS_X));
 					
 					if(pos_y<limit_top && limit){
 						pos_y=limit_top;

@@ -78,6 +78,7 @@ https://ajax333221.github.io/isepic-chess-ui/
 - Navigation buttons
 - Jump to move from the move list
 - Adaptable board size
+- Drag-and-drop and click-to-move
 - Pawn promotion dropdown menu
 - Visual material difference
 - Piece displacement animation
