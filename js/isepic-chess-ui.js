@@ -6,10 +6,11 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.4.1";
+		var _VERSION="2.5.0";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
+		var _HIDE_LABELS=false;
 		
 		var _ANIMATE_DURATION=300;
 		var _DRAGGING_REFRESH_RATE=50;
@@ -896,7 +897,6 @@
 				new_html+="<li><strong>Current move:</strong> <span>"+that.currentMove+"</span></li>";
 				new_html+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.promoteTo*that[that.activeColor].sign)+"</span></li>";
 				new_html+="<li><strong>Manual result:</strong> <span>"+that.manualResult+"</span></li>";
-				new_html+="<li><strong>Is unlabeled? <sup>(ui-only)</sup>:</strong> <span>"+that.isUnlabeled+"</span></li>";
 				
 				new_html+="<li>";
 				new_html+="<strong>Squares</strong>";
@@ -956,8 +956,8 @@
 						board_elm.attr("data-boardname", that.boardName);
 					}
 					
-					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")!==that.isUnlabeled){
-						_refreshTable(that.isRotated, that.isUnlabeled);
+					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")!==_HIDE_LABELS){
+						_refreshTable(that.isRotated, _HIDE_LABELS);
 					}
 				}
 				
