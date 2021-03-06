@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.5.0";
+		var _VERSION="2.6.0";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
@@ -854,7 +854,7 @@
 		}
 		
 		function _refreshDebug(){
-			var i, j, that, temp, current_square, current_row, new_html;
+			var i, j, len, that, temp, current_square, current_row, new_html;
 			
 			that=this;
 			
@@ -924,6 +924,28 @@
 				new_html+="</li>";
 				
 				new_html+="<li><strong>FEN:</strong> <span>"+that.fen+"</span></li>";
+				
+				temp="";
+				
+				for(i=0, len=that.legalUci.length; i<len; i++){//0<len
+					temp+=(i ? ", " : "")+((!i || i%5) ? "" : "<br>")+that.legalUci[i];
+				}
+				
+				new_html+="<li><strong>Legal UCI:</strong> <span>["+temp+"]</span></li>";
+				
+				new_html+="<li>";
+				new_html+="<strong>Legal UCI tree</strong>";
+				new_html+="<ul>";
+				
+				temp=Object.keys(that.legalUciTree);
+				
+				for(i=0, len=temp.length; i<len; i++){//0<len
+					new_html+="<li><strong>"+temp[i]+":</strong> ["+that.legalUciTree[temp[i]].join(", ")+"]</li>";
+				}
+				
+				new_html+="</ul>";
+				new_html+="</li>";
+				
 				new_html+="<li><strong>Version:</strong> <span>[Ic_v"+Ic.version+"] [IcUi_v"+_VERSION+"]</span></li>";
 				new_html+="</ul>";
 				
