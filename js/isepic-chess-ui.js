@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.6.0";
+		var _VERSION="2.6.1";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
@@ -604,8 +604,6 @@
 							if(square.className){
 								_SELECTED_BOS=current_bos;
 								
-								//??? _refreshDebug.apply(board, []);
-								
 								_dragPiece(e.pageX, e.pageY, current_bos);
 								
 								$("#ic_ui_"+current_bos).addClass("ic_currpiece");
@@ -647,11 +645,11 @@
 					}
 					
 					if(current_board.isHidden){
-						new_html+="<em class='ic_disabled'>"+current_board_name+"</em>";
+						new_html+=("<em class='ic_disabled'>"+current_board_name+"</em>");
 					}else if(current_board_name===board_name){
-						new_html+="<em>"+current_board_name+"</em>";
+						new_html+=("<em>"+current_board_name+"</em>");
 					}else{
-						new_html+="<a class='ic_changeboard' data-rebindboardname='"+current_board_name+"' href='#'>"+current_board_name+"</a>";
+						new_html+=("<a class='ic_changeboard' data-rebindboardname='"+current_board_name+"' href='#'>"+current_board_name+"</a>");
 					}
 				}
 				
@@ -677,7 +675,7 @@
 			new_html="<table cellpadding='0' cellspacing='0'>";
 			
 			if(!is_unlabeled){
-				new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_wside" : "ic_bside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
+				new_html+=("<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_wside" : "ic_bside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>");
 			}
 			
 			for(i=0; i<8; i++){//0...7
@@ -686,24 +684,24 @@
 				new_html+="<tr>";
 				
 				if(!is_unlabeled){
-					new_html+="<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>";
+					new_html+=("<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>");
 				}
 				
 				for(j=0; j<8; j++){//0...7
 					current_bos=Ic.toBos(is_rotated ? [(7-i), (7-j)] : [i, j]);
 					
-					new_html+="<td id='"+("ic_ui_"+current_bos)+"' class='"+((i+j)%2 ? "ic_bs" : "ic_ws")+"' data-bos='"+current_bos+"'><div class='ic_piece_holder'></div></td>";
+					new_html+=("<td id='"+("ic_ui_"+current_bos)+"' class='"+((i+j)%2 ? "ic_bs" : "ic_ws")+"' data-bos='"+current_bos+"'><div class='ic_piece_holder'></div></td>");
 				}
 				
 				if(!is_unlabeled){
-					new_html+="<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>";
+					new_html+=("<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>");
 				}
 				
 				new_html+="</tr>";
 			}
 			
 			if(!is_unlabeled){
-				new_html+="<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_bside" : "ic_wside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>";
+				new_html+=("<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_bside" : "ic_wside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>");
 			}
 			
 			new_html+="</table>";
@@ -785,7 +783,7 @@
 					temp="";
 					
 					for(j=0, len=current_side.materialDiff.length; j<len; j++){//0<len
-						temp+="<img src='"+("./css/images/"+Ic.toClassName(current_side.materialDiff[j])+".png")+"' width='"+_MATERIAL_DIFF_PX+"' height='"+_MATERIAL_DIFF_PX+"'>";
+						temp+=("<img src='"+("./css/images/"+Ic.toClassName(current_side.materialDiff[j])+".png")+"' width='"+_MATERIAL_DIFF_PX+"' height='"+_MATERIAL_DIFF_PX+"'>");
 					}
 					
 					matdiff_html+=(temp || "-");
@@ -817,10 +815,10 @@
 						
 						new_html+=(black_starts===!(i%2) ? ("<span class='ic_pgn_number'>"+(initial_full_move+Math.floor((i+black_starts-1)/2))+". </span>") : "");
 						
-						new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"'>"+move_list[i].san+"</span>";
+						new_html+=("<span class='"+(i!==that.currentMove ? "ic_pgn_link" : "ic_pgn_current")+"' data-index='"+i+"'>"+move_list[i].san+"</span>");
 						
 						if(move_list[i].comment){
-							new_html+="<span class='"+(i!==that.currentMove ? "ic_pgn_comment" : "ic_pgn_comment_current")+"'> "+move_list[i].comment+"</span>";
+							new_html+=("<span class='"+(i!==that.currentMove ? "ic_pgn_comment" : "ic_pgn_comment_current")+"'> "+move_list[i].comment+"</span>");
 						}
 					}
 					
@@ -835,15 +833,15 @@
 				
 				if(new_html){
 					if(black_starts){
-						new_html="<span class='ic_pgn_number'>"+initial_full_move+"...</span>"+new_html;
+						new_html=("<span class='ic_pgn_number'>"+initial_full_move+"...</span>"+new_html);
 					}
 					
 					if(result_tag_ow!=="*"){
-						new_html+=" <span class='ic_pgn_result'>"+result_tag_ow+"</span>";
+						new_html+=(" <span class='ic_pgn_result'>"+result_tag_ow+"</span>");
 					}
 				}else{
 					if(result_tag_ow!=="*"){
-						new_html+="<span class='ic_pgn_result'>"+result_tag_ow+"</span>";
+						new_html+=("<span class='ic_pgn_result'>"+result_tag_ow+"</span>");
 					}
 				}
 				
@@ -860,43 +858,43 @@
 			
 			if($("#ic_ui_debug").length){
 				new_html="<ul>";
-				new_html+="<li><strong>Selected board:</strong> <span>"+that.boardName+"</span></li>";
-				new_html+="<li><strong>Is rotated?:</strong> <span>"+that.isRotated+"</span></li>";
-				new_html+="<li><strong>Number of checks:</strong> <span>"+that.checks+"</span></li>";
-				new_html+="<li><strong>Is check?:</strong> <span>"+that.isCheck+"</span></li>";
-				new_html+="<li><strong>Is checkmate?:</strong> <span>"+that.isCheckmate+"</span></li>";
-				new_html+="<li><strong>Is stalemate?:</strong> <span>"+that.isStalemate+"</span></li>";
-				new_html+="<li><strong>Is threefold repetition?:</strong> <span>"+that.isThreefold+"</span></li>";
-				new_html+="<li><strong>Is insufficient material?:</strong> <span>"+that.isInsufficientMaterial+"</span></li>";
-				new_html+="<li><strong>Is fifty-move rule?:</strong> <span>"+that.isFiftyMove+"</span></li>";
-				new_html+="<li><strong>In draw?:</strong> <span>"+that.inDraw+"</span></li>";
-				new_html+="<li><strong>En Passant square:</strong> <span>"+(that.enPassantBos || "-")+"</span></li>";
-				new_html+="<li><strong>Active color:</strong> <span>"+that.activeColor+"</span></li>";
-				new_html+="<li><strong>Non active color:</strong> <span>"+that.nonActiveColor+"</span></li>";
+				new_html+=("<li><strong>Selected board:</strong> <span>"+that.boardName+"</span></li>");
+				new_html+=("<li><strong>Is rotated?:</strong> <span>"+that.isRotated+"</span></li>");
+				new_html+=("<li><strong>Number of checks:</strong> <span>"+that.checks+"</span></li>");
+				new_html+=("<li><strong>Is check?:</strong> <span>"+that.isCheck+"</span></li>");
+				new_html+=("<li><strong>Is checkmate?:</strong> <span>"+that.isCheckmate+"</span></li>");
+				new_html+=("<li><strong>Is stalemate?:</strong> <span>"+that.isStalemate+"</span></li>");
+				new_html+=("<li><strong>Is threefold repetition?:</strong> <span>"+that.isThreefold+"</span></li>");
+				new_html+=("<li><strong>Is insufficient material?:</strong> <span>"+that.isInsufficientMaterial+"</span></li>");
+				new_html+=("<li><strong>Is fifty-move rule?:</strong> <span>"+that.isFiftyMove+"</span></li>");
+				new_html+=("<li><strong>In draw?:</strong> <span>"+that.inDraw+"</span></li>");
+				new_html+=("<li><strong>En Passant square:</strong> <span>"+(that.enPassantBos || "-")+"</span></li>");
+				new_html+=("<li><strong>Active color:</strong> <span>"+that.activeColor+"</span></li>");
+				new_html+=("<li><strong>Non active color:</strong> <span>"+that.nonActiveColor+"</span></li>");
 				
 				new_html+="<li>";
 				new_html+="<strong>W</strong>";
 				new_html+="<ul>";
-				new_html+="<li><strong>king square:</strong> <span>"+that.w.kingBos+"</span></li>";
-				new_html+="<li><strong>castling rights:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.w.castling).toUpperCase() || "-")+"</span></li>";
-				new_html+="<li><strong>material difference:</strong> <span>["+that.w.materialDiff.join(", ")+"]</span></li>";
+				new_html+=("<li><strong>king square:</strong> <span>"+that.w.kingBos+"</span></li>");
+				new_html+=("<li><strong>castling rights:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.w.castling).toUpperCase() || "-")+"</span></li>");
+				new_html+=("<li><strong>material difference:</strong> <span>["+that.w.materialDiff.join(", ")+"]</span></li>");
 				new_html+="</ul>";
 				new_html+="</li>";
 				
 				new_html+="<li>";
 				new_html+="<strong>B</strong>";
 				new_html+="<ul>";
-				new_html+="<li><strong>king square:</strong> <span>"+that.b.kingBos+"</span></li>";
-				new_html+="<li><strong>castling rights:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.b.castling) || "-")+"</span></li>";
-				new_html+="<li><strong>material difference:</strong> <span>["+that.b.materialDiff.join(", ")+"]</span></li>";
+				new_html+=("<li><strong>king square:</strong> <span>"+that.b.kingBos+"</span></li>");
+				new_html+=("<li><strong>castling rights:</strong> <span>"+(Ic.utilityMisc.castlingChars(that.b.castling) || "-")+"</span></li>");
+				new_html+=("<li><strong>material difference:</strong> <span>["+that.b.materialDiff.join(", ")+"]</span></li>");
 				new_html+="</ul>";
 				new_html+="</li>";
 				
-				new_html+="<li><strong>Half moves:</strong> <span>"+that.halfMove+"</span></li>";
-				new_html+="<li><strong>Full moves:</strong> <span>"+that.fullMove+"</span></li>";
-				new_html+="<li><strong>Current move:</strong> <span>"+that.currentMove+"</span></li>";
-				new_html+="<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.promoteTo*that[that.activeColor].sign)+"</span></li>";
-				new_html+="<li><strong>Manual result:</strong> <span>"+that.manualResult+"</span></li>";
+				new_html+=("<li><strong>Half moves:</strong> <span>"+that.halfMove+"</span></li>");
+				new_html+=("<li><strong>Full moves:</strong> <span>"+that.fullMove+"</span></li>");
+				new_html+=("<li><strong>Current move:</strong> <span>"+that.currentMove+"</span></li>");
+				new_html+=("<li><strong>Promote to:</strong> <span>"+Ic.toBal(that.promoteTo*that[that.activeColor].sign)+"</span></li>");
+				new_html+=("<li><strong>Manual result:</strong> <span>"+that.manualResult+"</span></li>");
 				
 				new_html+="<li>";
 				new_html+="<strong>Squares</strong>";
@@ -908,30 +906,30 @@
 					for(j=0; j<8; j++){//0...7
 						current_square=that.getSquare([i, j]);
 						
-						temp=""+current_square.val;
+						temp=(""+current_square.val);
 						
 						if(temp.length===1){
-							temp=" "+temp;
+							temp=(" "+temp);
 						}
 						
 						current_row.push("<span title='"+(current_square.bos.toUpperCase()+" = "+(current_square.className || "empty"))+"'>"+temp+"</span>");
 					}
 					
-					new_html+="<li><strong>A"+(8-i)+"-H"+(8-i)+":</strong> "+current_row.join(" | ")+"</li>";
+					new_html+=("<li><strong>A"+(8-i)+"-H"+(8-i)+":</strong> "+current_row.join(" | ")+"</li>");
 				}
 				
 				new_html+="</ul>";
 				new_html+="</li>";
 				
-				new_html+="<li><strong>FEN:</strong> <span>"+that.fen+"</span></li>";
+				new_html+=("<li><strong>FEN:</strong> <span>"+that.fen+"</span></li>");
 				
 				temp="";
 				
 				for(i=0, len=that.legalUci.length; i<len; i++){//0<len
-					temp+=(i ? ", " : "")+((!i || i%5) ? "" : "<br>")+that.legalUci[i];
+					temp+=((i ? ", " : "")+((!i || i%5) ? "" : "<br>")+that.legalUci[i]);
 				}
 				
-				new_html+="<li><strong>Legal UCI:</strong> <span>["+temp+"]</span></li>";
+				new_html+=("<li><strong>Legal UCI:</strong> <span>["+temp+"]</span></li>");
 				
 				new_html+="<li>";
 				new_html+="<strong>Legal UCI tree</strong>";
@@ -940,13 +938,13 @@
 				temp=Object.keys(that.legalUciTree);
 				
 				for(i=0, len=temp.length; i<len; i++){//0<len
-					new_html+="<li><strong>"+temp[i]+":</strong> ["+that.legalUciTree[temp[i]].join(", ")+"]</li>";
+					new_html+=("<li><strong>"+temp[i]+":</strong> ["+that.legalUciTree[temp[i]].join(", ")+"]</li>");
 				}
 				
 				new_html+="</ul>";
 				new_html+="</li>";
 				
-				new_html+="<li><strong>Version:</strong> <span>[Ic_v"+Ic.version+"] [IcUi_v"+_VERSION+"]</span></li>";
+				new_html+=("<li><strong>Version:</strong> <span>[Ic_v"+Ic.version+"] [IcUi_v"+_VERSION+"]</span></li>");
 				new_html+="</ul>";
 				
 				$("#ic_ui_debug").html(new_html);
