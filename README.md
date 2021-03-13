@@ -74,15 +74,21 @@ https://ajax333221.github.io/isepic-chess-ui/
 :rocket: Features
 -------------
 
-- Highlight legal moves / last move
-- Navigation buttons
-- Jump to move from the move list
-- Adaptable board size
-- Drag-and-drop and click-to-move
-- Pawn promotion dropdown menu
-- Visual material difference
+- Responsive board size
+- Both *drag-and-drop* and *click-from-click-to* in parallel
+- Highlight legal moves and last move
+- Many optional components:
+	- Chess board
+	- Material difference (small piece icons)
+	- Selectable FEN text
+	- Navigation buttons (first, previous, next and last)
+	- Rotate board button
+	- Pawn promotion dropdown
+	- Board list (with *switch-to-board* links)
+	- SAN move list (with *jump-to-move* links)
+- Automatic component binding, no need to do anything manually to the DOM elements (they will simply work just by having their correct id property at any given time)
 - Piece displacement animation
-- Chess-font by ajax333221 <img src="./css/images/wk.png" width="20"><img src="./css/images/wq.png" width="20"><img src="./css/images/wr.png" width="20"><img src="./css/images/wb.png" width="20"><img src="./css/images/wn.png" width="20"><img src="./css/images/wp.png" width="20"><img src="./css/images/bk.png" width="20"><img src="./css/images/bq.png" width="20"><img src="./css/images/br.png" width="20"><img src="./css/images/bb.png" width="20"><img src="./css/images/bn.png" width="20"><img src="./css/images/bp.png" width="20">
+- **isepic-chess-font** <sup>(by ajax333221)</sup> <img src="./css/images/wk.png" width="20"><img src="./css/images/wq.png" width="20"><img src="./css/images/wr.png" width="20"><img src="./css/images/wb.png" width="20"><img src="./css/images/wn.png" width="20"><img src="./css/images/wp.png" width="20"><img src="./css/images/bk.png" width="20"><img src="./css/images/bq.png" width="20"><img src="./css/images/br.png" width="20"><img src="./css/images/bb.png" width="20"><img src="./css/images/bn.png" width="20"><img src="./css/images/bp.png" width="20">
 
 :book: Documentation
 -------------
@@ -107,14 +113,15 @@ Boards created by `Ic.initBoard()` have the following available UI methods.
 
 Function | Parameters | Return | UI refresh? | Description
 -------- | ---------- | ------ | ----------- | -----------
-**refreshUi**(<br>*animationType*<br>) | <ul><li>:eight_pointed_black_star:animationType (Number)</li></ul><hr>:eight_pointed_black_star:Optional Parameter | - | Yes | This method will:<ul><li>Refresh the HTML of all the components (if any) to reflect the internal state of the board.</li><li>Update the **data-attributes** of all the components (if any) to point to this **board name**.</li><li>Finish any ongoing piece animations.</li><li>Start the current animation (if any).</li></ul>If `animationType` is a **falsy-value**, no animation will happen.<br><br>If `animationType` is a **positive number**, the board will be refreshed with an animation as if the last move was played.<br><br>If `animationType` is a **negative number**, the board will be refreshed with an animation as if the next move was reverted.
+**refreshUi**(<br>*animationType*<br>) | <ul><li>:eight_pointed_black_star:animationType (Number)</li></ul><hr>:eight_pointed_black_star:Optional Parameter | - | Yes | This method will:<ul><li>Refresh the HTML of all the components (if any) to reflect the internal state of the board.</li><li>Update the **data-boardname** attribute of the board component (if any) with the **board name** of the board calling the method.</li><li>Finish any ongoing piece animations.</li><li>Cancel any ongoing piece dragging.</li><li>Start the current animation (if any).</li></ul>If `animationType` is a **falsy-value**, no animation will happen.<br><br>If `animationType` is a **positive number**, the board will be refreshed with an animation as if the last move was played.<br><br>If `animationType` is a **negative number**, the board will be refreshed with an animation as if the next move was reverted.
 
 :telescope: To do
 -------------
 
 - Create, rename and delete boards through the UI
 - Set-up position mode
-- Variety of themes and chess-fonts
+- **API:** *callback-functions* and *event-listeners*
+- Variety of themes and *chess-fonts*
 
 :page_facing_up: Copyright and license
 -------------
