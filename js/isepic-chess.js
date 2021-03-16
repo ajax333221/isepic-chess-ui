@@ -2544,6 +2544,12 @@
 				
 				autogen_comment="";
 				
+				temp=that.fen.split(" ")[0];
+				
+				if(temp==="rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR" || temp==="rnbq1bnr/ppppkppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR" || temp==="rnbq1bnr/ppppkppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR"){
+					autogen_comment="{!!}";
+				}
+				
 				if(that.inDraw){
 					if(that.isStalemate){
 						autogen_comment="{Stalemate}";
