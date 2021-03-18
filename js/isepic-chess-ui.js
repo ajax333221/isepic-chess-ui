@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.6.1";
+		var _VERSION="2.6.2";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
@@ -19,6 +19,8 @@
 		var _POS_Y=0;
 		var _POS_X=0;
 		var _INTERVAL=0;
+		
+		var _BOARD_NAME="";
 		var _SELECTED_BOS="";
 		var _DRAGGING_BOS="";
 		
@@ -51,43 +53,6 @@
 			}
 			
 			_DRAGGING_BOS="";
-		}
-		
-		function _getBoardFromData(){
-			var board, board_name, board_elm, no_errors, rtn;
-			
-			rtn=null;
-			no_errors=true;
-			
-			//if(no_errors){
-				board_elm=$("#ic_ui_board");
-				
-				if(!board_elm.length){
-					no_errors=false;
-				}
-			//}
-			
-			if(no_errors){
-				board_name=board_elm.attr("data-boardname");
-				
-				if(!board_name){
-					no_errors=false;
-				}
-			}
-			
-			if(no_errors){
-				board=Ic.getBoard(board_name);
-				
-				if(board===null){
-					no_errors=false;
-				}
-			}
-			
-			if(no_errors){
-				rtn=board;
-			}
-			
-			return rtn;
 		}
 		
 		function _getHoverElement(x, y){
@@ -273,7 +238,7 @@
 					
 					if(_KEY_NAV_MODE){
 						if(e.which>=37 && e.which<=40){
-							board=_getBoardFromData();
+							board=Ic.getBoard(_BOARD_NAME);
 							
 							if(board!==null){
 								current_nav=["left", "up", "right", "down"][e.which-37];
@@ -307,7 +272,7 @@
 					no_errors=true;
 					
 					//if(no_errors){
-						board=_getBoardFromData();
+						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
 							no_errors=false;
@@ -330,7 +295,7 @@
 					no_errors=true;
 					
 					//if(no_errors){
-						board=_getBoardFromData();
+						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
 							no_errors=false;
@@ -353,7 +318,7 @@
 					no_errors=true;
 					
 					//if(no_errors){
-						board=_getBoardFromData();
+						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
 							no_errors=false;
@@ -376,7 +341,7 @@
 					no_errors=true;
 					
 					//if(no_errors){
-						board=_getBoardFromData();
+						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
 							no_errors=false;
@@ -399,7 +364,7 @@
 					no_errors=true;
 					
 					//if(no_errors){
-						board=_getBoardFromData();
+						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
 							no_errors=false;
@@ -422,7 +387,7 @@
 					no_errors=true;
 					
 					//if(no_errors){
-						board=_getBoardFromData();
+						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
 							no_errors=false;
@@ -458,7 +423,7 @@
 						
 						if(board===null){
 							no_errors=false;
-							Ic.utilityMisc.consoleLog("Error[.ic_changeboard]: \""+board_name+"\" is not defined");
+							Ic.utilityMisc.consoleLog("Error[.ic_changeboard]: board not found");
 						}
 					}
 					
@@ -486,7 +451,7 @@
 					//}
 					
 					if(no_errors){
-						board=_getBoardFromData();
+						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
 							no_errors=false;
@@ -524,7 +489,7 @@
 					//}
 					
 					if(no_errors){
-						board=_getBoardFromData();
+						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
 							no_errors=false;
@@ -565,7 +530,7 @@
 					no_errors=true;
 					
 					//if(no_errors){
-						board=_getBoardFromData();
+						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
 							no_errors=false;
@@ -639,7 +604,7 @@
 					current_board=Ic.getBoard(current_board_name);
 					
 					if(current_board===null){
-						Ic.utilityMisc.consoleLog("Warning[_refreshBoardTabs]: \""+current_board_name+"\" is not defined");
+						Ic.utilityMisc.consoleLog("Warning[_refreshBoardTabs]: board not found");
 						
 						continue;
 					}
@@ -963,6 +928,8 @@
 			that=this;
 			
 			if(!that.isHidden){
+				_BOARD_NAME=that.boardName;
+				
 				_cancelSelected();
 				_cancelDragging();
 				_cancelAnimations();
@@ -972,10 +939,6 @@
 				board_elm=$("#ic_ui_board");
 				
 				if(board_elm.length){
-					if(!board_elm.attr("data-boardname") || board_elm.attr("data-boardname")!==that.boardName){
-						board_elm.attr("data-boardname", that.boardName);
-					}
-					
 					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")!==_HIDE_LABELS){
 						_refreshTable(that.isRotated, _HIDE_LABELS);
 					}
