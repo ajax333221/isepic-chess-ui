@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.6.2";
+		var _VERSION="2.7.0";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
@@ -817,7 +817,7 @@
 		}
 		
 		function _refreshDebug(){
-			var i, j, len, that, temp, current_square, current_row, new_html;
+			var i, j, len, len2, that, temp, temp2, current_square, current_row, new_html;
 			
 			that=this;
 			
@@ -904,6 +904,28 @@
 				
 				for(i=0, len=temp.length; i<len; i++){//0<len
 					new_html+=("<li><strong>"+temp[i]+":</strong> ["+that.legalUciTree[temp[i]].join(", ")+"]</li>");
+				}
+				
+				new_html+="</ul>";
+				new_html+="</li>";
+				
+				new_html+="<li>";
+				new_html+="<strong>Legal reversed tree</strong>";
+				new_html+="<ul>";
+				
+				temp=Object.keys(that.legalRevTree);
+				
+				for(i=0, len=temp.length; i<len; i++){//0<len
+					new_html+=("<li><strong>"+temp[i]+":</strong>");
+					new_html+=" {";
+					
+					temp2=Object.keys(that.legalRevTree[temp[i]]);
+					
+					for(j=0, len2=temp2.length; j<len2; j++){//0<len2
+						new_html+=((j ? ", " : "")+"<strong>"+temp2[j]+":</strong> ["+that.legalRevTree[temp[i]][temp2[j]].join(", ")+"]");
+					}
+					
+					new_html+="}</li>";
 				}
 				
 				new_html+="</ul>";
