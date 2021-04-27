@@ -31,14 +31,12 @@
 	border: 0;
 	border-top: 1px solid #ccc;
 }
-/*start(main) ---*/
+/*end(main) ---*/
 
 /*start(header) ---*/
 .ic_ui_header{
 	color: #333;
 	font-size: 15px;
-	/*2020 border: 1px solid #c7c56d;*/
-	/*2020 background: #edeb9f;*/
 }
 
 .ic_ui_header h3{
@@ -65,7 +63,7 @@
 .ic_ui_board{
 	color: #333;
 	font-size: 16px;
-	background: #5e828c;/*939393*/
+	background: #5e828c;
 }
 
 .ic_ui_board td{
@@ -80,17 +78,28 @@
 	display: table;
 }
 
-.ic_ui_board .ic_ws{background-color: #c6d2d5;}/*e0e0e0*/
-.ic_ui_board .ic_bs{background-color: #6d96a1;}/*b5b5b5*/
+.ic_ui_board .ic_ws{background-color: #c6d2d5;}
+.ic_ui_board .ic_bs{background-color: #6d96a1;}
 
-.ic_ui_board .ic_ws.ic_lastmove{background-color: #91dadb;}/*dac4ce*/
-.ic_ui_board .ic_bs.ic_lastmove{background-color: #65bdc4;}/*c6abba*/
+.ic_ui_board .ic_ws.ic_lastmove{background-color: #91dadb;}
+.ic_ui_board .ic_bs.ic_lastmove{background-color: #65bdc4;}
 
-.ic_ui_board .ic_ws.ic_highlight{background-color: #d2db91!important;}/*e9e5a5*/
-.ic_ui_board .ic_bs.ic_highlight{background-color: #b3c465!important;}/*ddd48e*/
+.ic_ui_board .ic_ws.ic_incheck, .ic_ui_board .ic_bs.ic_incheck{
+	background-image: radial-gradient(rgba(240, 115, 85, 0.8) 60%, transparent 100%);
+}
 
-.ic_ui_board .ic_ws.ic_currpiece{background-color: #d2db91!important;}/*d0bd4e*/
-.ic_ui_board .ic_bs.ic_currpiece{background-color: #b3c465!important;}/*d0bd4e*/
+.ic_ui_board .ic_ws.ic_highlight{background-color: #d2db91;}
+.ic_ui_board .ic_bs.ic_highlight{background-color: #b3c465;}
+
+.ic_ui_board .ic_ws.ic_currpiece{
+	background-color: #d2db91;
+	background-image: none;
+}
+
+.ic_ui_board .ic_bs.ic_currpiece{
+	background-color: #b3c465;
+	background-image: none;
+}
 
 .ic_ui_board .ic_bp{background-image: url('./images/bp.png');}
 .ic_ui_board .ic_br{background-image: url('./images/br.png');}
@@ -148,8 +157,6 @@
 .ic_ui_materialdiff{
 	color: #333;
 	font-size: 16px;
-	/*2020 border: 1px solid #8cd4c6;*/
-	/*2020 background: #c1f5eb;*/
 	text-align: left;
 }
 
@@ -172,8 +179,6 @@
 .ic_ui_controls{
 	color: #333;
 	font-size: 16px;
-	/*2020 border: 1px solid #8cd4c6;*/
-	/*2020 background: #c1f5eb;*/
 }
 
 .ic_ui_controls select{
@@ -204,8 +209,6 @@
 .ic_ui_tabs{
 	color: #333;
 	font-size: 16px;
-	/*2020 border: 1px solid #b281c7;*/
-	/*2020 background: #e4c9f0;*/
 }
 
 .ic_ui_tabs .ic_disabled{
@@ -217,8 +220,6 @@
 .ic_ui_movelist{
 	color: #333;
 	font-size: 17px;
-	/*2020 border: 1px solid #c4cca7;*/
-	/*2020 background: #eef2df;*/
 }
 
 .ic_ui_movelist .ic_pgn_number{
@@ -261,8 +262,6 @@
 .ic_ui_debug{
 	color: #333;
 	font-size: 16px;
-	/*2020 border: 1px solid #b2c8cf;*/
-	/*2020 background: #e9f4f7;*/
 }
 
 .ic_ui_debug ul{

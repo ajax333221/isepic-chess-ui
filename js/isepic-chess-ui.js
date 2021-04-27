@@ -6,10 +6,11 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.7.0";
+		var _VERSION="2.7.1";
 		
 		var _RAN_ONCE=false;
 		var _KEY_NAV_MODE=false;
+		var _HIGHLIGHT_CHECKS=true;
 		var _HIDE_LABELS=false;
 		
 		var _ANIMATE_DURATION=300;
@@ -730,6 +731,10 @@
 					
 					$("#ic_ui_"+current_square.bos).attr("class", reset_class).html("<div class='"+("ic_piece_holder"+square_class)+"'></div>");
 				}
+			}
+			
+			if(_HIGHLIGHT_CHECKS && that.isCheck){
+				$("#ic_ui_"+that[that.activeColor].kingBos).addClass("ic_incheck");
 			}
 		}
 		
