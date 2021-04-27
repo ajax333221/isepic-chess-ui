@@ -83,7 +83,7 @@ https://ajax333221.github.io/isepic-chess-ui/
 
 - Responsive board size
 - Both *drag-and-drop* and *click-from-click-to* in parallel
-- Highlight legal moves and last move
+- Highlight last move, legal moves and checks
 - Many optional components:
 	- Chess board
 	- Material difference (small piece icons)
