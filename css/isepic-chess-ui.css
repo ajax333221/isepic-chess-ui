@@ -64,6 +64,7 @@
 	color: #333;
 	font-size: 16px;
 	background: #5e828c;
+	cursor: pointer;
 }
 
 .ic_ui_board td{
@@ -91,12 +92,12 @@
 .ic_ui_board .ic_ws.ic_highlight{background-color: #d2db91;}
 .ic_ui_board .ic_bs.ic_highlight{background-color: #b3c465;}
 
-.ic_ui_board .ic_ws.ic_currpiece{
+.ic_ui_board .ic_ws.ic_selected{
 	background-color: #d2db91;
 	background-image: none;
 }
 
-.ic_ui_board .ic_bs.ic_currpiece{
+.ic_ui_board .ic_bs.ic_selected{
 	background-color: #b3c465;
 	background-image: none;
 }
@@ -126,6 +127,7 @@
 	user-select: none;
 	top: 0%;
 	left: 0%;
+	cursor: default;
 }
 
 .ic_ui_board .ic_char{
@@ -219,7 +221,12 @@
 
 .ic_ui_movelist{
 	color: #333;
-	font-size: 17px;
+	font-size: 16px;
+	line-height:25px;
+}
+
+.ic_ui_movelist .ic_pgn_number, .ic_ui_movelist .ic_pgn_comment, .ic_ui_movelist .ic_pgn_comment_active, .ic_ui_movelist .ic_pgn_result, .ic_ui_movelist .ic_pgn_link, .ic_ui_movelist .ic_pgn_active{
+	padding: 2px 1px;
 }
 
 .ic_ui_movelist .ic_pgn_number{
@@ -228,23 +235,18 @@
 
 .ic_ui_movelist .ic_pgn_comment{
 	font-style: italic;
-	color: #b873ba;
+	color: #c5c5c5;
 }
 
-.ic_ui_movelist .ic_pgn_comment_current{
+.ic_ui_movelist .ic_pgn_comment_active{
 	font-style: italic;
 	color: #662;
-	background: #fefe9b;
+	background: #f2f7c3;
 }
 
 .ic_ui_movelist .ic_pgn_result{
 	font-style: italic;
 	color: #555;
-}
-
-.ic_ui_movelist .ic_pgn_current{
-	color: #222;
-	background: #fefe9b;
 }
 
 .ic_ui_movelist .ic_pgn_link{
@@ -254,7 +256,12 @@
 
 .ic_ui_movelist .ic_pgn_link:hover{
 	color: #222;
-	background: #e0e0e0;
+	background: #efefef;
+}
+
+.ic_ui_movelist .ic_pgn_active{
+	color: #222;
+	background: #e6e6e6;
 }
 /*end(controls) ---*/
 
