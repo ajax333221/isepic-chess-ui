@@ -85,20 +85,25 @@
 .ic_ui_board .ic_ws.ic_lastmove{background-color: #91dadb;}
 .ic_ui_board .ic_bs.ic_lastmove{background-color: #65bdc4;}
 
-.ic_ui_board .ic_ws.ic_incheck, .ic_ui_board .ic_bs.ic_incheck{
+.ic_ui_board .ic_incheck{
 	background-image: radial-gradient(rgba(240, 115, 85, 0.8) 60%, transparent 100%);
 }
 
-.ic_ui_board .ic_ws.ic_highlight{background-color: #d2db91;}
-.ic_ui_board .ic_bs.ic_highlight{background-color: #b3c465;}
+.ic_ui_board .ic_highlight{
+	background-image: radial-gradient(rgba(135, 17, 145, 0.3) 20%, rgba(0, 0, 0, 0) 0);
+}
+
+.ic_ui_board .ic_highlight.ic_capture{
+	background-image: radial-gradient(transparent 0%, transparent 80%, rgba(135, 17, 145, 0.5) 80%);
+}
 
 .ic_ui_board .ic_ws.ic_selected{
-	background-color: #d2db91;
+	background-color: #cd91db;
 	background-image: none;
 }
 
 .ic_ui_board .ic_bs.ic_selected{
-	background-color: #b3c465;
+	background-color: #b865c4;
 	background-image: none;
 }
 

@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.8.0";
+		var _VERSION="2.8.1";
 		
 		//---------------- config.
 		
@@ -588,7 +588,15 @@
 									legal_moves=board.legalMoves(current_bos);
 									
 									for(i=0, len=legal_moves.length; i<len; i++){//0<len
-										$("#ic_ui_"+legal_moves[i]).addClass("ic_highlight");
+										square=board.getSquare(legal_moves[i]);
+										
+										temp="ic_highlight";
+										
+										if(!square.isEmptySquare && square.sign===board[board.nonActiveColor].sign){
+											temp+=" ic_capture";
+										}
+										
+										$("#ic_ui_"+square.bos).addClass(temp);
 									}
 								}
 							}

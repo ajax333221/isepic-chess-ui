@@ -1,6 +1,6 @@
 {
   "name": "isepic-chess-ui",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "title": "isepic-chess-ui.js",
   "description": "UI of isepic-chess.js",
   "main": "js/isepic-chess-ui.js",
