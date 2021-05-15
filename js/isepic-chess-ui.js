@@ -963,7 +963,7 @@
 			}
 		}
 		
-		//---------------- ic ui (this=apply)
+		//---------------- ic ui
 		
 		function setKeyNavMode(val){
 			_KEY_NAV_MODE=!!val;
