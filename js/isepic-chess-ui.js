@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.9.0";
+		var _VERSION="2.9.1";
 		
 		//---------------- config.
 		
@@ -20,7 +20,7 @@
 		
 		var _ANIMATE_DURATION_MS=300;
 		var _DRAGGING_REFRESH_RATE_MS=50;
-		var _MATERIAL_DIFF_PX=15;
+		var _MATERIAL_DIFF_PX=20;
 		
 		var _POS_Y=0;
 		var _POS_X=0;
@@ -778,7 +778,7 @@
 					temp="";
 					
 					for(j=0, len=current_side.materialDiff.length; j<len; j++){//0<len
-						temp+=("<img src='"+("./css/images/"+Ic.toClassName(current_side.materialDiff[j])+".png")+"' width='"+_MATERIAL_DIFF_PX+"' height='"+_MATERIAL_DIFF_PX+"'>");
+						temp+=("<img src='"+("./css/images/chess-fonts/"+(_CHESSFONT_MERIDA ? "merida" : "isepic")+"/"+Ic.toClassName(current_side.materialDiff[j])+".png")+"' width='"+_MATERIAL_DIFF_PX+"' height='"+_MATERIAL_DIFF_PX+"'>");
 					}
 					
 					matdiff_html+=(temp || "-");
