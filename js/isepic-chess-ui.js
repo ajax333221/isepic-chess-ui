@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.8.1";
+		var _VERSION="2.9.0";
 		
 		//---------------- config.
 		
@@ -16,6 +16,7 @@
 		var _HIGHLIGHT_LEGALMOVES=true;
 		var _HIGHLIGHT_CHECKS=true;
 		var _HIGHLIGHT_SELECTED=true;
+		var _CHESSFONT_MERIDA=true;
 		
 		var _ANIMATE_DURATION_MS=300;
 		var _DRAGGING_REFRESH_RATE_MS=50;
@@ -656,6 +657,10 @@
 				temp.push("ic_unlabeled");
 			}
 			
+			if(_CHESSFONT_MERIDA){
+				temp.push("ic_merida");
+			}
+			
 			new_class=temp.join(" ");
 			
 			new_html="<table cellpadding='0' cellspacing='0'>";
@@ -986,7 +991,7 @@
 				board_elm=$("#ic_ui_board");
 				
 				if(board_elm.length){
-					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")!==_HIDE_LABELS){
+					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")!==_HIDE_LABELS || board_elm.hasClass("ic_merida")!==_CHESSFONT_MERIDA){
 						_refreshTable(that.isRotated, _HIDE_LABELS);
 					}
 				}

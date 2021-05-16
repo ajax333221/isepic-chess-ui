@@ -15,7 +15,6 @@ Isepic Chess UI is the user interface for [isepic-chess.js](https://github.com/a
 - [Documentation](https://github.com/ajax333221/isepic-chess-ui#book-documentation)
 	- [IcUi methods](https://github.com/ajax333221/isepic-chess-ui#list-of-icuimethods)
 	- [Board UI methods](https://github.com/ajax333221/isepic-chess-ui#list-of-boarduimethods)
-- [To do](https://github.com/ajax333221/isepic-chess-ui#telescope-to-do)
 - [Copyright and license](https://github.com/ajax333221/isepic-chess-ui#page_facing_up-copyright-and-license)
 
 :computer_mouse: How to use?
@@ -121,14 +120,6 @@ Boards created by `Ic.initBoard()` have the following available UI methods.
 Function | Parameters | Return | UI refresh? | Description
 -------- | ---------- | ------ | ----------- | -----------
 **refreshUi**(<br>*animationType*<br>) | <ul><li>:eight_pointed_black_star:animationType (Number)</li></ul><hr>:eight_pointed_black_star:Optional Parameter | - | Yes | This method will:<ul><li>Refresh the HTML of all the components (if any) to reflect the internal state of the board.</li><li>Update the **data-boardname** attribute of the board component (if any) with the **board name** of the board calling the method.</li><li>Finish any ongoing piece animations.</li><li>Cancel any ongoing piece dragging.</li><li>Start the current animation (if any).</li></ul>If `animationType` is a **falsy-value**, no animation will happen.<br><br>If `animationType` is a **positive number**, the board will be refreshed with an animation as if the last move was played.<br><br>If `animationType` is a **negative number**, the board will be refreshed with an animation as if the next move was reverted.
-
-:telescope: To do
--------------
-
-- Create, rename and delete boards through the UI
-- Set-up position mode
-- **API:** *callback-functions* and *event-listeners*
-- Variety of themes and *chess-fonts*
 
 :page_facing_up: Copyright and license
 -------------
