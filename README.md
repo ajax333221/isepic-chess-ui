@@ -101,8 +101,8 @@ https://ajax333221.github.io/isepic-chess-ui/
 
 > **Note:** make sure to also read the [isepic-chess.js Documentation](https://github.com/ajax333221/isepic-chess#book-documentation).
 
-- [Ic Ui methods](https://github.com/ajax333221/isepic-chess/blob/master/docs/ic-methods.md#ic-methods)
-- [Board Ui methods](https://github.com/ajax333221/isepic-chess/blob/master/docs/board-methods.md#board-methods)
+- [Ic Ui methods](https://github.com/ajax333221/isepic-chess-ui/blob/master/docs/ic-ui-methods.md#ic-ui-methods)
+- [Board Ui methods](https://github.com/ajax333221/isepic-chess-ui/blob/master/docs/board-ui-methods.md#board-ui-methods)
 
 :page_facing_up: Copyright and license
 -------------
