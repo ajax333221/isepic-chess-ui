@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Doco. Generator (Ic Ui methods)</title>
+	</head>
+	<body>
+		<h1>ic-ui-methods.md</h1>
+		<textarea id="result" style="width:100%;height:400px">...</textarea>
+	</body>
+	<script src="../doco-gen.js"></script>
+	<script>
+		var icui, res;
+		
+		icui={
+			setKeyNavMode : {
+				index : 1,
+				name : "setKeyNavMode"
+			}
+		};
+		
+		//start: setKeyNavMode
+		icui.setKeyNavMode.params={
+			children : [{name : "allowNavigation", type : "Boolean"}]
+		};
+		
+		icui.setKeyNavMode.returnVal={};
+		
+		icui.setKeyNavMode.description=[];
+		icui.setKeyNavMode.description.push("Turns on/off the **key navigation mode** to allow/deny the navigation with the keyboard arrows (`left = previous`, `up = first`, `down = last` and `right = next`).");
+		icui.setKeyNavMode.description.push("The **key navigation mode** is initially turned off.");
+		icui.setKeyNavMode.description.push(":large_orange_diamond:**Important:** the default behavior of the keyboard arrows will get disabled when the mode is on.");
+		
+		icui.setKeyNavMode.examples=[];
+		icui.setKeyNavMode.examples.push("IcUi.setKeyNavMode(true)");
+		icui.setKeyNavMode.examples.push("IcUi.setKeyNavMode(false)");
+		//end: setKeyNavMode
+		
+		res="";
+		
+		res+="<p align=\"center\">"+urlHrefLink(["« Return", "#book-documentation"])+"</p>";
+		
+		res+="\n\n";
+		
+		res+="<h1 align=\"center\">Ic Ui methods</h1>";
+		
+		res+="\n\n";
+		
+		res+="Isepic Chess UI library `isepic-chess-ui.js` has the following available methods:";
+		
+		res+="\n\n";
+		
+		res+="<ul>\n<li>IcUi."+docoGenMethodList(icui).join("()</li>\n<li>IcUi.")+"()</li>\n</ul>";
+		
+		res+="\n\n";
+		
+		res+="#### Table `IcUi.<methods>(...)`:";
+		
+		res+="\n\n";
+		
+		res+="Function | Parameters | Return | UI refresh? | Description";
+		
+		res+="\n";
+		
+		res+="-------- | ---------- | ------ | ----------- | -----------";
+		
+		res+="\n";
+		
+		res+=docoGenMethodTable(icui).join("\n");
+		
+		res+="\n\n";
+		
+		res+="<p align=\"center\">"+urlHrefLink(["« Return", "#book-documentation"])+"</p>";
+		
+		res+="\n";
+		
+		document.getElementById("result").value=res;
+	</script>
+</html>
