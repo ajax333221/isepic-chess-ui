@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.9.1";
+		var _VERSION="2.10.0";
 		
 		//---------------- config.
 		
@@ -17,6 +17,7 @@
 		var _HIGHLIGHT_CHECKS=true;
 		var _HIGHLIGHT_SELECTED=true;
 		var _CHESSFONT_MERIDA=true;
+		var _SOUND_EFFECTS=true;
 		
 		var _ANIMATE_DURATION_MS=300;
 		var _DRAGGING_REFRESH_RATE_MS=50;
@@ -438,7 +439,7 @@
 					}
 					
 					if(no_errors){
-						refreshUi.apply(board, [0]);
+						refreshUi.apply(board, [0, false]);
 					}
 					
 					if($(this).prop("tagName")==="A"){
@@ -526,7 +527,7 @@
 					
 					if(no_errors){
 						if(old_drg!==current_bos){
-							board.playMove([old_drg, current_bos], {isInanimated : true});
+							board.playMove([old_drg, current_bos], {isInanimated : true, playSounds : true});
 						}
 					}
 				});
@@ -575,7 +576,7 @@
 					}
 					
 					if(no_errors){
-						if(!old_sel || (old_sel!==current_bos && !board.playMove([old_sel, current_bos]))){
+						if(!old_sel || (old_sel!==current_bos && !board.playMove([old_sel, current_bos], {playSounds : true}))){
 							if(square.className){
 								_SELECTED_BOS=current_bos;
 								
@@ -696,6 +697,11 @@
 			}
 			
 			new_html+="</table>";
+			
+			if(_SOUND_EFFECTS){
+				new_html+="<audio id='ic_ui_sound_move' src='./sounds/move.wav' preload='auto' style='display:none'></audio>";
+				new_html+="<audio id='ic_ui_sound_capture' src='./sounds/capture.wav' preload='auto' style='display:none'></audio>";
+			}
 			
 			$("#ic_ui_board").attr("class", new_class).html(new_html);
 		}
@@ -974,8 +980,8 @@
 			_KEY_NAV_MODE=!!val;
 		}
 		
-		function refreshUi(animation_type){
-			var that, board_elm;
+		function refreshUi(animation_type, play_sounds){
+			var that, temp, board_elm;
 			
 			that=this;
 			
@@ -991,7 +997,7 @@
 				board_elm=$("#ic_ui_board");
 				
 				if(board_elm.length){
-					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")!==_HIDE_LABELS || board_elm.hasClass("ic_merida")!==_CHESSFONT_MERIDA){
+					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")!==_HIDE_LABELS || board_elm.hasClass("ic_merida")!==_CHESSFONT_MERIDA || (!!$("#ic_ui_sound_move").length || !!$("#ic_ui_sound_capture").length)!==_SOUND_EFFECTS){
 						_refreshTable(that.isRotated, _HIDE_LABELS);
 					}
 				}
@@ -1015,6 +1021,17 @@
 					
 					if(animation_type){
 						_animateCaller.apply(that, [animation_type<0]);
+					}
+					
+					if(_SOUND_EFFECTS && play_sounds){
+						temp=(that.moveList[that.currentMove].isCapture ? "capture" : "move");
+						temp=$("#ic_ui_sound_"+temp)[0];
+						
+						if(temp){
+							temp.pause();
+							temp.currentTime=0;
+							temp.play();
+						}
 					}
 					
 					if(_HIGHLIGHT_LASTMOVE && that.currentMove!==0){

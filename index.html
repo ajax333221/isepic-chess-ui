@@ -121,7 +121,7 @@
 					$("#right_elm .padded").last().append("<br><hr><br><div class='ic_ui_debug'><div><a id='ic_ui_debug_toggle' href='#'>Debug ▲</a></div><div id='ic_ui_debug' style='display:none'></div>");
 					
 					if(Ic.getBoard("main")){
-						Ic.getBoard("main").refreshUi();
+						Ic.getBoard("main").refreshUi(0, false);
 					}
 				}
 			}
@@ -182,7 +182,7 @@
 						$("#parsetoggler").trigger("click");
 						
 						if(animate_last_move){
-							Ic.getBoard("main").refreshUi(1);
+							Ic.getBoard("main").refreshUi(1, true);
 						}
 					}
 					
