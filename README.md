@@ -22,6 +22,7 @@ Isepic Chess UI is the user interface for [isepic-chess.js](https://github.com/a
 
 ```html
 <link rel="stylesheet" href="./css/isepic-chess-ui.css">
+
 <script src="./js/jquery-3.3.1.min.js"></script>
 <script src="./js/isepic-chess.js"></script>
 <script src="./js/isepic-chess-ui.js"></script>
@@ -40,33 +41,7 @@ Isepic Chess UI is the user interface for [isepic-chess.js](https://github.com/a
 ```
 <sub>**Note:** Documentation for `Ic.initBoard()` can be found [here](https://github.com/ajax333221/isepic-chess/blob/master/docs/ic-methods.md#ic-methods).</sub>
 
-3. Add the elements you need (don't add them more than once) inside `<body>`.
-```html
-<div id="ic_ui_board"></div>
-
-<div id="ic_ui_materialdiff"></div>
-
-<input id="ic_ui_fen" value="" type="text">
-
-<input id="ic_ui_nav_first" value="|<" type="button">
-<input id="ic_ui_nav_previous" value="<" type="button">
-<input id="ic_ui_nav_next" value=">" type="button">
-<input id="ic_ui_nav_last" value=">|" type="button">
-
-<input id="ic_ui_rotate" value="rotate" type="button">
-
-<select id="ic_ui_promote">
-  <option value="5" selected="selected">queen</option>
-  <option value="4">rook</option>
-  <option value="3">bishop</option>
-  <option value="2">knight</option>
-</select>
-
-<div id="ic_ui_tabs"></div>
-
-<div id="ic_ui_movelist"></div>
-```
-<sub>**Note:** there are classes that enhance them (no documentation for this yet, see `index.html` and `isepic-chess-ui.css` for help).</sub>
+3. Add some [components](https://ajax333221.github.io/isepic-chess-ui/components.html) (don't add them more than once) inside `<body>`.
 
 4. Open the **.html** file.
 
@@ -81,15 +56,17 @@ https://ajax333221.github.io/isepic-chess-ui/
 - Responsive board size
 - Both *drag-and-drop* and *click-from-click-to* in parallel
 - Highlight last move, legal moves and checks
-- Many optional components:
-	- Chess board
-	- Material difference (small piece icons)
-	- Selectable FEN text
-	- Navigation buttons (first, previous, next and last)
-	- Rotate board button
-	- Pawn promotion dropdown
-	- Board list (with *switch-to-board* links)
-	- SAN move list (with *jump-to-move* links)
+- [Components](https://ajax333221.github.io/isepic-chess-ui/components.html):
+	- Chess [board](https://ajax333221.github.io/isepic-chess-ui/components.html#board)
+	- [Board tabs](https://ajax333221.github.io/isepic-chess-ui/components.html#board_tabs) (with *switch-to-board* links)
+	- [Material difference](https://ajax333221.github.io/isepic-chess-ui/components.html#material_diff) (small piece icons)
+	- Navigation buttons ([first](https://ajax333221.github.io/isepic-chess-ui/components.html#first), [previous](https://ajax333221.github.io/isepic-chess-ui/components.html#previous), [next](https://ajax333221.github.io/isepic-chess-ui/components.html#next) and [last](https://ajax333221.github.io/isepic-chess-ui/components.html#last))
+	- [Rotate](https://ajax333221.github.io/isepic-chess-ui/components.html#rotate) board button
+	- [Promotion dropdown](https://ajax333221.github.io/isepic-chess-ui/components.html#promote)
+	- SAN [move list](https://ajax333221.github.io/isepic-chess-ui/components.html#move_list) (with *jump-to-move* links)
+	- Selectable [FEN](https://ajax333221.github.io/isepic-chess-ui/components.html#fen) text
+	- [Debug toggler](https://ajax333221.github.io/isepic-chess-ui/components.html#debug_toggler)
+	- [Debug](https://ajax333221.github.io/isepic-chess-ui/components.html#debug)
 - Automatic component binding, no need to do anything manually to the DOM elements (they will simply work just by having their correct id property at any given time)
 - Piece displacement animation
 - Chess fonts:

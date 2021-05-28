@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="2.10.0";
+		var _VERSION="3.0.0";
 		
 		//---------------- config.
 		
@@ -235,7 +235,7 @@
 					$(this).select();
 				});
 				
-				doc.off("click.icuidebug").on("click.icuidebug", "#ic_ui_debug_toggle", function(){
+				doc.off("click.icuidebug").on("click.icuidebug", "#ic_ui_debug_toggler", function(){
 					$(this).text("Debug "+($("#ic_ui_debug").is(":visible") ? "▲" : "▼"));
 					$("#ic_ui_debug").toggle();
 					
@@ -408,10 +408,6 @@
 					
 					if(no_errors){
 						board.setPromoteTo($(this).val());
-					}
-					
-					if($(this).prop("tagName")==="A"){
-						return false;
 					}
 				});
 				
@@ -616,9 +612,9 @@
 		function _refreshBoardTabs(board_name){
 			var i, len, current_board, current_board_name, board_list, new_html;
 			
-			if($("#ic_ui_tabs").length){
+			if($("#ic_ui_board_tabs").length){
 				board_list=Ic.getBoardNames();
-				new_html="<strong>Board list:</strong> ";
+				new_html="<strong>Boards:</strong> ";
 				
 				for(i=0, len=board_list.length; i<len; i++){//0<len
 					new_html+=(i ? " | " : "");
@@ -641,7 +637,7 @@
 					}
 				}
 				
-				$("#ic_ui_tabs").html(new_html);
+				$("#ic_ui_board_tabs").html(new_html);
 			}
 		}
 		
@@ -774,7 +770,7 @@
 			
 			that=this;
 			
-			if($("#ic_ui_materialdiff").length){
+			if($("#ic_ui_material_diff").length){
 				matdiff_html="";
 				
 				for(i=0; i<2; i++){//0...1
@@ -790,7 +786,7 @@
 					matdiff_html+=(temp || "-");
 				}
 				
-				$("#ic_ui_materialdiff").html(matdiff_html);
+				$("#ic_ui_material_diff").html(matdiff_html);
 			}
 		}
 		
@@ -799,7 +795,7 @@
 			
 			that=this;
 			
-			if($("#ic_ui_movelist").length){
+			if($("#ic_ui_move_list").length){
 				move_list=that.moveList;
 				
 				black_starts=(move_list[0].colorToPlay==="b");
@@ -848,7 +844,7 @@
 				
 				new_html=(new_html || "-");
 				
-				$("#ic_ui_movelist").html(new_html);
+				$("#ic_ui_move_list").html(new_html);
 			}
 		}
 		

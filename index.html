@@ -29,7 +29,7 @@
 				min-width: 100%; /*this is an overwrite*/
 			}
 			
-			.ic_ui_materialdiff{
+			#ic_ui_material_diff{
 				display: inline-block; /*this is an overwrite*/
 			}
 			
@@ -118,7 +118,7 @@
 			
 			function display_debug(){
 				if(!$(".ic_ui_debug").length){
-					$("#right_elm .padded").last().append("<br><hr><br><div class='ic_ui_debug'><div><a id='ic_ui_debug_toggle' href='#'>Debug ▲</a></div><div id='ic_ui_debug' style='display:none'></div>");
+					$("#right_elm .padded").last().append("<br><hr><br><div class='ic_ui_debug'><a id='ic_ui_debug_toggler' href='#'>Debug ▲</a><div id='ic_ui_debug' style='display:none'></div></div>");
 					
 					if(Ic.getBoard("main")){
 						Ic.getBoard("main").refreshUi(0, false);
@@ -258,8 +258,8 @@
 						
 						<br>
 						
-						<div class="ic_ui_movelist">
-							<div id="ic_ui_movelist"></div>
+						<div class="ic_ui_move_list">
+							<div id="ic_ui_move_list"></div>
 						</div>
 						
 						<br>
@@ -271,8 +271,8 @@
 					
 					<br>
 					
-					<div class="ic_ui_materialdiff">
-						<div id="ic_ui_materialdiff"></div>
+					<div class="ic_ui_material_diff">
+						<div id="ic_ui_material_diff"></div>
 					</div>
 				</div>
 			</div>

@@ -177,27 +177,27 @@
 }
 /*end(board) ---*/
 
-/*start(materialdiff) ---*/
-.ic_ui_materialdiff{
+/*start(material_diff) ---*/
+.ic_ui_material_diff{
 	color: #333;
 	font-size: 16px;
 	text-align: left;
 }
 
-.ic_ui_materialdiff hr{
+.ic_ui_material_diff hr{
 	margin: 2px 0;
 	padding: 0;
 	border: 0;
 	border-top: 1px solid #e5e5e5;
 }
 
-.ic_ui_materialdiff img{
+.ic_ui_material_diff img{
 	margin: 2px;
 	background: transparent;
 	opacity: 0.5;
 	filter: alpha(opacity=50);
 }
-/*end(materialdiff) ---*/
+/*end(material_diff) ---*/
 
 /*start(controls) ---*/
 .ic_ui_controls{
@@ -227,65 +227,65 @@
 	box-sizing: border-box;
 	width: 100%;
 }
+/*end(controls) ---*/
 
-/* - */
-
-.ic_ui_tabs{
+/*start(board_tabs) ---*/
+.ic_ui_board_tabs{
 	color: #333;
 	font-size: 16px;
 }
 
-.ic_ui_tabs .ic_disabled{
+.ic_ui_board_tabs .ic_disabled{
 	color: #808080;
 }
+/*end(board_tabs) ---*/
 
-/* - */
-
-.ic_ui_movelist{
+/*start(move_list) ---*/
+.ic_ui_move_list{
 	color: #333;
 	font-size: 16px;
 	line-height:25px;
 }
 
-.ic_ui_movelist .ic_pgn_number, .ic_ui_movelist .ic_pgn_comment, .ic_ui_movelist .ic_pgn_comment_active, .ic_ui_movelist .ic_pgn_result, .ic_ui_movelist .ic_pgn_link, .ic_ui_movelist .ic_pgn_active{
+.ic_ui_move_list .ic_pgn_number, .ic_ui_move_list .ic_pgn_comment, .ic_ui_move_list .ic_pgn_comment_active, .ic_ui_move_list .ic_pgn_result, .ic_ui_move_list .ic_pgn_link, .ic_ui_move_list .ic_pgn_active{
 	padding: 2px 1px;
 }
 
-.ic_ui_movelist .ic_pgn_number{
+.ic_ui_move_list .ic_pgn_number{
 	font-weight: bold;
 }
 
-.ic_ui_movelist .ic_pgn_comment{
+.ic_ui_move_list .ic_pgn_comment{
 	font-style: italic;
 	color: #c5c5c5;
 }
 
-.ic_ui_movelist .ic_pgn_comment_active{
+.ic_ui_move_list .ic_pgn_comment_active{
 	font-style: italic;
 	color: #662;
 	background: #f2f7c3;
 }
 
-.ic_ui_movelist .ic_pgn_result{
+.ic_ui_move_list .ic_pgn_result{
 	font-style: italic;
 	color: #555;
 }
 
-.ic_ui_movelist .ic_pgn_link{
+.ic_ui_move_list .ic_pgn_link{
 	color: #4862a3;
 	cursor: pointer;
 }
 
-.ic_ui_movelist .ic_pgn_link:hover{
+.ic_ui_move_list .ic_pgn_link:hover{
 	color: #222;
 	background: #efefef;
 }
 
-.ic_ui_movelist .ic_pgn_active{
+.ic_ui_move_list .ic_pgn_active{
 	color: #222;
 	background: #e6e6e6;
 }
-/*end(controls) ---*/
+/*end(move_list) ---*/
 
 /*start(debug) ---*/
 .ic_ui_debug{
