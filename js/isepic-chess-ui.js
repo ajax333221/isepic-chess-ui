@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="3.0.0";
+		var _VERSION="3.0.1";
 		
 		//---------------- config.
 		
@@ -141,8 +141,8 @@
 			limit=document.body;
 			
 			if(limit){
-				limit_top=$(limit).offset().top;
-				limit_left=$(limit).offset().left;
+				limit_top=$(limit).offset().top+$(document).scrollTop();
+				limit_left=$(limit).offset().left+$(document).scrollLeft();
 				
 				limit_right=(limit_left+$(limit).innerWidth());
 				limit_bottom=(limit_top+$(limit).innerHeight());
