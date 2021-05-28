@@ -16,7 +16,6 @@
 			h1{
 				padding: 0;
 				margin: 0;
-				margin-left: 10px;
 			}
 			
 			.danger{
@@ -35,6 +34,17 @@
 			p.component_first_p{
 				padding-top: 10px;
 				border-top: 2px solid #f0f0f0;
+			}
+			
+			ul.component_list{
+				padding: 10px;
+				margin: 0;
+				margin-top: 10px;
+				background: #e4f0ef;
+			}
+			
+			ul.component_list li{
+				margin: 3px 0 3px 25px;
 			}
 			
 			code{
@@ -100,33 +110,35 @@
 				</div>
 			</div>
 			
-			<h1>Ui Components:</h1>
-			
-			<ul>
-				<li><a href="#board">#ic_ui_board</a></li>
-				<li><a href="#board_tabs">#ic_ui_board_tabs</a></li>
-				<li><a href="#material_diff">#ic_ui_material_diff</a></li>
-				<li>
-					Controls:
-					<ul>
-						<li><a href="#first">#ic_ui_nav_first</a></li>
-						<li><a href="#previous">#ic_ui_nav_previous</a></li>
-						<li><a href="#next">#ic_ui_nav_next</a></li>
-						<li><a href="#last">#ic_ui_nav_last</a></li>
-						<li><a href="#rotate">#ic_ui_rotate</a></li>
-						<li><a href="#promote">#ic_ui_promote</a></li>
-						<li><a href="#move_list">#ic_ui_move_list</a></li>
-						<li><a href="#fen">#ic_ui_fen</a></li>
-					</ul>
-				</li>
-				<li>
-					Debug:
-					<ul>
-						<li><a href="#debug_toggler">#ic_ui_debug_toggler</a></li>
-						<li><a href="#debug">#ic_ui_debug</a></li>
-					</ul>
-				</li>
-			</ul>
+			<div id="header" class="component_holder">
+				<h1>Ui Components:</h1>
+				
+				<ul class="component_list">
+					<li><a href="#board">#ic_ui_board</a></li>
+					<li><a href="#board_tabs">#ic_ui_board_tabs</a></li>
+					<li><a href="#material_diff">#ic_ui_material_diff</a></li>
+					<li>
+						Controls:
+						<ul>
+							<li><a href="#first">#ic_ui_nav_first</a></li>
+							<li><a href="#previous">#ic_ui_nav_previous</a></li>
+							<li><a href="#next">#ic_ui_nav_next</a></li>
+							<li><a href="#last">#ic_ui_nav_last</a></li>
+							<li><a href="#rotate">#ic_ui_rotate</a></li>
+							<li><a href="#promote">#ic_ui_promote</a></li>
+							<li><a href="#move_list">#ic_ui_move_list</a></li>
+							<li><a href="#fen">#ic_ui_fen</a></li>
+						</ul>
+					</li>
+					<li>
+						Debug:
+						<ul>
+							<li><a href="#debug_toggler">#ic_ui_debug_toggler</a></li>
+							<li><a href="#debug">#ic_ui_debug</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
 			
 			<div id="board" class="component_holder">
 				<a href="#board" class="component_anchor">#ic_ui_board</a>
