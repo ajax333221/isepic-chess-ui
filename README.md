@@ -78,6 +78,7 @@ https://ajax333221.github.io/isepic-chess-ui/
 
 > **Note:** make sure to also read the [isepic-chess.js Documentation](https://github.com/ajax333221/isepic-chess#book-documentation).
 
+- [Components](https://ajax333221.github.io/isepic-chess-ui/components.html)
 - [Ic Ui methods](https://github.com/ajax333221/isepic-chess-ui/blob/master/docs/ic-ui-methods.md#ic-ui-methods)
 - [Board Ui methods](https://github.com/ajax333221/isepic-chess-ui/blob/master/docs/board-ui-methods.md#board-ui-methods)
 
