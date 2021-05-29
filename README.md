@@ -72,6 +72,8 @@ https://ajax333221.github.io/isepic-chess-ui/
 - Chess fonts:
 	- **Merida** <img src="./css/images/chess-fonts/merida/wk.png" width="20"><img src="./css/images/chess-fonts/merida/wq.png" width="20"><img src="./css/images/chess-fonts/merida/wr.png" width="20"><img src="./css/images/chess-fonts/merida/wb.png" width="20"><img src="./css/images/chess-fonts/merida/wn.png" width="20"><img src="./css/images/chess-fonts/merida/wp.png" width="20"><img src="./css/images/chess-fonts/merida/bk.png" width="20"><img src="./css/images/chess-fonts/merida/bq.png" width="20"><img src="./css/images/chess-fonts/merida/br.png" width="20"><img src="./css/images/chess-fonts/merida/bb.png" width="20"><img src="./css/images/chess-fonts/merida/bn.png" width="20"><img src="./css/images/chess-fonts/merida/bp.png" width="20">
 	- **isepic-chess-font** <sup>(by ajax333221)</sup> <img src="./css/images/chess-fonts/isepic/wk.png" width="20"><img src="./css/images/chess-fonts/isepic/wq.png" width="20"><img src="./css/images/chess-fonts/isepic/wr.png" width="20"><img src="./css/images/chess-fonts/isepic/wb.png" width="20"><img src="./css/images/chess-fonts/isepic/wn.png" width="20"><img src="./css/images/chess-fonts/isepic/wp.png" width="20"><img src="./css/images/chess-fonts/isepic/bk.png" width="20"><img src="./css/images/chess-fonts/isepic/bq.png" width="20"><img src="./css/images/chess-fonts/isepic/br.png" width="20"><img src="./css/images/chess-fonts/isepic/bb.png" width="20"><img src="./css/images/chess-fonts/isepic/bn.png" width="20"><img src="./css/images/chess-fonts/isepic/bp.png" width="20">
+- Sound effects
+- Wheel scroll move navigation
 
 :book: Documentation
 -------------

@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="3.1.0";
+		var _VERSION="3.2.0";
 		
 		//---------------- config.
 		
@@ -18,9 +18,12 @@
 		var _HIGHLIGHT_SELECTED=true;
 		var _CHESSFONT_MERIDA=true;
 		var _SOUND_EFFECTS=true;
+		var _PIECE_DRAGGING=true;
+		var _MOVE_SCROLLING=true;
 		
 		var _ANIMATE_DURATION_MS=300;
 		var _DRAGGING_REFRESH_RATE_MS=50;
+		var _SCROLLING_DELAY_MS=100;
 		var _MATERIAL_DIFF_PX=20;
 		
 		var _POS_Y=0;
@@ -30,6 +33,7 @@
 		//---------------- private
 		
 		var _RAN_ONCE=false;
+		var _SCROLLING_WAITING=false;
 		
 		var _BOARD_NAME="";
 		var _SELECTED_BOS="";
@@ -237,6 +241,7 @@
 				
 				doc.off("click.icuidebug").on("click.icuidebug", "#ic_ui_debug_toggler", function(){
 					$(this).text("Debug "+($("#ic_ui_debug").is(":visible") ? "▲" : "▼"));
+					
 					$("#ic_ui_debug").toggle();
 					
 					if($(this).prop("tagName")==="A"){
@@ -245,35 +250,52 @@
 				});
 				
 				doc.off("keydown.icuikeynav").on("keydown.icuikeynav", function(e){
-					var board, current_nav;
+					var board, current_nav, no_errors;
 					
-					if(_KEY_NAV_MODE){
-						if(e.which>=37 && e.which<=40){
-							board=Ic.getBoard(_BOARD_NAME);
-							
-							if(board!==null){
-								current_nav=["left", "up", "right", "down"][e.which-37];
-								
-								switch(current_nav){
-									case "up" :
-										board.navFirst();
-										break;
-									case "left" :
-										board.navPrevious();
-										break;
-									case "right" :
-										board.navNext();
-										break;
-									case "down" :
-										board.navLast();
-										break;
-									default :
-										Ic.utilityMisc.consoleLog("Error[keydown.icuikeynav]: invalid arrow name \""+current_nav+"\"");
-								}
-								
-								return false;
-							}
+					no_errors=true;
+					
+					//if(no_errors){
+						if(!_KEY_NAV_MODE){
+							no_errors=false;
 						}
+					//}
+					
+					if(no_errors){
+						if(e.which<37 || e.which>40){
+							no_errors=false;
+						}
+					}
+					
+					if(no_errors){
+						board=Ic.getBoard(_BOARD_NAME);
+						
+						if(board===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[keydown]: board not found");
+						}
+					}
+					
+					if(no_errors){
+						current_nav=["left", "up", "right", "down"][e.which-37];
+						
+						switch(current_nav){
+							case "up" :
+								board.navFirst();
+								break;
+							case "left" :
+								board.navPrevious();
+								break;
+							case "right" :
+								board.navNext();
+								break;
+							case "down" :
+								board.navLast();
+								break;
+							default :
+								Ic.utilityMisc.consoleLog("Error[keydown]: invalid case \""+current_nav+"\"");
+						}
+						
+						return false;
 					}
 				});
 				
@@ -496,7 +518,17 @@
 				});
 				
 				doc.off("mousemove.icuirefreshpos").on("mousemove.icuirefreshpos", function(e){
-					if(_DRAGGING_BOS){
+					var no_errors;
+					
+					no_errors=true;
+					
+					//if(no_errors){
+						if(!_PIECE_DRAGGING || !_DRAGGING_BOS){
+							no_errors=false;
+						}
+					//}
+					
+					if(no_errors){
 						_POS_Y=e.pageY;
 						_POS_X=e.pageX;
 					}
@@ -596,7 +628,9 @@
 							if(square.className){
 								_SELECTED_BOS=current_bos;
 								
-								_dragPiece(e.pageX, e.pageY, current_bos);
+								if(_PIECE_DRAGGING){
+									_dragPiece(e.pageX, e.pageY, current_bos);
+								}
 								
 								if(_HIGHLIGHT_SELECTED){
 									$("#ic_ui_"+current_bos).addClass("ic_selected");
@@ -618,6 +652,61 @@
 									}
 								}
 							}
+						}
+					}
+				});
+				
+				doc.off("wheel.icuiscroll").on("wheel.icuiscroll", function(e){
+					var temp, board, is_reversed, no_errors;
+					
+					no_errors=true;
+					
+					//if(no_errors){
+						if(!_MOVE_SCROLLING || _SCROLLING_WAITING){
+							no_errors=false;
+						}
+					//}
+					
+					if(no_errors){
+						_SCROLLING_WAITING=true;
+						
+						setTimeout(function(){
+							_SCROLLING_WAITING=false;
+						}, _SCROLLING_DELAY_MS);
+						
+						temp=0;
+						
+						if(e && e.originalEvent && e.originalEvent.deltaY){
+							temp=e.originalEvent.deltaY;
+						}
+						
+						if(!temp){//horizontal scrolling or bad event
+							no_errors=false;
+						}
+					}
+					
+					if(no_errors){
+						is_reversed=(temp<0);
+						
+						if(!$(e.target).closest("#ic_ui_board").length){//not a child
+							no_errors=false;
+						}
+					}
+					
+					if(no_errors){
+						board=Ic.getBoard(_BOARD_NAME);
+						
+						if(board===null){
+							no_errors=false;
+							Ic.utilityMisc.consoleLog("Error[wheel]: board not found");
+						}
+					}
+					
+					if(no_errors){
+						if(is_reversed){
+							board.navPrevious();
+						}else{
+							board.navNext();
 						}
 					}
 				});
