@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="3.0.1";
+		var _VERSION="3.1.0";
 		
 		//---------------- config.
 		
@@ -280,6 +280,10 @@
 				doc.off("click.icuifirst").on("click.icuifirst", "#ic_ui_nav_first", function(){
 					var board, no_errors;
 					
+					if($(this).hasClass("ic_disabled")){
+						return false;
+					}
+					
 					no_errors=true;
 					
 					//if(no_errors){
@@ -302,6 +306,10 @@
 				
 				doc.off("click.icuiprev").on("click.icuiprev", "#ic_ui_nav_previous", function(){
 					var board, no_errors;
+					
+					if($(this).hasClass("ic_disabled")){
+						return false;
+					}
 					
 					no_errors=true;
 					
@@ -326,6 +334,10 @@
 				doc.off("click.icuinext").on("click.icuinext", "#ic_ui_nav_next", function(){
 					var board, no_errors;
 					
+					if($(this).hasClass("ic_disabled")){
+						return false;
+					}
+					
 					no_errors=true;
 					
 					//if(no_errors){
@@ -349,6 +361,10 @@
 				doc.off("click.icuilast").on("click.icuilast", "#ic_ui_nav_last", function(){
 					var board, no_errors;
 					
+					if($(this).hasClass("ic_disabled")){
+						return false;
+					}
+					
 					no_errors=true;
 					
 					//if(no_errors){
@@ -371,6 +387,10 @@
 				
 				doc.off("click.icuirotate").on("click.icuirotate", "#ic_ui_rotate", function(){
 					var board, no_errors;
+					
+					if($(this).hasClass("ic_disabled")){
+						return false;
+					}
 					
 					no_errors=true;
 					
@@ -1009,6 +1029,16 @@
 				_refreshMaterialDifference.apply(that, []);
 				
 				_refreshMoveList.apply(that, []);
+				
+				$("#ic_ui_nav_first.ic_disabled, #ic_ui_nav_previous.ic_disabled, #ic_ui_nav_next.ic_disabled, #ic_ui_nav_last.ic_disabled").removeClass("ic_disabled");
+				
+				if(!that.currentMove){
+					$("#ic_ui_nav_first, #ic_ui_nav_previous").addClass("ic_disabled");
+				}
+				
+				if(that.currentMove===(that.moveList.length-1)){
+					$("#ic_ui_nav_next, #ic_ui_nav_last").addClass("ic_disabled");
+				}
 				
 				if(board_elm.length){
 					_refreshPieceClasses.apply(that, []);

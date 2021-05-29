@@ -227,6 +227,13 @@
 	box-sizing: border-box;
 	width: 100%;
 }
+
+.ic_ui_controls input.ic_disabled{
+	color: #ccc;
+	border-color: #ddd;
+	background: #f2f2f2;
+	cursor: default;
+}
 /*end(controls) ---*/
 
 /*start(board_tabs) ---*/
