@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="4.0.0";
+		var _VERSION="4.0.1";
 		
 		var _CFG={
 			chessFont : "merida",
@@ -1094,7 +1094,15 @@
 		//---------------- ic ui
 		
 		function setCfg(key, val){
+			var board;
+			
 			_CFG[""+key]=val;
+			
+			board=Ic.getBoard(_BOARD_NAME);
+			
+			if(board!==null){
+				refreshUi.apply(board, [0, false]);
+			}
 		}
 		
 		function refreshUi(animation_type, play_sounds){

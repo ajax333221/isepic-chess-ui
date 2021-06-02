@@ -33,6 +33,12 @@ Isepic Chess UI is the user interface for [isepic-chess.js](https://github.com/a
 ```html
 <script>
   $(function(){
+    //you can overwrite configuration options
+    IcUi.setCfg("soundEffects", false);
+    IcUi.setCfg("scrollNavigation", false);
+    IcUi.setCfg("animationTime", 150);
+    
+    //initialize a board
     var board = Ic.initBoard({
       boardName : "main"
     });
