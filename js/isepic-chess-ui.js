@@ -6,31 +6,27 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="3.2.0";
+		var _VERSION="4.0.0";
 		
-		//---------------- config.
-		
-		var _KEY_NAV_MODE=false;
-		var _HIDE_LABELS=false;
-		var _HIGHLIGHT_LASTMOVE=true;
-		var _HIGHLIGHT_LEGALMOVES=true;
-		var _HIGHLIGHT_CHECKS=true;
-		var _HIGHLIGHT_SELECTED=true;
-		var _CHESSFONT_MERIDA=true;
-		var _SOUND_EFFECTS=true;
-		var _PIECE_DRAGGING=true;
-		var _MOVE_SCROLLING=true;
-		
-		var _ANIMATE_DURATION_MS=300;
-		var _DRAGGING_REFRESH_RATE_MS=50;
-		var _SCROLLING_DELAY_MS=100;
-		var _MATERIAL_DIFF_PX=20;
+		var _CFG={
+			chessFont : "merida",
+			boardLabels : true,
+			soundEffects : true,
+			pieceDragging : true,
+			highlightChecks : true,
+			highlightLastMove : true,
+			highlightLegalMoves : true,
+			highlightSelected : true,
+			scrollNavigation : true,
+			arrowKeysNavigation : false,
+			animationTime : 300,
+			draggingTime : 50,
+			scrollingTime : 60
+		};
 		
 		var _POS_Y=0;
 		var _POS_X=0;
 		var _INTERVAL=0;
-		
-		//---------------- private
 		
 		var _RAN_ONCE=false;
 		var _SCROLLING_WAITING=false;
@@ -38,6 +34,18 @@
 		var _BOARD_NAME="";
 		var _SELECTED_BOS="";
 		var _DRAGGING_BOS="";
+		
+		//---------------- helpers
+		
+		function _chessFontHelper(chess_font){
+			chess_font=(""+chess_font).replace(/\s/g, "");
+			
+			if(chess_font!=="merida" && chess_font!=="isepic"){
+				chess_font="merida";
+			}
+			
+			return chess_font;
+		}
 		
 		//---------------- utilities
 		
@@ -127,7 +135,7 @@
 				top : new_offset.top,
 				left : new_offset.left
 			}, {
-				duration : _ANIMATE_DURATION_MS,
+				duration : _CFG.animationTime,
 				always : function(){
 					piece_elm.show();
 					temp.remove();
@@ -224,7 +232,7 @@
 				
 				old_y=_POS_Y;
 				old_x=_POS_X;
-			}, _DRAGGING_REFRESH_RATE_MS);
+			}, _CFG.draggingTime);
 		}
 		
 		function _bindOnce(){
@@ -255,7 +263,7 @@
 					no_errors=true;
 					
 					//if(no_errors){
-						if(!_KEY_NAV_MODE){
+						if(!_CFG.arrowKeysNavigation){
 							no_errors=false;
 						}
 					//}
@@ -523,7 +531,7 @@
 					no_errors=true;
 					
 					//if(no_errors){
-						if(!_PIECE_DRAGGING || !_DRAGGING_BOS){
+						if(!_CFG.pieceDragging || !_DRAGGING_BOS){
 							no_errors=false;
 						}
 					//}
@@ -628,15 +636,15 @@
 							if(square.className){
 								_SELECTED_BOS=current_bos;
 								
-								if(_PIECE_DRAGGING){
+								if(_CFG.pieceDragging){
 									_dragPiece(e.pageX, e.pageY, current_bos);
 								}
 								
-								if(_HIGHLIGHT_SELECTED){
+								if(_CFG.highlightSelected){
 									$("#ic_ui_"+current_bos).addClass("ic_selected");
 								}
 								
-								if(_HIGHLIGHT_LEGALMOVES){
+								if(_CFG.highlightLegalMoves){
 									legal_moves=board.legalMoves(current_bos);
 									
 									for(i=0, len=legal_moves.length; i<len; i++){//0<len
@@ -662,7 +670,7 @@
 					no_errors=true;
 					
 					//if(no_errors){
-						if(!_MOVE_SCROLLING || _SCROLLING_WAITING){
+						if(!_CFG.scrollNavigation || _SCROLLING_WAITING){
 							no_errors=false;
 						}
 					//}
@@ -672,7 +680,7 @@
 						
 						setTimeout(function(){
 							_SCROLLING_WAITING=false;
-						}, _SCROLLING_DELAY_MS);
+						}, _CFG.scrollingTime);
 						
 						temp=0;
 						
@@ -750,7 +758,7 @@
 			}
 		}
 		
-		function _refreshTable(is_rotated, is_unlabeled){
+		function _refreshTable(is_rotated, is_labeled){
 			var i, j, temp, rank_bos, current_bos, new_class, new_html;
 			
 			temp=[];
@@ -759,19 +767,17 @@
 				temp.push("ic_rotated");
 			}
 			
-			if(is_unlabeled){
+			if(!is_labeled){
 				temp.push("ic_unlabeled");
 			}
 			
-			if(_CHESSFONT_MERIDA){
-				temp.push("ic_merida");
-			}
+			temp.push("ic_"+_chessFontHelper(_CFG.chessFont));
 			
 			new_class=temp.join(" ");
 			
 			new_html="<table cellpadding='0' cellspacing='0'>";
 			
-			if(!is_unlabeled){
+			if(is_labeled){
 				new_html+=("<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_wside" : "ic_bside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>");
 			}
 			
@@ -780,7 +786,7 @@
 				
 				new_html+="<tr>";
 				
-				if(!is_unlabeled){
+				if(is_labeled){
 					new_html+=("<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>");
 				}
 				
@@ -790,20 +796,20 @@
 					new_html+=("<td id='"+("ic_ui_"+current_bos)+"' class='"+((i+j)%2 ? "ic_bs" : "ic_ws")+"' data-bos='"+current_bos+"'><div class='ic_piece_holder'></div></td>");
 				}
 				
-				if(!is_unlabeled){
+				if(is_labeled){
 					new_html+=("<td class='ic_label'><div class='ic_char'><span>"+rank_bos+"</span></div></td>");
 				}
 				
 				new_html+="</tr>";
 			}
 			
-			if(!is_unlabeled){
+			if(is_labeled){
 				new_html+=("<tr><td class='ic_label'></td><td class='ic_label'><div class='ic_char'><span>"+(is_rotated ? "HGFEDCBA" : "ABCDEFGH").split("").join("</span></div></td><td class='ic_label'><div class='ic_char'><span>")+"</span></div></td><td class='"+("ic_label ic_dot "+(is_rotated ? "ic_bside" : "ic_wside"))+"'><div class='ic_char'><span>◘</span></div></td></tr>");
 			}
 			
 			new_html+="</table>";
 			
-			if(_SOUND_EFFECTS){
+			if(_CFG.soundEffects){
 				new_html+="<audio id='ic_ui_sound_move' src='./sounds/move.wav' preload='auto' style='display:none'></audio>";
 				new_html+="<audio id='ic_ui_sound_capture' src='./sounds/capture.wav' preload='auto' style='display:none'></audio>";
 			}
@@ -869,18 +875,24 @@
 				}
 			}
 			
-			if(_HIGHLIGHT_CHECKS && that.isCheck){
+			if(_CFG.highlightChecks && that.isCheck){
 				$("#ic_ui_"+that[that.activeColor].kingBos).addClass("ic_incheck");
 			}
 		}
 		
 		function _refreshMaterialDifference(){
-			var i, j, len, that, temp, current_side, matdiff_html;
+			var i, j, len, that, temp, current_side, img_obj, matdiff_html;
 			
 			that=this;
 			
 			if($("#ic_ui_material_diff").length){
 				matdiff_html="";
+				
+				img_obj={
+					chessFont : _chessFontHelper(_CFG.chessFont),
+					width : 20,
+					height : 20
+				};
 				
 				for(i=0; i<2; i++){//0...1
 					current_side=(that.isRotated===!i ? that.w : that.b);
@@ -889,7 +901,7 @@
 					temp="";
 					
 					for(j=0, len=current_side.materialDiff.length; j<len; j++){//0<len
-						temp+=("<img src='"+("./css/images/chess-fonts/"+(_CHESSFONT_MERIDA ? "merida" : "isepic")+"/"+Ic.toClassName(current_side.materialDiff[j])+".png")+"' width='"+_MATERIAL_DIFF_PX+"' height='"+_MATERIAL_DIFF_PX+"'>");
+						temp+=("<img src='"+("./css/images/chess-fonts/"+img_obj.chessFont+"/"+Ic.toClassName(current_side.materialDiff[j])+".png")+"' width='"+img_obj.width+"' height='"+img_obj.height+"'>");
 					}
 					
 					matdiff_html+=(temp || "-");
@@ -1081,8 +1093,8 @@
 		
 		//---------------- ic ui
 		
-		function setKeyNavMode(val){
-			_KEY_NAV_MODE=!!val;
+		function setCfg(key, val){
+			_CFG[""+key]=val;
 		}
 		
 		function refreshUi(animation_type, play_sounds){
@@ -1102,8 +1114,8 @@
 				board_elm=$("#ic_ui_board");
 				
 				if(board_elm.length){
-					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")!==_HIDE_LABELS || board_elm.hasClass("ic_merida")!==_CHESSFONT_MERIDA || (!!$("#ic_ui_sound_move").length || !!$("#ic_ui_sound_capture").length)!==_SOUND_EFFECTS){
-						_refreshTable(that.isRotated, _HIDE_LABELS);
+					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")===_CFG.boardLabels || !board_elm.hasClass("ic_"+_chessFontHelper(_CFG.chessFont)) || (!!$("#ic_ui_sound_move").length || !!$("#ic_ui_sound_capture").length)!==_CFG.soundEffects){
+						_refreshTable(that.isRotated, _CFG.boardLabels);
 					}
 				}
 				
@@ -1138,7 +1150,7 @@
 						_animateCaller.apply(that, [animation_type<0]);
 					}
 					
-					if(_SOUND_EFFECTS && play_sounds){
+					if(_CFG.soundEffects && play_sounds){
 						temp=(that.moveList[that.currentMove].isCapture ? "capture" : "move");
 						temp=$("#ic_ui_sound_"+temp)[0];
 						
@@ -1149,7 +1161,7 @@
 						}
 					}
 					
-					if(_HIGHLIGHT_LASTMOVE && that.currentMove!==0){
+					if(_CFG.highlightLastMove && that.currentMove!==0){
 						$("#ic_ui_"+that.moveList[that.currentMove].fromBos).addClass("ic_lastmove");
 						$("#ic_ui_"+that.moveList[that.currentMove].toBos).addClass("ic_lastmove");
 					}
@@ -1159,7 +1171,7 @@
 		
 		return (($!==null && Ic!==null) ? {
 			version : _VERSION,
-			setKeyNavMode : setKeyNavMode,
+			setCfg : setCfg,
 			refreshUi : refreshUi
 		} : null);
 	})();

@@ -74,13 +74,16 @@
 
 .ic_ui_board .ic_piece_holder{
 	background-repeat: no-repeat;
-	background-size: 70%;
 	background-position: 50% 50%;
 	display: table;
 }
 
 .ic_ui_board .ic_merida .ic_piece_holder{
 	background-size: 80%;
+}
+
+.ic_ui_board .ic_isepic .ic_piece_holder{
+	background-size: 70%;
 }
 
 .ic_ui_board .ic_ws{background-color: #c6d2d5;}
@@ -111,19 +114,6 @@
 	background-image: none;
 }
 
-.ic_ui_board .ic_bp{background-image: url('./images/chess-fonts/isepic/bp.png');}
-.ic_ui_board .ic_br{background-image: url('./images/chess-fonts/isepic/br.png');}
-.ic_ui_board .ic_bn{background-image: url('./images/chess-fonts/isepic/bn.png');}
-.ic_ui_board .ic_bb{background-image: url('./images/chess-fonts/isepic/bb.png');}
-.ic_ui_board .ic_bq{background-image: url('./images/chess-fonts/isepic/bq.png');}
-.ic_ui_board .ic_bk{background-image: url('./images/chess-fonts/isepic/bk.png');}
-.ic_ui_board .ic_wp{background-image: url('./images/chess-fonts/isepic/wp.png');}
-.ic_ui_board .ic_wr{background-image: url('./images/chess-fonts/isepic/wr.png');}
-.ic_ui_board .ic_wn{background-image: url('./images/chess-fonts/isepic/wn.png');}
-.ic_ui_board .ic_wb{background-image: url('./images/chess-fonts/isepic/wb.png');}
-.ic_ui_board .ic_wq{background-image: url('./images/chess-fonts/isepic/wq.png');}
-.ic_ui_board .ic_wk{background-image: url('./images/chess-fonts/isepic/wk.png');}
-
 .ic_ui_board .ic_merida .ic_bp{background-image: url('./images/chess-fonts/merida/bp.png');}
 .ic_ui_board .ic_merida .ic_br{background-image: url('./images/chess-fonts/merida/br.png');}
 .ic_ui_board .ic_merida .ic_bn{background-image: url('./images/chess-fonts/merida/bn.png');}
@@ -136,6 +126,19 @@
 .ic_ui_board .ic_merida .ic_wb{background-image: url('./images/chess-fonts/merida/wb.png');}
 .ic_ui_board .ic_merida .ic_wq{background-image: url('./images/chess-fonts/merida/wq.png');}
 .ic_ui_board .ic_merida .ic_wk{background-image: url('./images/chess-fonts/merida/wk.png');}
+
+.ic_ui_board .ic_isepic .ic_bp{background-image: url('./images/chess-fonts/isepic/bp.png');}
+.ic_ui_board .ic_isepic .ic_br{background-image: url('./images/chess-fonts/isepic/br.png');}
+.ic_ui_board .ic_isepic .ic_bn{background-image: url('./images/chess-fonts/isepic/bn.png');}
+.ic_ui_board .ic_isepic .ic_bb{background-image: url('./images/chess-fonts/isepic/bb.png');}
+.ic_ui_board .ic_isepic .ic_bq{background-image: url('./images/chess-fonts/isepic/bq.png');}
+.ic_ui_board .ic_isepic .ic_bk{background-image: url('./images/chess-fonts/isepic/bk.png');}
+.ic_ui_board .ic_isepic .ic_wp{background-image: url('./images/chess-fonts/isepic/wp.png');}
+.ic_ui_board .ic_isepic .ic_wr{background-image: url('./images/chess-fonts/isepic/wr.png');}
+.ic_ui_board .ic_isepic .ic_wn{background-image: url('./images/chess-fonts/isepic/wn.png');}
+.ic_ui_board .ic_isepic .ic_wb{background-image: url('./images/chess-fonts/isepic/wb.png');}
+.ic_ui_board .ic_isepic .ic_wq{background-image: url('./images/chess-fonts/isepic/wq.png');}
+.ic_ui_board .ic_isepic .ic_wk{background-image: url('./images/chess-fonts/isepic/wk.png');}
 
 .ic_ui_board .ic_label{
 	font-size: 2.2vmin;

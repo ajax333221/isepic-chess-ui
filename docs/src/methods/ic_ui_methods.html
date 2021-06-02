@@ -13,28 +13,29 @@
 		var icui, res;
 		
 		icui={
-			setKeyNavMode : {
+			setCfg : {
 				index : 1,
-				name : "setKeyNavMode"
+				name : "setCfg"
 			}
 		};
 		
-		//start: setKeyNavMode
-		icui.setKeyNavMode.params={
-			children : [{name : "allowNavigation", type : "Boolean"}]
+		//start: setCfg
+		icui.setCfg.params={
+			children : [
+				{name : "option", type : "String"},
+				{name : "value", type : "(type varies)"}
+			]
 		};
 		
-		icui.setKeyNavMode.returnVal={};
+		icui.setCfg.returnVal={};
 		
-		icui.setKeyNavMode.description=[];
-		icui.setKeyNavMode.description.push("Turns on/off the **key navigation mode** to allow/deny the navigation with the keyboard arrows (`left = previous`, `up = first`, `down = last` and `right = next`).");
-		icui.setKeyNavMode.description.push("The **key navigation mode** is initially turned off.");
-		icui.setKeyNavMode.description.push(":large_orange_diamond:**Important:** the default behavior of the keyboard arrows will get disabled when the mode is on.");
+		icui.setCfg.description=[];
+		icui.setCfg.description.push("Overwrites a configuration option with a new value.");
 		
-		icui.setKeyNavMode.examples=[];
-		icui.setKeyNavMode.examples.push("IcUi.setKeyNavMode(true)");
-		icui.setKeyNavMode.examples.push("IcUi.setKeyNavMode(false)");
-		//end: setKeyNavMode
+		icui.setCfg.examples=[];
+		icui.setCfg.examples.push("IcUi.setCfg(\"arrowKeysNavigation\", true)");
+		icui.setCfg.examples.push("IcUi.setCfg(\"soundEffects\", false)");
+		//end: setCfg
 		
 		res="";
 		
