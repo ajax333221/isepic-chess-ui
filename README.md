@@ -45,7 +45,7 @@ Isepic Chess UI is the user interface for [isepic-chess.js](https://github.com/a
   });
 </script>
 ```
-<sub>**Note:** Documentation for `Ic.initBoard()` can be found [here](https://github.com/ajax333221/isepic-chess/blob/master/docs/ic-methods.md#ic-methods).</sub>
+<sub>**Note:** documentation for `Ic.initBoard()` can be found [here](https://github.com/ajax333221/isepic-chess/blob/master/docs/ic-methods.md#ic-methods).</sub>
 
 3. Add some [components](https://ajax333221.github.io/isepic-chess-ui/components.html) (don't add them more than once) inside `<body>`.
 
