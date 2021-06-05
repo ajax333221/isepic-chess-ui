@@ -63,6 +63,7 @@
 .ic_ui_board{
 	color: #333;
 	font-size: 16px;
+	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
