@@ -6,12 +6,13 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="4.0.1";
+		var _VERSION="4.1.0";
 		
 		var _CFG={
 			chessFont : "merida",
 			boardLabels : true,
 			soundEffects : true,
+			pieceAnimations : true,
 			pieceDragging : true,
 			highlightChecks : true,
 			highlightLastMove : true,
@@ -1154,7 +1155,7 @@
 					
 					_refreshActiveDot(that[that.activeColor].isBlack);
 					
-					if(animation_type){
+					if(_CFG.pieceAnimations && animation_type){
 						_animateCaller.apply(that, [animation_type<0]);
 					}
 					
