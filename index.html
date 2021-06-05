@@ -151,18 +151,20 @@
 					//if(!parsed_correctly){
 						if(Ic.fenApply(val, "isLegalFen")){
 							parsed_correctly=!!Ic.initBoard({
-								boardName : "main",
+								boardName : "parsed",
 								fen : val,
-								validOrBreak : true
+								validOrBreak : true,
+								isHidden : true
 							});
 						}
 					//}
 					
 					if(!parsed_correctly){
 						parsed_correctly=!!Ic.initBoard({
-							boardName : "main",
+							boardName : "parsed",
 							pgn : val,
-							validOrBreak : true
+							validOrBreak : true,
+							isHidden : true
 						});
 						
 						animate_last_move=parsed_correctly;
@@ -170,9 +172,10 @@
 					
 					if(!parsed_correctly){
 						parsed_correctly=!!Ic.initBoard({
-							boardName : "main",
+							boardName : "parsed",
 							uci : val,
-							validOrBreak : true
+							validOrBreak : true,
+							isHidden : true
 						});
 						
 						animate_last_move=parsed_correctly;
@@ -181,9 +184,11 @@
 					if(parsed_correctly){
 						$("#parsetoggler").trigger("click");
 						
-						if(animate_last_move){
-							Ic.getBoard("main").refreshUi(1, true);
-						}
+						Ic.cloneBoard("main", "parsed");
+						
+						Ic.getBoard("main").isHidden=false;
+						
+						Ic.getBoard("main").refreshUi((animate_last_move*1), true);
 					}
 					
 					return false;
