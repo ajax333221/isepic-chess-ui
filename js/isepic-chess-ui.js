@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="4.1.0";
+		var _VERSION="4.1.1";
 		
 		var _CFG={
 			chessFont : "merida",
@@ -259,32 +259,25 @@
 				});
 				
 				doc.off("keydown.icuikeynav").on("keydown.icuikeynav", function(e){
-					var board, current_nav, no_errors;
+					var board, current_nav;
 					
-					no_errors=true;
-					
-					//if(no_errors){
+					block:
+					{
 						if(!_CFG.arrowKeysNavigation){
-							no_errors=false;
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						if(e.which<37 || e.which>40){
-							no_errors=false;
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[keydown]: board not found");
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						current_nav=["left", "up", "right", "down"][e.which-37];
 						
 						switch(current_nav){
@@ -309,24 +302,21 @@
 				});
 				
 				doc.off("click.icuifirst").on("click.icuifirst", "#ic_ui_nav_first", function(){
-					var board, no_errors;
+					var board;
 					
 					if($(this).hasClass("ic_disabled")){
 						return false;
 					}
 					
-					no_errors=true;
-					
-					//if(no_errors){
+					block:
+					{
 						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_first]: board not found");
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						board.navFirst();
 					}
 					
@@ -336,24 +326,21 @@
 				});
 				
 				doc.off("click.icuiprev").on("click.icuiprev", "#ic_ui_nav_previous", function(){
-					var board, no_errors;
+					var board;
 					
 					if($(this).hasClass("ic_disabled")){
 						return false;
 					}
 					
-					no_errors=true;
-					
-					//if(no_errors){
+					block:
+					{
 						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_previous]: board not found");
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						board.navPrevious();
 					}
 					
@@ -363,24 +350,21 @@
 				});
 				
 				doc.off("click.icuinext").on("click.icuinext", "#ic_ui_nav_next", function(){
-					var board, no_errors;
+					var board;
 					
 					if($(this).hasClass("ic_disabled")){
 						return false;
 					}
 					
-					no_errors=true;
-					
-					//if(no_errors){
+					block:
+					{
 						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_next]: board not found");
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						board.navNext();
 					}
 					
@@ -390,24 +374,21 @@
 				});
 				
 				doc.off("click.icuilast").on("click.icuilast", "#ic_ui_nav_last", function(){
-					var board, no_errors;
+					var board;
 					
 					if($(this).hasClass("ic_disabled")){
 						return false;
 					}
 					
-					no_errors=true;
-					
-					//if(no_errors){
+					block:
+					{
 						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[#ic_ui_nav_last]: board not found");
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						board.navLast();
 					}
 					
@@ -417,24 +398,21 @@
 				});
 				
 				doc.off("click.icuirotate").on("click.icuirotate", "#ic_ui_rotate", function(){
-					var board, no_errors;
+					var board;
 					
 					if($(this).hasClass("ic_disabled")){
 						return false;
 					}
 					
-					no_errors=true;
-					
-					//if(no_errors){
+					block:
+					{
 						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[#ic_ui_rotate]: board not found");
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						board.toggleIsRotated();
 					}
 					
@@ -444,48 +422,40 @@
 				});
 				
 				doc.off("change.icuipromote").on("change.icuipromote", "#ic_ui_promote", function(){
-					var board, no_errors;
+					var board;
 					
-					no_errors=true;
-					
-					//if(no_errors){
+					block:
+					{
 						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[#ic_ui_promote]: board not found");
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						board.setPromoteTo($(this).val());
 					}
 				});
 				
 				doc.off("click.icuichange").on("click.icuichange", ".ic_changeboard", function(){
-					var board, board_name, no_errors;
+					var board, board_name;
 					
-					no_errors=true;
-					
-					//if(no_errors){
+					block:
+					{
 						board_name=$(this).attr("data-rebindboardname");
 						
 						if(!board_name){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[.ic_changeboard]: missing data-rebindboardname");
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						board=Ic.getBoard(board_name);
 						
 						if(board===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[.ic_changeboard]: board not found");
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						refreshUi.apply(board, [0, false]);
 					}
 					
@@ -495,29 +465,24 @@
 				});
 				
 				doc.off("click.icuipgnlinks").on("click.icuipgnlinks", ".ic_pgn_link", function(){
-					var pgn_index, board, no_errors;
+					var pgn_index, board;
 					
-					no_errors=true;
-					
-					//if(no_errors){
+					block:
+					{
 						pgn_index=$(this).attr("data-index");
 						
 						if(!pgn_index){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[.ic_pgn_link]: missing data-index");
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[.ic_pgn_link]: board not found");
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						board.navLinkMove(pgn_index);
 					}
 					
@@ -527,62 +492,49 @@
 				});
 				
 				doc.off("mousemove.icuirefreshpos").on("mousemove.icuirefreshpos", function(e){
-					var no_errors;
-					
-					no_errors=true;
-					
-					//if(no_errors){
+					block:
+					{
 						if(!_CFG.pieceDragging || !_DRAGGING_BOS){
-							no_errors=false;
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						_POS_Y=e.pageY;
 						_POS_X=e.pageX;
 					}
 				});
 				
 				doc.off("mouseup.icuirelease").on("mouseup.icuirelease", function(e){
-					var temp, board, current_bos, old_drg, no_errors;
+					var temp, board, current_bos, old_drg;
 					
 					old_drg=_DRAGGING_BOS;
 					_cancelDragging();
-					no_errors=true;
 					
-					//if(no_errors){
+					block:
+					{
 						if(!old_drg){
-							no_errors=false;
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[mouseup]: board not found");
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						temp=_getHoverElement(e.pageX, e.pageY);
 						
 						if(!temp){
-							no_errors=false;
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						current_bos=temp.attr("data-bos");
 						
 						if(!current_bos){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[mouseup]: missing data-bos");
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						if(old_drg!==current_bos){
 							board.playMove([old_drg, current_bos], {isInanimated : true, playSounds : true});
 						}
@@ -590,49 +542,41 @@
 				});
 				
 				doc.off("mousedown.icuipress").on("mousedown.icuipress", function(e){
-					var i, len, temp, legal_moves, board, square, current_bos, old_sel, no_errors;
+					var i, len, temp, legal_moves, board, square, current_bos, old_sel;
 					
 					old_sel=_SELECTED_BOS;
 					_cancelSelected();
 					_cancelDragging();
-					no_errors=true;
 					
-					//if(no_errors){
+					block:
+					{
 						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[mousedown]: board not found");
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						temp=_getHoverElement(e.pageX, e.pageY);
 						
 						if(!temp){
-							no_errors=false;
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						current_bos=temp.attr("data-bos");
 						
 						if(!current_bos){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[mousedown]: missing data-bos");
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						square=board.getSquare(current_bos);
 						
 						if(square===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[mousedown]: square not found");
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						if(!old_sel || (old_sel!==current_bos && !board.playMove([old_sel, current_bos], {playSounds : true}))){
 							if(square.className){
 								_SELECTED_BOS=current_bos;
@@ -666,17 +610,14 @@
 				});
 				
 				doc.off("wheel.icuiscroll").on("wheel.icuiscroll", function(e){
-					var temp, board, is_reversed, no_errors;
+					var temp, board, is_reversed;
 					
-					no_errors=true;
-					
-					//if(no_errors){
+					block:
+					{
 						if(!_CFG.scrollNavigation || _SCROLLING_WAITING){
-							no_errors=false;
+							break block;
 						}
-					//}
-					
-					if(no_errors){
+						
 						_SCROLLING_WAITING=true;
 						
 						setTimeout(function(){
@@ -690,28 +631,22 @@
 						}
 						
 						if(!temp){//horizontal scrolling or bad event
-							no_errors=false;
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						is_reversed=(temp<0);
 						
 						if(!$(e.target).closest("#ic_ui_board").length){//not a child
-							no_errors=false;
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
-							no_errors=false;
 							Ic.utilityMisc.consoleLog("Error[wheel]: board not found");
+							break block;
 						}
-					}
-					
-					if(no_errors){
+						
 						if(is_reversed){
 							board.navPrevious();
 						}else{
