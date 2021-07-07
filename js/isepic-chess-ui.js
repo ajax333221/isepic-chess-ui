@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="4.1.1";
+		var _VERSION="4.1.2";
 		
 		var _CFG={
 			chessFont : "merida",
@@ -70,8 +70,6 @@
 			
 			if(_DRAGGING_BOS){
 				$("#ic_ui_board .ic_drag_shown").remove();
-				
-				$("#ic_ui_drag_container").hide();
 				
 				$("#ic_ui_board .ic_drag_hidden").show().removeClass("ic_drag_hidden");
 			}
@@ -186,19 +184,6 @@
 				cursor : "pointer",
 				zIndex : 1020
 			}).addClass("ic_drag_shown").appendTo("#ic_ui_board");
-			
-			if($("#ic_ui_drag_container").length){
-				$("#ic_ui_drag_container").show();
-			}else{
-				$("<div id='ic_ui_drag_container'></div>").css({
-					position : "absolute",
-					top : "0",
-					left : "0",
-					height : ($(limit).outerHeight()+"px"),
-					width : ($(limit).outerWidth()+"px"),
-					zIndex : 1010
-				}).appendTo(limit);
-			}
 			
 			_POS_Y=initial_y;
 			_POS_X=initial_x;
