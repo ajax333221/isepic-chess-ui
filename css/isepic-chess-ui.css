@@ -74,6 +74,10 @@
 	cursor: pointer;
 }
 
+.ic_ui_board .ic_frozen{
+	cursor: default;
+}
+
 .ic_ui_board td{
 	text-align: center;
 	vertical-align: middle;

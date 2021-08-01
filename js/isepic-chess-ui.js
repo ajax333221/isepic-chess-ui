@@ -6,11 +6,12 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="4.1.2";
+		var _VERSION="4.2.0";
 		
 		var _CFG={
 			chessFont : "merida",
 			boardLabels : true,
+			boardInteractions : true,
 			soundEffects : true,
 			pieceAnimations : true,
 			pieceDragging : true,
@@ -496,6 +497,10 @@
 					
 					block:
 					{
+						if(!_CFG.boardInteractions){
+							break block;
+						}
+						
 						if(!old_drg){
 							break block;
 						}
@@ -535,6 +540,10 @@
 					
 					block:
 					{
+						if(!_CFG.boardInteractions){
+							break block;
+						}
+						
 						board=Ic.getBoard(_BOARD_NAME);
 						
 						if(board===null){
@@ -679,7 +688,7 @@
 			}
 		}
 		
-		function _refreshTable(is_rotated, is_labeled){
+		function _refreshTable(is_rotated, is_labeled, is_interactive){
 			var i, j, temp, rank_bos, current_bos, new_class, new_html;
 			
 			temp=[];
@@ -690,6 +699,10 @@
 			
 			if(!is_labeled){
 				temp.push("ic_unlabeled");
+			}
+			
+			if(!is_interactive){
+				temp.push("ic_frozen");
 			}
 			
 			temp.push("ic_"+_chessFontHelper(_CFG.chessFont));
@@ -1043,8 +1056,8 @@
 				board_elm=$("#ic_ui_board");
 				
 				if(board_elm.length){
-					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")===_CFG.boardLabels || !board_elm.hasClass("ic_"+_chessFontHelper(_CFG.chessFont)) || (!!$("#ic_ui_sound_move").length || !!$("#ic_ui_sound_capture").length)!==_CFG.soundEffects){
-						_refreshTable(that.isRotated, _CFG.boardLabels);
+					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")===_CFG.boardLabels || board_elm.hasClass("ic_frozen")===_CFG.boardInteractions || !board_elm.hasClass("ic_"+_chessFontHelper(_CFG.chessFont)) || (!!$("#ic_ui_sound_move").length || !!$("#ic_ui_sound_capture").length)!==_CFG.soundEffects){
+						_refreshTable(that.isRotated, _CFG.boardLabels, _CFG.boardInteractions);
 					}
 				}
 				
