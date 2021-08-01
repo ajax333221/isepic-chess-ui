@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="4.2.0";
+		var _VERSION="4.2.1";
 		
 		var _CFG={
 			chessFont : "merida",
@@ -744,8 +744,8 @@
 			new_html+="</table>";
 			
 			if(_CFG.soundEffects){
-				new_html+="<audio id='ic_ui_sound_move' src='./sounds/move.wav' preload='auto' style='display:none'></audio>";
-				new_html+="<audio id='ic_ui_sound_capture' src='./sounds/capture.wav' preload='auto' style='display:none'></audio>";
+				new_html+="<audio id='ic_ui_sound_move' src='./sounds/move.wav' preload='auto' style='display:none;'></audio>";
+				new_html+="<audio id='ic_ui_sound_capture' src='./sounds/capture.wav' preload='auto' style='display:none;'></audio>";
 			}
 			
 			$("#ic_ui_board").attr("class", new_class).html(new_html);
