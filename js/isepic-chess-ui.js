@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="4.2.1";
+		var _VERSION="4.3.0";
 		
 		var _CFG={
 			chessFont : "merida",
@@ -21,6 +21,7 @@
 			highlightSelected : true,
 			scrollNavigation : true,
 			arrowKeysNavigation : false,
+			puzzleMode : false,
 			animationTime : 300,
 			draggingTime : 50,
 			scrollingTime : 60
@@ -526,7 +527,7 @@
 						}
 						
 						if(old_drg!==current_bos){
-							board.playMove([old_drg, current_bos], {isInanimated : true, playSounds : true});
+							_playMoveCaller.apply(board, [[old_drg, current_bos], true]);
 						}
 					}
 				});
@@ -571,7 +572,7 @@
 							break block;
 						}
 						
-						if(!old_sel || (old_sel!==current_bos && !board.playMove([old_sel, current_bos], {playSounds : true}))){
+						if(!old_sel || (old_sel!==current_bos && !_playMoveCaller.apply(board, [[old_sel, current_bos], false]))){
 							if(square.className){
 								_SELECTED_BOS=current_bos;
 								
@@ -753,6 +754,47 @@
 		
 		//---------------- utilities (this=apply)
 		
+		function _playMoveCaller(mov, is_inanimated){
+			var that, temp, puzzle_advance, rtn;
+			
+			that=this;
+			
+			rtn=false;
+			
+			if(that.isLegalMove(mov)){
+				if(_CFG.puzzleMode){
+					puzzle_advance=false;
+					
+					if((that.currentMove+1)<that.moveList.length){
+						temp=that.playMove(mov, {isMockMove : true, isLegalMove : true});
+						temp=(temp ? temp.san : "");
+						
+						if(temp===that.moveList[that.currentMove+1].san){
+							puzzle_advance=true;
+						}
+					}
+					
+					if(puzzle_advance){
+						that.setCurrentMove(2, false);
+						
+						if((that.currentMove+1)===that.moveList.length){
+							Ic.utilityMisc.consoleLog("Puzzle: finished");
+						}
+						
+						rtn=true;
+					}else{
+						_cancelSelected();
+						
+						Ic.utilityMisc.consoleLog("Puzzle: wrong move");
+					}
+				}else{
+					rtn=that.playMove(mov, {isInanimated : !!is_inanimated, playSounds : true, isLegalMove : true});
+				}
+			}
+			
+			return rtn;
+		}
+		
 		function _animateCaller(is_reversed){
 			var that, temp, from_bos, to_bos, piece_class, promotion_class;
 			
@@ -863,6 +905,10 @@
 				
 				for(i=0, len=move_list.length; i<len; i++){//0<len
 					if(i){
+						if(_CFG.puzzleMode && i>that.currentMove){
+							continue;
+						}
+						
 						new_html+=(i!==1 ? " " : "");
 						
 						new_html+=(black_starts===!(i%2) ? ("<span class='ic_pgn_number'>"+(initial_full_move+Math.floor((i+black_starts-1)/2))+". </span>") : "");
@@ -894,6 +940,14 @@
 				}else{
 					if(result_tag_ow!=="*"){
 						new_html+=("<span class='ic_pgn_result'>"+result_tag_ow+"</span>");
+					}
+				}
+				
+				if(_CFG.puzzleMode){
+					if((that.currentMove+1)===that.moveList.length){
+						new_html+="<br><span class='ic_pgn_complete'>Puzzle complete!</span>";
+					}else{
+						new_html+=" *<br><span class='ic_pgn_find'>Find the best move.</span>";
 					}
 				}
 				

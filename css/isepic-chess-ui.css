@@ -300,6 +300,18 @@
 	color: #222;
 	background: #e6e6e6;
 }
+
+.ic_ui_move_list .ic_pgn_complete{
+	font-size: 18px;
+	line-height:35px;
+	color: #197030;
+}
+
+.ic_ui_move_list .ic_pgn_find{
+	font-size: 18px;
+	line-height:35px;
+	color: #6b6b6b;
+}
 /*end(move_list) ---*/
 
 /*start(debug) ---*/
