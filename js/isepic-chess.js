@@ -6,7 +6,7 @@
 
 (function(windw, expts, defin){
 	var Ic=(function(_WIN){
-		var _VERSION="7.4.0";
+		var _VERSION="7.5.0";
 		
 		var _SILENT_MODE=true;
 		var _BOARDS={};
@@ -354,9 +354,12 @@
 					toggleActiveNonActive : _toggleActiveNonActive,
 					toggleIsRotated : _toggleIsRotated,
 					setPromoteTo : _setPromoteTo,
+					silentlyResetOptions : _silentlyResetOptions,
+					silentlyResetManualResult : _silentlyResetManualResult,
 					setManualResult : _setManualResult,
 					setCurrentMove : _setCurrentMove,
-					readValidatedFen : _readValidatedFen,
+					loadFen : _loadFen,
+					loadValidatedFen : _loadValidatedFen,
 					getClocklessFenHelper : _getClocklessFenHelper,
 					updateFenAndMisc : _updateFenAndMisc,
 					refinedFenTest : _refinedFenTest,
@@ -382,6 +385,7 @@
 					undoMoves : _undoMoves,
 					deleteMoves : _deleteMoves,
 					countLightDarkBishops : _countLightDarkBishops,
+					updateHelper : _updateHelper,
 					fenWrapmoveHelper : _fenWrapmoveHelper,
 					sanWrapmoveHelper : _sanWrapmoveHelper,
 					getWrappedMove : _getWrappedMove,
@@ -1078,6 +1082,30 @@
 			return rtn_changed;
 		}
 		
+		function _silentlyResetOptions(){
+			var that;
+			
+			that=this;
+			
+			that.isHidden=true;//prevents ui refresh from setPromoteTo()
+			
+			that.isRotated=false;
+			that.setPromoteTo(_QUEEN);
+			that.isHidden=false;
+		}
+		
+		function _silentlyResetManualResult(){
+			var that, temp;
+			
+			that=this;
+			
+			temp=that.isHidden;
+			
+			that.isHidden=true;
+			that.setManualResult(_RESULT_ONGOING);
+			that.isHidden=temp;
+		}
+		
 		function _setManualResult(str){
 			var that, temp, rtn_changed;
 			
@@ -1128,9 +1156,11 @@
 					break block;
 				}
 				
-				that.currentMove=temp;
-				that.readValidatedFen(that.moveList[temp].fen);
-				that.updateFenAndMisc();
+				that.updateHelper({
+					currentMove : temp,
+					fen : that.moveList[temp].fen,
+					skipFenValidation : true
+				});/*NO remove skipFenValidation*/
 				
 				that.refreshUi((is_goto ? 0 : num), true);//autorefresh
 				
@@ -1180,7 +1210,48 @@
 			return that.setCurrentMove(move_index);//autorefresh (sometimes)
 		}
 		
-		function _readValidatedFen(fen){
+		//p = {skipFenValidation, keepOptions}
+		function _loadFen(fen, p){
+			var that, temp, hash_cache, rtn_changed;
+			
+			that=this;
+			
+			rtn_changed=false;
+			p=_unreferenceP(p);
+			
+			block:
+			{
+				p.skipFenValidation=(p.skipFenValidation===true);
+				p.keepOptions=(p.keepOptions===true);
+				
+				hash_cache=that.boardHash();
+				
+				temp=that.updateHelper({
+					currentMove : 0,
+					fen : fen,
+					skipFenValidation : p.skipFenValidation,
+					resetOptions : !p.keepOptions,
+					resetMoveList : true
+				});
+				
+				if(!temp){
+					_consoleLog("Error[_loadFen]: bad FEN");
+					break block;
+				}
+				
+				that.silentlyResetManualResult();
+				
+				if(that.boardHash()!==hash_cache){
+					rtn_changed=true;
+					
+					that.refreshUi(0, false);//autorefresh
+				}
+			}
+			
+			return rtn_changed;
+		}
+		
+		function _loadValidatedFen(fen){
 			var i, j, len, that, fen_parts, current_file, current_char, fen_board_arr, skip_files;
 			
 			that=this;
@@ -2192,7 +2263,7 @@
 		}
 		
 		function _reset(keep_options){
-			var that, temp, hash_cache, rtn_changed;
+			var that, hash_cache, rtn_changed;
 			
 			that=this;
 			
@@ -2200,39 +2271,15 @@
 			
 			hash_cache=that.boardHash();
 			
-			that.currentMove=0;
-			that.readValidatedFen(_DEFAULT_FEN);
-			that.updateFenAndMisc();
+			that.updateHelper({
+				currentMove : 0,
+				fen : _DEFAULT_FEN,
+				skipFenValidation : true,
+				resetOptions : !keep_options,
+				resetMoveList : true
+			});/*NO remove skipFenValidation*/
 			
-			that.moveList=[{
-				colorMoved : that.nonActiveColor,
-				colorToPlay : that.activeColor,
-				fen : that.fen,
-				san : "",
-				uci : "",
-				comment : "",
-				moveResult : "",
-				canDraw : that.inDraw,
-				isCapture : false,
-				fromBos : "",
-				toBos : "",
-				piece : "",
-				promotion : ""
-			}];
-			
-			temp=that.isHidden;
-			
-			that.isHidden=true;
-			that.setManualResult(_RESULT_ONGOING);
-			that.isHidden=temp;
-			
-			if(!keep_options){
-				that.isHidden=true;//prevents ui refresh from setPromoteTo()
-				
-				that.isRotated=false;
-				that.setPromoteTo(_QUEEN);
-				that.isHidden=false;
-			}
+			that.silentlyResetManualResult();
 			
 			if(that.boardHash()!==hash_cache){
 				rtn_changed=true;
@@ -2288,11 +2335,7 @@
 				if(that.boardHash()!==hash_cache){
 					rtn_changed=true;
 					
-					temp=that.isHidden;
-					
-					that.isHidden=true;
-					that.setManualResult(_RESULT_ONGOING);
-					that.isHidden=temp;
+					that.silentlyResetManualResult();
 					
 					//the next moveList element was removed, not possible to reverse animation
 					//is_goto=(Math.abs(that.currentMove-current_move_cache)!==1);
@@ -2336,6 +2379,72 @@
 						}
 					}
 				}
+			}
+			
+			return rtn;
+		}
+		
+		function _updateHelper(obj){
+			var that, temp, fen_was_valid, rtn;
+			
+			that=this;
+			
+			rtn=false;
+			
+			block:
+			{
+				if(!_isObject(obj)){
+					break block;
+				}
+				
+				if(obj.fen){
+					fen_was_valid=(obj.skipFenValidation || isLegalFen(obj.fen));
+					
+					if(!fen_was_valid){
+						_consoleLog("Error[_updateHelper]: bad FEN");
+						break block;
+					}
+				}
+				
+				that.currentMove=_toInt(obj.currentMove);
+				
+				if(obj.fen){
+					that.loadValidatedFen(obj.fen);
+				}
+				
+				that.updateFenAndMisc(obj.slicedFenHistory);
+				
+				if(obj.resetMoveList){
+					temp="";
+					
+					if(that.isCheckmate){
+						temp=(that[that.activeColor].isBlack ? _RESULT_W_WINS : _RESULT_B_WINS);
+					}else if(that.isStalemate){
+						temp=_RESULT_DRAW;
+					}
+					
+					that.moveList=[{
+						colorMoved : that.nonActiveColor,
+						colorToPlay : that.activeColor,
+						fen : that.fen,
+						san : "",
+						uci : "",
+						comment : "",
+						moveResult : temp,
+						canDraw : that.inDraw,
+						isCapture : false,
+						fromBos : "",
+						toBos : "",
+						piece : "",
+						promotion : ""
+					}];
+				}
+				
+				if(obj.resetOptions){
+					that.silentlyResetOptions();
+				}
+				
+				rtn=true;
 			}
 			
 			return rtn;
@@ -2873,8 +2982,10 @@
 					that.fullMove++;
 				}
 				
-				that.currentMove++;/*NO move below updateFenAndMisc()*/
-				that.updateFenAndMisc(sliced_fen_history);
+				that.updateHelper({
+					currentMove : (that.currentMove+1),
+					slicedFenHistory : sliced_fen_history
+				});
 				
 				complete_san=pgn_obj.partialSan;
 				move_res="";
@@ -2949,11 +3060,7 @@
 					rtn_move_obj=temp;
 				}
 				
-				temp=that.isHidden;
-				
-				that.isHidden=true;
-				that.setManualResult(_RESULT_ONGOING);
-				that.isHidden=temp;
+				that.silentlyResetManualResult();
 				
 				that.refreshUi((p.isInanimated ? 0 : 1), p.playSounds);//autorefresh
 			}
@@ -3341,33 +3448,12 @@
 				
 				temp=(fen_was_valid ? p.fen : _DEFAULT_FEN);
 				
-				new_board.currentMove=0;
-				new_board.readValidatedFen(temp);
-				new_board.updateFenAndMisc();
-				
-				temp="";
-				
-				if(new_board.isCheckmate){
-					temp=(new_board[new_board.activeColor].isBlack ? _RESULT_W_WINS : _RESULT_B_WINS);
-				}else if(new_board.isStalemate){
-					temp=_RESULT_DRAW;
-				}
-				
-				new_board.moveList=[{
-					colorMoved : new_board.nonActiveColor,
-					colorToPlay : new_board.activeColor,
-					fen : new_board.fen,
-					san : "",
-					uci : "",
-					comment : "",
-					moveResult : temp,
-					canDraw : new_board.inDraw,
-					isCapture : false,
-					fromBos : "",
-					toBos : "",
-					piece : "",
-					promotion : ""
-				}];
+				new_board.updateHelper({
+					currentMove : 0,
+					fen : temp,
+					skipFenValidation : true,
+					resetMoveList : true
+				});/*NO remove skipFenValidation*/
 				
 				postfen_was_valid=(p.skipFenValidation || !new_board.refinedFenTest());
 				
@@ -3377,25 +3463,12 @@
 				}
 				
 				if(!postfen_was_valid){
-					new_board.currentMove=0;
-					new_board.readValidatedFen(_DEFAULT_FEN);
-					new_board.updateFenAndMisc();
-					
-					new_board.moveList=[{
-						colorMoved : new_board.nonActiveColor,
-						colorToPlay : new_board.activeColor,
-						fen : new_board.fen,
-						san : "",
-						uci : "",
-						comment : "",
-						moveResult : "",
-						canDraw : new_board.inDraw,
-						isCapture : false,
-						fromBos : "",
-						toBos : "",
-						piece : "",
-						promotion : ""
-					}];
+					new_board.updateHelper({
+						currentMove : 0,
+						fen : _DEFAULT_FEN,
+						skipFenValidation : true,
+						resetMoveList : true
+					});/*NO remove skipFenValidation*/
 				}
 				
 				if(p.pgn){

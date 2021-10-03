@@ -149,7 +149,7 @@
 					parsed_correctly=false;
 					
 					//if(!parsed_correctly){
-						if(Ic.fenApply(val, "isLegalFen")){
+						if(Ic.isLegalFen(val)){
 							parsed_correctly=!!Ic.initBoard({
 								boardName : "parsed",
 								fen : val,
