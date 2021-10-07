@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="4.3.0";
+		var _VERSION="4.4.0";
 		
 		var _CFG={
 			chessFont : "merida",
@@ -1147,7 +1147,7 @@
 					}
 					
 					if(_CFG.soundEffects && play_sounds){
-						temp=(that.moveList[that.currentMove].isCapture ? "capture" : "move");
+						temp=(that.moveList[that.currentMove].captured ? "capture" : "move");
 						temp=$("#ic_ui_sound_"+temp)[0];
 						
 						if(temp){
