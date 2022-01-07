@@ -111,8 +111,8 @@
 				h_temp=elm_flex_wrapper.height();
 				
 				$("#ic_ui_board").parent().css({
-					"width" : Math.min(w_temp, h_temp),
-					"height" : Math.min(w_temp, h_temp)
+					"width": Math.min(w_temp, h_temp),
+					"height": Math.min(w_temp, h_temp)
 				});
 			}
 			
@@ -133,7 +133,7 @@
 				IcUi.setCfg("arrowKeysNavigation", true);
 				
 				Ic.initBoard({
-					boardName : "main"
+					boardName: "main"
 				});
 				
 				$(window).on("resize", stretch_board);
@@ -151,20 +151,20 @@
 					//if(!parsed_correctly){
 						if(Ic.isLegalFen(val)){
 							parsed_correctly=!!Ic.initBoard({
-								boardName : "parsed",
-								fen : val,
-								validOrBreak : true,
-								isHidden : true
+								boardName: "parsed",
+								fen: val,
+								validOrBreak: true,
+								isHidden: true
 							});
 						}
 					//}
 					
 					if(!parsed_correctly){
 						parsed_correctly=!!Ic.initBoard({
-							boardName : "parsed",
-							pgn : val,
-							validOrBreak : true,
-							isHidden : true
+							boardName: "parsed",
+							pgn: val,
+							validOrBreak: true,
+							isHidden: true
 						});
 						
 						animate_last_move=parsed_correctly;
@@ -172,10 +172,10 @@
 					
 					if(!parsed_correctly){
 						parsed_correctly=!!Ic.initBoard({
-							boardName : "parsed",
-							uci : val,
-							validOrBreak : true,
-							isHidden : true
+							boardName: "parsed",
+							uci: val,
+							validOrBreak: true,
+							isHidden: true
 						});
 						
 						animate_last_move=parsed_correctly;

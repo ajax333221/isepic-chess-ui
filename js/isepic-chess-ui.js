@@ -6,25 +6,25 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="4.4.0";
+		var _VERSION="4.4.1";
 		
 		var _CFG={
-			chessFont : "merida",
-			boardLabels : true,
-			boardInteractions : true,
-			soundEffects : true,
-			pieceAnimations : true,
-			pieceDragging : true,
-			highlightChecks : true,
-			highlightLastMove : true,
-			highlightLegalMoves : true,
-			highlightSelected : true,
-			scrollNavigation : true,
-			arrowKeysNavigation : false,
-			puzzleMode : false,
-			animationTime : 300,
-			draggingTime : 50,
-			scrollingTime : 60
+			chessFont: "merida",
+			boardLabels: true,
+			boardInteractions: true,
+			soundEffects: true,
+			pieceAnimations: true,
+			pieceDragging: true,
+			highlightChecks: true,
+			highlightLastMove: true,
+			highlightLegalMoves: true,
+			highlightSelected: true,
+			scrollNavigation: true,
+			arrowKeysNavigation: false,
+			puzzleMode: false,
+			animationTime: 300,
+			draggingTime: 50,
+			scrollingTime: 60
 		};
 		
 		var _POS_Y=0;
@@ -126,18 +126,18 @@
 			piece_elm.hide().attr("class", ("ic_piece_holder"+(promotion_class || piece_class)));
 			
 			temp.css({
-				position : "absolute",
-				top : old_offset.top,
-				left : old_offset.left,
-				height : old_h,
-				width : old_w,
-				zIndex : 1000
+				position: "absolute",
+				top: old_offset.top,
+				left: old_offset.left,
+				height: old_h,
+				width: old_w,
+				zIndex: 1000
 			}).animate({
-				top : new_offset.top,
-				left : new_offset.left
+				top: new_offset.top,
+				left: new_offset.left
 			}, {
-				duration : _CFG.animationTime,
-				always : function(){
+				duration: _CFG.animationTime,
+				always: function(){
 					piece_elm.show();
 					temp.remove();
 				}
@@ -178,13 +178,13 @@
 			centered_left=(initial_x-(piece_w/2));
 			
 			dragged_elm.css({
-				position : "absolute",
-				top : piece_offset.top,
-				left : piece_offset.left,
-				height : piece_h,
-				width : piece_w,
-				cursor : "pointer",
-				zIndex : 1020
+				position: "absolute",
+				top: piece_offset.top,
+				left: piece_offset.left,
+				height: piece_h,
+				width: piece_w,
+				cursor: "pointer",
+				zIndex: 1020
 			}).addClass("ic_drag_shown").appendTo("#ic_ui_board");
 			
 			_POS_Y=initial_y;
@@ -213,8 +213,8 @@
 					}
 					
 					dragged_elm.css({
-						top : pos_y,
-						left : pos_x
+						top: pos_y,
+						left: pos_x
 					});
 				}
 				
@@ -681,7 +681,7 @@
 					}else if(current_board_name===board_name){
 						new_html+=("<em>"+current_board_name+"</em>");
 					}else{
-						new_html+=("<a class='ic_changeboard' data-rebindboardname='"+current_board_name+"' href='#'>"+current_board_name+"</a>");
+						new_html+=("<a href='#' class='ic_changeboard' data-rebindboardname='"+current_board_name+"'>"+current_board_name+"</a>");
 					}
 				}
 				
@@ -766,7 +766,7 @@
 					puzzle_advance=false;
 					
 					if((that.currentMove+1)<that.moveList.length){
-						temp=that.playMove(mov, {isMockMove : true, isLegalMove : true});
+						temp=that.playMove(mov, {isMockMove: true, isLegalMove: true});
 						temp=(temp ? temp.san : "");
 						
 						if(temp===that.moveList[that.currentMove+1].san){
@@ -788,7 +788,7 @@
 						Ic.utilityMisc.consoleLog("Puzzle: wrong move");
 					}
 				}else{
-					rtn=that.playMove(mov, {isInanimated : !!is_inanimated, playSounds : true, isLegalMove : true});
+					rtn=!!that.playMove(mov, {isInanimated: !!is_inanimated, playSounds: true, isLegalMove: true});
 				}
 			}
 			
@@ -865,9 +865,9 @@
 				matdiff_html="";
 				
 				img_obj={
-					chessFont : _chessFontHelper(_CFG.chessFont),
-					width : 20,
-					height : 20
+					chessFont: _chessFontHelper(_CFG.chessFont),
+					width: 20,
+					height: 20
 				};
 				
 				for(i=0; i<2; i++){//0...1
@@ -1166,9 +1166,9 @@
 		}
 		
 		return (($!==null && Ic!==null) ? {
-			version : _VERSION,
-			setCfg : setCfg,
-			refreshUi : refreshUi
+			version: _VERSION,
+			setCfg: setCfg,
+			refreshUi: refreshUi
 		} : null);
 	})();
 	

@@ -40,7 +40,7 @@ Isepic Chess UI is the user interface for [isepic-chess.js](https://github.com/a
     
     //initialize a board
     var board = Ic.initBoard({
-      boardName : "main"
+      boardName: "main"
     });
   });
 </script>
