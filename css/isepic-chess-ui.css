@@ -259,7 +259,7 @@
 .ic_ui_move_list{
 	color: #333;
 	font-size: 16px;
-	line-height:25px;
+	line-height: 25px;
 }
 
 .ic_ui_move_list .ic_pgn_number, .ic_ui_move_list .ic_pgn_comment, .ic_ui_move_list .ic_pgn_comment_active, .ic_ui_move_list .ic_pgn_result, .ic_ui_move_list .ic_pgn_link, .ic_ui_move_list .ic_pgn_active{
@@ -303,13 +303,13 @@
 
 .ic_ui_move_list .ic_pgn_complete{
 	font-size: 18px;
-	line-height:35px;
+	line-height: 35px;
 	color: #197030;
 }
 
 .ic_ui_move_list .ic_pgn_find{
 	font-size: 18px;
-	line-height:35px;
+	line-height: 35px;
 	color: #6b6b6b;
 }
 /*end(move_list) ---*/

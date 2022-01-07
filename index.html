@@ -34,7 +34,7 @@
 			}
 			
 			.ic_ui_board{
-				margin:0 auto; /*this is an overwrite*/
+				margin: 0 auto; /*this is an overwrite*/
 			}
 			
 			.ic_ui_debug{
@@ -118,7 +118,7 @@
 			
 			function display_debug(){
 				if(!$(".ic_ui_debug").length){
-					$("#right_elm .padded").last().append("<br><hr><br><div class='ic_ui_debug'><a id='ic_ui_debug_toggler' href='#'>Debug ▲</a><div id='ic_ui_debug' style='display:none'></div></div>");
+					$("#right_elm .padded").last().append("<br><hr><br><div class='ic_ui_debug'><a id='ic_ui_debug_toggler' href='#'>Debug ▲</a><div id='ic_ui_debug' style='display:none;'></div></div>");
 					
 					if(Ic.getBoard("main")){
 						Ic.getBoard("main").refreshUi(0, false);

@@ -166,7 +166,7 @@ function recursiveFormat(obj, options, has_op_params, has_op_keys){
 	
 	if(options && (typeof options.removeKey)==="string"){
 		if(obj.name===options.removeKey){
-			return {html:"", hasOpParams:false, hasOpKeys:false};
+			return {html: "", hasOpParams: false, hasOpKeys: false};
 		}
 	}
 	
@@ -226,7 +226,7 @@ function recursiveFormat(obj, options, has_op_params, has_op_keys){
 		}
 	}
 	
-	return {html:rtn, hasOpParams:has_op_params, hasOpKeys:has_op_keys};
+	return {html: rtn, hasOpParams: has_op_params, hasOpKeys: has_op_keys};
 }
 
 function getHtmlParam(obj, p){
