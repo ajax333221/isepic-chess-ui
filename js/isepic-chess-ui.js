@@ -6,7 +6,7 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="4.4.1";
+		var _VERSION="4.4.2";
 		
 		var _CFG={
 			chessFont: "merida",
@@ -765,7 +765,7 @@
 				if(_CFG.puzzleMode){
 					puzzle_advance=false;
 					
-					if((that.currentMove+1)<that.moveList.length){
+					if(that.currentMove<(that.moveList.length-1)){
 						temp=that.playMove(mov, {isMockMove: true, isLegalMove: true});
 						temp=(temp ? temp.san : "");
 						
@@ -775,17 +775,23 @@
 					}
 					
 					if(puzzle_advance){
-						that.setCurrentMove(2, false);
-						
-						if((that.currentMove+1)===that.moveList.length){
-							Ic.utilityMisc.consoleLog("Puzzle: finished");
+						if(is_inanimated && ((that.currentMove+1)>=(that.moveList.length-1))){
+							that.setCurrentMove((that.moveList.length-1), true);
+						}else{
+							that.setCurrentMove(2, false);
 						}
 						
 						rtn=true;
 					}else{
 						_cancelSelected();
 						
-						Ic.utilityMisc.consoleLog("Puzzle: wrong move");
+						if(that.currentMove!==(that.moveList.length-1)){
+							Ic.utilityMisc.consoleLog("Puzzle: wrong move");
+						}
+					}
+					
+					if(that.currentMove===(that.moveList.length-1)){
+						Ic.utilityMisc.consoleLog("Puzzle: finished");
 					}
 				}else{
 					rtn=!!that.playMove(mov, {isInanimated: !!is_inanimated, playSounds: true, isLegalMove: true});
