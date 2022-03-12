@@ -1,4 +1,4 @@
-/** Copyright (c) 2021 Ajax Isepic (ajax333221) Licensed MIT */
+/** Copyright (c) 2022 Ajax Isepic (ajax333221) Licensed MIT */
 
 /* jshint quotmark:double, undef:true, unused:true, jquery:true, curly:true, latedef:nofunc, bitwise:false, eqeqeq:true, esversion:9 */
 
@@ -6,10 +6,11 @@
 
 (function(windw, $, Ic){
 	var IcUi=(function(){
-		var _VERSION="4.4.2";
+		var _VERSION="4.5.0";
 		
 		var _CFG={
 			chessFont: "merida",
+			chessTheme: "wood",
 			boardLabels: true,
 			boardInteractions: true,
 			soundEffects: true,
@@ -41,13 +42,35 @@
 		//---------------- helpers
 		
 		function _chessFontHelper(chess_font){
-			chess_font=(""+chess_font).replace(/\s/g, "");
+			var arr, default_elm;
 			
-			if(chess_font!=="merida" && chess_font!=="isepic"){
-				chess_font="merida";
+			default_elm="merida";
+			
+			arr=[default_elm, "isepic"];
+			
+			chess_font=(""+chess_font).replace(/\s/g, "").toLowerCase();
+			
+			if(arr.indexOf(chess_font)===-1){
+				chess_font=default_elm;
 			}
 			
 			return chess_font;
+		}
+		
+		function _chessThemeHelper(chess_theme){
+			var arr, default_elm;
+			
+			default_elm="wood";
+			
+			arr=[default_elm, "olive", "magenta", "aqua"];
+			
+			chess_theme=(""+chess_theme).replace(/\s/g, "").toLowerCase();
+			
+			if(arr.indexOf(chess_theme)===-1){
+				chess_theme=default_elm;
+			}
+			
+			return chess_theme;
 		}
 		
 		//---------------- utilities
@@ -706,7 +729,8 @@
 				temp.push("ic_frozen");
 			}
 			
-			temp.push("ic_"+_chessFontHelper(_CFG.chessFont));
+			temp.push("ic_font_"+_chessFontHelper(_CFG.chessFont));
+			temp.push("ic_theme_"+_chessThemeHelper(_CFG.chessTheme));
 			
 			new_class=temp.join(" ");
 			
@@ -1116,7 +1140,7 @@
 				board_elm=$("#ic_ui_board");
 				
 				if(board_elm.length){
-					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")===_CFG.boardLabels || board_elm.hasClass("ic_frozen")===_CFG.boardInteractions || !board_elm.hasClass("ic_"+_chessFontHelper(_CFG.chessFont)) || (!!$("#ic_ui_sound_move").length || !!$("#ic_ui_sound_capture").length)!==_CFG.soundEffects){
+					if(!board_elm.html() || board_elm.hasClass("ic_rotated")!==that.isRotated || board_elm.hasClass("ic_unlabeled")===_CFG.boardLabels || board_elm.hasClass("ic_frozen")===_CFG.boardInteractions || !board_elm.hasClass("ic_font_"+_chessFontHelper(_CFG.chessFont)) || !board_elm.hasClass("ic_theme_"+_chessThemeHelper(_CFG.chessTheme)) || (!!$("#ic_ui_sound_move").length || !!$("#ic_ui_sound_capture").length)!==_CFG.soundEffects){
 						_refreshTable(that.isRotated, _CFG.boardLabels, _CFG.boardInteractions);
 					}
 				}

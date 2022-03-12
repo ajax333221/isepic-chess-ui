@@ -70,9 +70,14 @@
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	background: #5e828c;
 	cursor: pointer;
 }
+
+.ic_ui_board{background: #4c4c4c;}
+.ic_ui_board .ic_theme_wood{background: #615937;}
+.ic_ui_board .ic_theme_olive{background: #496137;}
+.ic_ui_board .ic_theme_magenta{background: #61373a;}
+.ic_ui_board .ic_theme_aqua{background: #375361;}
 
 .ic_ui_board .ic_frozen{
 	cursor: default;
@@ -89,67 +94,93 @@
 	display: table;
 }
 
-.ic_ui_board .ic_merida .ic_piece_holder{
+.ic_ui_board .ic_font_merida .ic_piece_holder{
 	background-size: 80%;
 }
 
-.ic_ui_board .ic_isepic .ic_piece_holder{
+.ic_ui_board .ic_font_isepic .ic_piece_holder{
 	background-size: 70%;
 }
 
-.ic_ui_board .ic_ws{background-color: #c6d2d5;}
-.ic_ui_board .ic_bs{background-color: #6d96a1;}
+.ic_ui_board .ic_ws{background-color: #e0e0e0;}
+.ic_ui_board .ic_theme_wood .ic_ws{background-color: #eedbd2;}
+.ic_ui_board .ic_theme_olive .ic_ws{background-color: #eceed2;}
+.ic_ui_board .ic_theme_magenta .ic_ws{background-color: #eed2e2;}
+.ic_ui_board .ic_theme_aqua .ic_ws{background-color: #d2eee9;}
 
-.ic_ui_board .ic_ws.ic_lastmove{background-color: #91dadb;}
-.ic_ui_board .ic_bs.ic_lastmove{background-color: #65bdc4;}
+.ic_ui_board .ic_bs{background-color: #767676;}
+.ic_ui_board .ic_theme_wood .ic_bs{background-color: #968a56;}
+.ic_ui_board .ic_theme_olive .ic_bs{background-color: #729656;}
+.ic_ui_board .ic_theme_magenta .ic_bs{background-color: #96565a;}
+.ic_ui_board .ic_theme_aqua .ic_bs{background-color: #568196;}
 
-.ic_ui_board .ic_incheck{
-	background-image: radial-gradient(rgba(240, 115, 85, 0.8) 60%, transparent 100%);
-}
+.ic_ui_board .ic_ws.ic_lastmove{background-color: #c8c8c8;}
+.ic_ui_board .ic_theme_wood .ic_ws.ic_lastmove{background-color: #acbbe5;}
+.ic_ui_board .ic_theme_olive .ic_ws.ic_lastmove{background-color: #edace5;}
+.ic_ui_board .ic_theme_magenta .ic_ws.ic_lastmove{background-color: #ace5ee;}
+.ic_ui_board .ic_theme_aqua .ic_ws.ic_lastmove{background-color: #e5dbaa;}
 
-.ic_ui_board .ic_highlight{
-	background-image: radial-gradient(rgba(135, 17, 145, 0.3) 20%, rgba(0, 0, 0, 0) 0);
-}
+.ic_ui_board .ic_bs.ic_lastmove{background-color: #8c8c8c;}
+.ic_ui_board .ic_theme_wood .ic_bs.ic_lastmove{background-color: #7a8d9f;}
+.ic_ui_board .ic_theme_olive .ic_bs.ic_lastmove{background-color: #a87a9f;}
+.ic_ui_board .ic_theme_magenta .ic_bs.ic_lastmove{background-color: #7a9fa1;}
+.ic_ui_board .ic_theme_aqua .ic_bs.ic_lastmove{background-color: #9f9d7a;}
 
-.ic_ui_board .ic_highlight.ic_capture{
-	background-image: radial-gradient(transparent 0%, transparent 80%, rgba(135, 17, 145, 0.5) 80%);
-}
+.ic_ui_board .ic_incheck{background-image: radial-gradient(rgba(240, 115, 85, 0.8) 60%, transparent 100%);}
 
-.ic_ui_board .ic_ws.ic_selected{
-	background-color: #cd91db;
+.ic_ui_board .ic_highlight{background-image: radial-gradient(rgba(22, 22, 22, 0.18) 20%, rgba(0, 0, 0, 0) 0);}
+.ic_ui_board .ic_theme_wood .ic_highlight{background-image: radial-gradient(rgba(16, 18, 28, 0.18) 20%, rgba(0, 0, 0, 0) 0);}
+.ic_ui_board .ic_theme_olive .ic_highlight{background-image: radial-gradient(rgba(23, 16, 28, 0.18) 20%, rgba(0, 0, 0, 0) 0);}
+.ic_ui_board .ic_theme_magenta .ic_highlight{background-image: radial-gradient(rgba(16, 28, 27, 0.18) 20%, rgba(0, 0, 0, 0) 0);}
+.ic_ui_board .ic_theme_aqua .ic_highlight{background-image: radial-gradient(rgba(28, 20, 16, 0.18) 20%, rgba(0, 0, 0, 0) 0);}
+
+.ic_ui_board .ic_highlight.ic_capture{background-image: radial-gradient(transparent 0%, transparent 80%, rgba(22, 22, 22, 0.24) 80%);}
+.ic_ui_board .ic_theme_wood .ic_highlight.ic_capture{background-image: radial-gradient(transparent 0%, transparent 80%, rgba(16, 18, 28, 0.24) 80%);}
+.ic_ui_board .ic_theme_olive .ic_highlight.ic_capture{background-image: radial-gradient(transparent 0%, transparent 80%, rgba(23, 16, 28, 0.24) 80%);}
+.ic_ui_board .ic_theme_magenta .ic_highlight.ic_capture{background-image: radial-gradient(transparent 0%, transparent 80%, rgba(16, 28, 27, 0.24) 80%);}
+.ic_ui_board .ic_theme_aqua .ic_highlight.ic_capture{background-image: radial-gradient(transparent 0%, transparent 80%, rgba(28, 20, 16, 0.24) 80%);}
+
+.ic_ui_board .ic_ws.ic_selected, .ic_ui_board .ic_bs.ic_selected{
 	background-image: none;
 }
 
-.ic_ui_board .ic_bs.ic_selected{
-	background-color: #b865c4;
-	background-image: none;
-}
+.ic_ui_board .ic_ws.ic_selected{background-color: #8e8e8e;}
+.ic_ui_board .ic_theme_wood .ic_ws.ic_selected{background-color: #fdde1b;}
+.ic_ui_board .ic_theme_olive .ic_ws.ic_selected{background-color: #fde01b;}
+.ic_ui_board .ic_theme_magenta .ic_ws.ic_selected{background-color: #fddc1d;}
+.ic_ui_board .ic_theme_aqua .ic_ws.ic_selected{background-color: #f9e01e;}
 
-.ic_ui_board .ic_merida .ic_bp{background-image: url('./images/chess-fonts/merida/bp.png');}
-.ic_ui_board .ic_merida .ic_br{background-image: url('./images/chess-fonts/merida/br.png');}
-.ic_ui_board .ic_merida .ic_bn{background-image: url('./images/chess-fonts/merida/bn.png');}
-.ic_ui_board .ic_merida .ic_bb{background-image: url('./images/chess-fonts/merida/bb.png');}
-.ic_ui_board .ic_merida .ic_bq{background-image: url('./images/chess-fonts/merida/bq.png');}
-.ic_ui_board .ic_merida .ic_bk{background-image: url('./images/chess-fonts/merida/bk.png');}
-.ic_ui_board .ic_merida .ic_wp{background-image: url('./images/chess-fonts/merida/wp.png');}
-.ic_ui_board .ic_merida .ic_wr{background-image: url('./images/chess-fonts/merida/wr.png');}
-.ic_ui_board .ic_merida .ic_wn{background-image: url('./images/chess-fonts/merida/wn.png');}
-.ic_ui_board .ic_merida .ic_wb{background-image: url('./images/chess-fonts/merida/wb.png');}
-.ic_ui_board .ic_merida .ic_wq{background-image: url('./images/chess-fonts/merida/wq.png');}
-.ic_ui_board .ic_merida .ic_wk{background-image: url('./images/chess-fonts/merida/wk.png');}
+.ic_ui_board .ic_bs.ic_selected{background-color: #7d7d7d;}
+.ic_ui_board .ic_theme_wood .ic_bs.ic_selected{background-color: #f1d30b;}
+.ic_ui_board .ic_theme_olive .ic_bs.ic_selected{background-color: #edd50b;}
+.ic_ui_board .ic_theme_magenta .ic_bs.ic_selected{background-color: #f1cc0c;}
+.ic_ui_board .ic_theme_aqua .ic_bs.ic_selected{background-color: #e9d213;}
 
-.ic_ui_board .ic_isepic .ic_bp{background-image: url('./images/chess-fonts/isepic/bp.png');}
-.ic_ui_board .ic_isepic .ic_br{background-image: url('./images/chess-fonts/isepic/br.png');}
-.ic_ui_board .ic_isepic .ic_bn{background-image: url('./images/chess-fonts/isepic/bn.png');}
-.ic_ui_board .ic_isepic .ic_bb{background-image: url('./images/chess-fonts/isepic/bb.png');}
-.ic_ui_board .ic_isepic .ic_bq{background-image: url('./images/chess-fonts/isepic/bq.png');}
-.ic_ui_board .ic_isepic .ic_bk{background-image: url('./images/chess-fonts/isepic/bk.png');}
-.ic_ui_board .ic_isepic .ic_wp{background-image: url('./images/chess-fonts/isepic/wp.png');}
-.ic_ui_board .ic_isepic .ic_wr{background-image: url('./images/chess-fonts/isepic/wr.png');}
-.ic_ui_board .ic_isepic .ic_wn{background-image: url('./images/chess-fonts/isepic/wn.png');}
-.ic_ui_board .ic_isepic .ic_wb{background-image: url('./images/chess-fonts/isepic/wb.png');}
-.ic_ui_board .ic_isepic .ic_wq{background-image: url('./images/chess-fonts/isepic/wq.png');}
-.ic_ui_board .ic_isepic .ic_wk{background-image: url('./images/chess-fonts/isepic/wk.png');}
+.ic_ui_board .ic_font_merida .ic_bp{background-image: url('./images/chess-fonts/merida/bp.png');}
+.ic_ui_board .ic_font_merida .ic_br{background-image: url('./images/chess-fonts/merida/br.png');}
+.ic_ui_board .ic_font_merida .ic_bn{background-image: url('./images/chess-fonts/merida/bn.png');}
+.ic_ui_board .ic_font_merida .ic_bb{background-image: url('./images/chess-fonts/merida/bb.png');}
+.ic_ui_board .ic_font_merida .ic_bq{background-image: url('./images/chess-fonts/merida/bq.png');}
+.ic_ui_board .ic_font_merida .ic_bk{background-image: url('./images/chess-fonts/merida/bk.png');}
+.ic_ui_board .ic_font_merida .ic_wp{background-image: url('./images/chess-fonts/merida/wp.png');}
+.ic_ui_board .ic_font_merida .ic_wr{background-image: url('./images/chess-fonts/merida/wr.png');}
+.ic_ui_board .ic_font_merida .ic_wn{background-image: url('./images/chess-fonts/merida/wn.png');}
+.ic_ui_board .ic_font_merida .ic_wb{background-image: url('./images/chess-fonts/merida/wb.png');}
+.ic_ui_board .ic_font_merida .ic_wq{background-image: url('./images/chess-fonts/merida/wq.png');}
+.ic_ui_board .ic_font_merida .ic_wk{background-image: url('./images/chess-fonts/merida/wk.png');}
+
+.ic_ui_board .ic_font_isepic .ic_bp{background-image: url('./images/chess-fonts/isepic/bp.png');}
+.ic_ui_board .ic_font_isepic .ic_br{background-image: url('./images/chess-fonts/isepic/br.png');}
+.ic_ui_board .ic_font_isepic .ic_bn{background-image: url('./images/chess-fonts/isepic/bn.png');}
+.ic_ui_board .ic_font_isepic .ic_bb{background-image: url('./images/chess-fonts/isepic/bb.png');}
+.ic_ui_board .ic_font_isepic .ic_bq{background-image: url('./images/chess-fonts/isepic/bq.png');}
+.ic_ui_board .ic_font_isepic .ic_bk{background-image: url('./images/chess-fonts/isepic/bk.png');}
+.ic_ui_board .ic_font_isepic .ic_wp{background-image: url('./images/chess-fonts/isepic/wp.png');}
+.ic_ui_board .ic_font_isepic .ic_wr{background-image: url('./images/chess-fonts/isepic/wr.png');}
+.ic_ui_board .ic_font_isepic .ic_wn{background-image: url('./images/chess-fonts/isepic/wn.png');}
+.ic_ui_board .ic_font_isepic .ic_wb{background-image: url('./images/chess-fonts/isepic/wb.png');}
+.ic_ui_board .ic_font_isepic .ic_wq{background-image: url('./images/chess-fonts/isepic/wq.png');}
+.ic_ui_board .ic_font_isepic .ic_wk{background-image: url('./images/chess-fonts/isepic/wk.png');}
 
 .ic_ui_board .ic_label{
 	font-size: 2.2vmin;
@@ -172,9 +203,11 @@
 	left: 25%;
 }
 
-.ic_ui_board .ic_dot{
-	color: #5e828c;
-}
+.ic_ui_board .ic_dot{color: #4c4c4c;}
+.ic_ui_board .ic_theme_wood .ic_dot{color: #615937;}
+.ic_ui_board .ic_theme_olive .ic_dot{color: #496137;}
+.ic_ui_board .ic_theme_magenta .ic_dot{color: #61373a;}
+.ic_ui_board .ic_theme_aqua .ic_dot{color: #375361;}
 
 .ic_ui_board .ic_b_color{
 	color: #010101;

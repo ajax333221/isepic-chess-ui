@@ -78,6 +78,7 @@ https://ajax333221.github.io/isepic-chess-ui/
 - Chess fonts:
 	- **Merida** <img src="./css/images/chess-fonts/merida/wk.png" width="20"><img src="./css/images/chess-fonts/merida/wq.png" width="20"><img src="./css/images/chess-fonts/merida/wr.png" width="20"><img src="./css/images/chess-fonts/merida/wb.png" width="20"><img src="./css/images/chess-fonts/merida/wn.png" width="20"><img src="./css/images/chess-fonts/merida/wp.png" width="20"><img src="./css/images/chess-fonts/merida/bk.png" width="20"><img src="./css/images/chess-fonts/merida/bq.png" width="20"><img src="./css/images/chess-fonts/merida/br.png" width="20"><img src="./css/images/chess-fonts/merida/bb.png" width="20"><img src="./css/images/chess-fonts/merida/bn.png" width="20"><img src="./css/images/chess-fonts/merida/bp.png" width="20">
 	- **isepic-chess-font** <sup>(by ajax333221)</sup> <img src="./css/images/chess-fonts/isepic/wk.png" width="20"><img src="./css/images/chess-fonts/isepic/wq.png" width="20"><img src="./css/images/chess-fonts/isepic/wr.png" width="20"><img src="./css/images/chess-fonts/isepic/wb.png" width="20"><img src="./css/images/chess-fonts/isepic/wn.png" width="20"><img src="./css/images/chess-fonts/isepic/wp.png" width="20"><img src="./css/images/chess-fonts/isepic/bk.png" width="20"><img src="./css/images/chess-fonts/isepic/bq.png" width="20"><img src="./css/images/chess-fonts/isepic/br.png" width="20"><img src="./css/images/chess-fonts/isepic/bb.png" width="20"><img src="./css/images/chess-fonts/isepic/bn.png" width="20"><img src="./css/images/chess-fonts/isepic/bp.png" width="20">
+- Chess themes: *"wood"* (default), *"olive"*, *"magenta"* and *"aqua"*
 - Sound effects
 - Move navigation via scrolling and arrow keys
 - Puzzle mode (:construction: work in progress :construction:)
@@ -94,6 +95,6 @@ https://ajax333221.github.io/isepic-chess-ui/
 :page_facing_up: Copyright and license
 -------------
 
-Copyright © 2021 Ajax Isepic (ajax333221)
+Copyright © 2022 Ajax Isepic (ajax333221)
 
 Licensed under MIT License: http://opensource.org/licenses/mit-license.php
