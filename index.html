@@ -23,6 +23,7 @@
 			.flex_child{
 				min-height: 100%;
 				width: 100%;
+				overflow-y: auto;
 			}
 			
 			.ic_ui_main{
@@ -39,14 +40,15 @@
 			
 			.ic_ui_debug{
 				font-size: 12px; /*this is an overwrite*/
-				max-height: 200px;
+				max-height: 300px;
 				overflow-x: hidden;
 				overflow-y: auto;
 			}
 			
 			#parsebox{
 				text-align: center;
-				background: #dfdfdf;
+				background: #dbf2d7;
+				padding-bottom: 10px;
 			}
 			
 			#parsebox p{
@@ -57,6 +59,8 @@
 			
 			#parsebox textarea{
 				box-sizing: border-box;
+				border: 1px solid #ccc;
+				background: #fafafa;
 				height: 80px;
 				width: 100%;
 				padding: 15px;
@@ -91,10 +95,36 @@
 				background: #f6f6f6;
 			}
 			
-			.padded{padding: 10px 50px;}
+			a.theme_changer.wood{color: #968a56;}
+			a.theme_changer.olive{color: #729656;}
+			a.theme_changer.magenta{color: #96565a;}
+			a.theme_changer.aqua{color: #568196;}
 			
-			#left_elm{background: #f0f0f0;}
-			#right_elm{background: #f9f9f9;}
+			a.theme_changer.wood:hover{color: #b9af85;}
+			a.theme_changer.olive:hover{color: #9bb985;}
+			a.theme_changer.magenta:hover{color: #b98588;}
+			a.theme_changer.aqua:hover{color: #85a8b9;}
+			
+			.padded{
+				padding: 5px 10px;
+			}
+			
+			.whitebox{
+				padding: 10px 20px;
+				margin-top: 10px;
+				background: #fff;
+				border: 1px solid #e6e6e6;
+				box-shadow: 2px 2px 3px 1px rgba(0, 0, 0, 0.05);
+			}
+			
+			#left_elm{
+				background: #f0f0f0;
+			}
+			
+			#right_elm{
+				background: #f9f9f9;
+				border-left: 1px solid #ccc;
+			}
 		</style>
 		
 		<script src="./js/jquery-3.3.1.min.js"></script>
@@ -116,19 +146,7 @@
 				});
 			}
 			
-			function display_debug(){
-				if(!$(".ic_ui_debug").length){
-					$("#right_elm .padded").last().append("<br><hr><br><div class='ic_ui_debug'><a id='ic_ui_debug_toggler' href='#'>Debug ▲</a><div id='ic_ui_debug' style='display:none;'></div></div>");
-					
-					if(Ic.getBoard("main")){
-						Ic.getBoard("main").refreshUi(0, false);
-					}
-				}
-			}
-			
 			$(function(){
-				var Debug_clic;
-				
 				Ic.setSilentMode(false);
 				IcUi.setCfg("arrowKeysNavigation", true);
 				
@@ -201,17 +219,13 @@
 					return false;
 				});
 				
-				$(".ic_ui_header h3").click(function(){
-					Debug_clic=((Debug_clic*1 || 0)+1);
+				$(".theme_changer").click(function(){
+					IcUi.setCfg("chessTheme", $(this).attr("data-theme"));
 					
-					if(Debug_clic>2){
-						display_debug();
-					}
+					return false;
 				});
 				
 				$("#parseinput").val("1. e4 e5 2. Nf3 Nc6 3. Bc4 f6 4. O-O");
-				
-				console.log("Note: to display the debug box call display_debug() or click the GitHub header a few times");
 			});
 		</script>
 	</head>
@@ -226,58 +240,75 @@
 			<div id="right_elm" class="flex_child">
 				<div id="parsebox">
 					<div class="padded">
-						<p><strong>Input</strong> (<em>FEN position</em> • <em>PGN game</em> • <em>UCI move list</em>):</p>
-						
-						<textarea id="parseinput" name="parseinput"></textarea>
-						
-						<br>
-						
-						<input id="parsebtn" value="Load" type="button">
+						<div class="whitebox">
+							<p><strong>Input</strong> (<em>FEN position</em> • <em>PGN game</em> • <em>UCI move list</em>):</p>
+							
+							<textarea id="parseinput" name="parseinput"></textarea>
+							
+							<br>
+							
+							<input id="parsebtn" value="Load" type="button">
+						</div>
 					</div>
 				</div>
 				
 				<div id="parsetoggler">▲</div>
 				
 				<div class="padded">
-					<div class="ic_ui_header">
-						<h3>GitHub: <a href="https://github.com/ajax333221/isepic-chess">isepic-chess</a> | <a href="https://github.com/ajax333221/isepic-chess-ui">isepic-chess-ui</a></h3>
+					<div class="whitebox">
+						<div class="ic_ui_header">
+							<h3>GitHub: <a href="https://github.com/ajax333221/isepic-chess">isepic-chess</a> | <a href="https://github.com/ajax333221/isepic-chess-ui">isepic-chess-ui</a></h3>
+						</div>
 					</div>
 					
-					<br><hr><br>
-					
-					<div class="ic_ui_controls">
-						<div>
-							<input id="ic_ui_nav_first" value="|<" type="button">
-							<input id="ic_ui_nav_previous" value="<" type="button">
-							<input id="ic_ui_nav_next" value=">" type="button">
-							<input id="ic_ui_nav_last" value=">|" type="button">
-							<input id="ic_ui_rotate" value="rotate" type="button">
+					<div class="whitebox">
+						<div class="ic_ui_controls">
+							<div>
+								<input id="ic_ui_nav_first" value="|<" type="button">
+								<input id="ic_ui_nav_previous" value="<" type="button">
+								<input id="ic_ui_nav_next" value=">" type="button">
+								<input id="ic_ui_nav_last" value=">|" type="button">
+								<input id="ic_ui_rotate" value="rotate" type="button">
+								
+								<select id="ic_ui_promote">
+									<option value="5" selected="selected">queen</option>
+									<option value="4">rook</option>
+									<option value="3">bishop</option>
+									<option value="2">knight</option>
+								</select>
+							</div>
 							
-							<select id="ic_ui_promote">
-								<option value="5" selected="selected">queen</option>
-								<option value="4">rook</option>
-								<option value="3">bishop</option>
-								<option value="2">knight</option>
-							</select>
+							<br>
+							
+							<div class="ic_ui_move_list">
+								<div id="ic_ui_move_list"></div>
+							</div>
+							
+							<br>
+							
+							<div>
+								<input id="ic_ui_fen" value="" type="text">
+							</div>
 						</div>
 						
 						<br>
 						
-						<div class="ic_ui_move_list">
-							<div id="ic_ui_move_list"></div>
+						<div class="ic_ui_material_diff">
+							<div id="ic_ui_material_diff"></div>
 						</div>
 						
 						<br>
 						
 						<div>
-							<input id="ic_ui_fen" value="" type="text">
+							<p><strong>Theme:</strong> <a class="theme_changer wood" data-theme="wood" href="#">■ wood</a> | <a class="theme_changer olive" data-theme="olive" href="#">■ olive</a> | <a class="theme_changer magenta" data-theme="magenta" href="#">■ magenta</a> | <a class="theme_changer aqua" data-theme="aqua" href="#">■ aqua</a></p>
 						</div>
 					</div>
 					
-					<br>
-					
-					<div class="ic_ui_material_diff">
-						<div id="ic_ui_material_diff"></div>
+					<div class="whitebox">
+						<div class="ic_ui_debug">
+							<a id="ic_ui_debug_toggler" href="#">Debug ▲</a>
+							<div id="ic_ui_debug" style="display:none;"></div>
+						</div>
 					</div>
 				</div>
 			</div>
