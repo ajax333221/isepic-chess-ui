@@ -349,7 +349,7 @@
 
 /*start(debug) ---*/
 .ic_ui_debug{
-	color: #333;
+	color: #fff;
 	font-size: 16px;
 }
 
@@ -358,7 +358,7 @@
 	padding: 0;
 	font-family: monospace;
 	white-space: pre;
-	color: #4a8296;
+	color: #dbda70;
 }
 
 .ic_ui_debug li{
@@ -367,6 +367,6 @@
 }
 
 .ic_ui_debug li strong{
-	color: #735d62;
+	color: #c2ffc3;
 }
 /*end(debug) ---*/
