@@ -1,92 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Doco. Generator (Board Ui methods)</title>
-	</head>
-	<body>
-		<h1>board-ui-methods.md</h1>
-		<textarea id="result" style="width:100%; height:400px;">...</textarea>
-	</body>
-	<script src="../doco-gen.js"></script>
-	<script>
-		var boardui, res;
-		
-		boardui={
-			refreshUi: {
-				index: 1,
-				name: "refreshUi",
-				refreshUi: true
-			}
-		};
-		
-		//start: refreshUi
-		boardui.refreshUi.params={
-			children: [
-				{name: "animationType", type: "Number", icon: "eight_pointed_black_star"},
-				{name: "playSounds", type: "Boolean", icon: "eight_pointed_black_star"}
-			]
-		};
-		
-		boardui.refreshUi.returnVal={};
-		
-		boardui.refreshUi.description=[];
-		boardui.refreshUi.description.push("This method will:<ul><li>Refresh the HTML of all the components (if any) to reflect the internal state of the board.</li><li>Finish ongoing piece animations.</li><li>Cancel ongoing piece dragging.</li><li>Unselect and unhighlight squares.</li><li>Start the current animation (if any).</li><li>Highlight squares (if any).</li></ul>If `animationType` is a **falsy-value**, no animation will happen.");
-		boardui.refreshUi.description.push("If `animationType` is a **positive number**, the board will be refreshed with an animation as if the last move was played.");
-		boardui.refreshUi.description.push("If `animationType` is a **negative number**, the board will be refreshed with an animation as if the next move was reverted.");
-		boardui.refreshUi.description.push("If `playSounds` is a **truthy-value**, a sound might be played depending on multiple factors (if sound effects are not disabled in the configuration or by the browser). The sounds might get supressed by browers if the method was not fired from a click or keypress.");
-		
-		boardui.refreshUi.examples=[];
-		boardui.refreshUi.examples.push("board.refreshUi()");
-		boardui.refreshUi.examples.push("board.refreshUi(0)");
-		boardui.refreshUi.examples.push("board.refreshUi(1)");
-		boardui.refreshUi.examples.push("board.refreshUi(-1)");
-		boardui.refreshUi.examples.push("board.refreshUi(1, true)");
-		boardui.refreshUi.examples.push("board.refreshUi(-1, false)");
-		//end: refreshUi
-		
-		res="";
-		
-		res+="<p align=\"center\">"+urlHrefLink(["« Return", "#book-documentation"])+"</p>";
-		
-		res+="\n\n";
-		
-		res+="<h1 align=\"center\">Board Ui methods</h1>";
-		
-		res+="\n\n";
-		
-		res+="> **Note:** the board UI methods will automatically start working when **isepic-chess-ui.js** is present, otherwise nothing will happen when they are called.";
-		
-		res+="\n\n";
-		
-		res+="Boards created by `Ic.initBoard()` have the following available UI methods:";
-		
-		res+="\n\n";
-		
-		res+="<ul>\n<li>board."+docoGenMethodList(boardui).join("()</li>\n<li>board.")+"()</li>\n</ul>";
-		
-		res+="\n\n";
-		
-		res+="#### Table `board.<UImethods>(...)`:";
-		
-		res+="\n\n";
-		
-		res+="Function | Parameters | Return | UI refresh? | Description";
-		
-		res+="\n";
-		
-		res+="-------- | ---------- | ------ | ----------- | -----------";
-		
-		res+="\n";
-		
-		res+=docoGenMethodTable(boardui).join("\n");
-		
-		res+="\n\n";
-		
-		res+="<p align=\"center\">"+urlHrefLink(["« Return", "#book-documentation"])+"</p>";
-		
-		res+="\n";
-		
-		document.getElementById("result").value=res;
-	</script>
+  <head>
+    <meta charset="utf-8" />
+    <title>Doco. Generator (Board Ui methods)</title>
+  </head>
+  <body>
+    <h1>board-ui-methods.md</h1>
+    <textarea id="result" style="width: 100%; height: 400px">...</textarea>
+  </body>
+  <script src="../doco-gen.js"></script>
+  <script>
+    var boardui, res;
+
+    boardui = {
+      refreshUi: {
+        index: 1,
+        name: 'refreshUi',
+        refreshUi: true,
+      },
+    };
+
+    //start: refreshUi
+    boardui.refreshUi.params = {
+      children: [
+        { name: 'animationType', type: 'Number', icon: 'eight_pointed_black_star' },
+        { name: 'playSounds', type: 'Boolean', icon: 'eight_pointed_black_star' },
+      ],
+    };
+
+    boardui.refreshUi.returnVal = {};
+
+    boardui.refreshUi.description = [];
+    boardui.refreshUi.description.push(
+      'This method will:<ul><li>Refresh the HTML of all the components (if any) to reflect the internal state of the board.</li><li>Finish ongoing piece animations.</li><li>Cancel ongoing piece dragging.</li><li>Unselect and unhighlight squares.</li><li>Start the current animation (if any).</li><li>Highlight squares (if any).</li></ul>If `animationType` is a **falsy-value**, no animation will happen.'
+    );
+    boardui.refreshUi.description.push(
+      'If `animationType` is a **positive number**, the board will be refreshed with an animation as if the last move was played.'
+    );
+    boardui.refreshUi.description.push(
+      'If `animationType` is a **negative number**, the board will be refreshed with an animation as if the next move was reverted.'
+    );
+    boardui.refreshUi.description.push(
+      'If `playSounds` is a **truthy-value**, a sound might be played depending on multiple factors (if sound effects are not disabled in the configuration or by the browser). The sounds might get supressed by browers if the method was not fired from a click or keypress.'
+    );
+
+    boardui.refreshUi.examples = [];
+    boardui.refreshUi.examples.push('board.refreshUi()');
+    boardui.refreshUi.examples.push('board.refreshUi(0)');
+    boardui.refreshUi.examples.push('board.refreshUi(1)');
+    boardui.refreshUi.examples.push('board.refreshUi(-1)');
+    boardui.refreshUi.examples.push('board.refreshUi(1, true)');
+    boardui.refreshUi.examples.push('board.refreshUi(-1, false)');
+    //end: refreshUi
+
+    res = '';
+
+    res += '<p align="center">' + urlHrefLink(['« Return', '#book-documentation']) + '</p>';
+
+    res += '\n\n';
+
+    res += '<h1 align="center">Board Ui methods</h1>';
+
+    res += '\n\n';
+
+    res +=
+      '> **Note:** the board UI methods will automatically start working when **isepic-chess-ui.js** is present, otherwise nothing will happen when they are called.';
+
+    res += '\n\n';
+
+    res += 'Boards created by `Ic.initBoard()` have the following available UI methods:';
+
+    res += '\n\n';
+
+    res += '<ul>\n<li>board.' + docoGenMethodList(boardui).join('()</li>\n<li>board.') + '()</li>\n</ul>';
+
+    res += '\n\n';
+
+    res += '#### Table `board.<UImethods>(...)`:';
+
+    res += '\n\n';
+
+    res += 'Function | Parameters | Return | UI refresh? | Description';
+
+    res += '\n';
+
+    res += '-------- | ---------- | ------ | ----------- | -----------';
+
+    res += '\n';
+
+    res += docoGenMethodTable(boardui).join('\n');
+
+    res += '\n\n';
+
+    res += '<p align="center">' + urlHrefLink(['« Return', '#book-documentation']) + '</p>';
+
+    res += '\n';
+
+    document.getElementById('result').value = res;
+  </script>
 </html>

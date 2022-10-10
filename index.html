@@ -1,332 +1,360 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>Isepic Chess UI - Demo</title>
-		
-		<link rel="stylesheet" href="./css/isepic-chess-ui.css">
-		
-		<style>
-			html, body, .flex_wrapper{
-				height: 100%;
-				padding: 0;
-				margin: 0;
-			}
-			
-			.flex_wrapper{
-				display: flex;
-				align-items: stretch;
-				justify-content: space-around;
-				width: 100%;
-			}
-			
-			.flex_child{
-				min-height: 100%;
-				width: 100%;
-				overflow-y: auto;
-			}
-			
-			.ic_ui_main{
-				min-width: 100%; /*this is an overwrite*/
-			}
-			
-			#ic_ui_material_diff{
-				display: inline-block; /*this is an overwrite*/
-			}
-			
-			.ic_ui_board{
-				margin: 0 auto; /*this is an overwrite*/
-			}
-			
-			.ic_ui_debug{
-				color: #fff; /*this is an overwrite*/
-				font-size: 13px; /*this is an overwrite*/
-			}
-			
-			.ic_ui_debug ul{
-				color: #dbda70; /*this is an overwrite*/
-			}
-			
-			.ic_ui_debug li strong{
-				color: #c2ffc3; /*this is an overwrite*/
-			}
-			
-			#ic_ui_debug{
-				padding: 8px 4px;
-				margin: 10px 0;
-				max-height: 300px;
-				overflow-x: hidden;
-				overflow-y: auto;
-				background: #182e1f;
-			}
-			
-			#parsebox{
-				text-align: center;
-				background: #dbf2d7;
-				padding-bottom: 10px;
-			}
-			
-			#parsebox p{
-				color: #555;
-				font-size: 13px;
-				margin: 0px;
-			}
-			
-			#parsebox textarea{
-				box-sizing: border-box;
-				border: 1px solid #ccc;
-				background: #fafafa;
-				height: 80px;
-				width: 100%;
-				padding: 15px;
-				margin-top: 10px;
-			}
-			
-			#parsebox input{
-				font-size: 15px;
-				border: 1px solid #ccc;
-				background: #fafafa;
-				cursor: pointer;
-				padding: 9px 40px;
-				margin-top: 10px;
-			}
-			
-			#parsebox input:hover{
-				color: #3e6640;
-				background: #fff;
-			}
-			
-			#parsetoggler{
-				text-align: center;
-				background: #fff;
-				border: 1px solid #d5d5d5;
-				border-left: 0px;
-				border-right: 0px;
-				cursor: pointer;
-				padding: 5px;
-			}
-			
-			#parsetoggler:hover{
-				background: #f6f6f6;
-			}
-			
-			a.theme_changer.wood{color: #968a56;}
-			a.theme_changer.olive{color: #729656;}
-			a.theme_changer.magenta{color: #96565a;}
-			a.theme_changer.aqua{color: #568196;}
-			
-			a.theme_changer.wood:hover{color: #b9af85;}
-			a.theme_changer.olive:hover{color: #9bb985;}
-			a.theme_changer.magenta:hover{color: #b98588;}
-			a.theme_changer.aqua:hover{color: #85a8b9;}
-			
-			.padded{
-				padding: 5px 10px;
-			}
-			
-			.whitebox{
-				padding: 10px 20px;
-				margin-top: 10px;
-				background: #fff;
-				border: 1px solid #e6e6e6;
-				box-shadow: 2px 2px 3px 1px rgba(0, 0, 0, 0.05);
-			}
-			
-			#left_elm{
-				background: #f0f0f0;
-			}
-			
-			#right_elm{
-				background: #f9f9f9;
-				border-left: 1px solid #ccc;
-			}
-		</style>
-		
-		<script src="./js/jquery-3.3.1.min.js"></script>
-		<script src="./js/isepic-chess.js"></script>
-		<script src="./js/isepic-chess-ui.js"></script>
-		
-		<script>
-			function stretch_board(){
-				var elm_flex_wrapper, w_temp, h_temp;
-				
-				elm_flex_wrapper=$("#right_elm");
-				
-				w_temp=elm_flex_wrapper.width();
-				h_temp=elm_flex_wrapper.height();
-				
-				$("#ic_ui_board").parent().css({
-					"width": Math.min(w_temp, h_temp),
-					"height": Math.min(w_temp, h_temp)
-				});
-			}
-			
-			$(function(){
-				Ic.setSilentMode(false);
-				IcUi.setCfg("arrowKeysNavigation", true);
-				
-				Ic.initBoard({
-					boardName: "main"
-				});
-				
-				$(window).on("resize", stretch_board);
-				
-				stretch_board();
-				
-				$("#parsebtn").click(function(){
-					var val, animate_last_move, parsed_correctly;
-					
-					val=$("#parseinput").val();
-					
-					animate_last_move=false;
-					parsed_correctly=false;
-					
-					//if(!parsed_correctly){
-						if(Ic.isLegalFen(val)){
-							parsed_correctly=!!Ic.initBoard({
-								boardName: "parsed",
-								fen: val,
-								validOrBreak: true,
-								isHidden: true
-							});
-						}
-					//}
-					
-					if(!parsed_correctly){
-						parsed_correctly=!!Ic.initBoard({
-							boardName: "parsed",
-							pgn: val,
-							validOrBreak: true,
-							isHidden: true
-						});
-						
-						animate_last_move=parsed_correctly;
-					}
-					
-					if(!parsed_correctly){
-						parsed_correctly=!!Ic.initBoard({
-							boardName: "parsed",
-							uci: val,
-							validOrBreak: true,
-							isHidden: true
-						});
-						
-						animate_last_move=parsed_correctly;
-					}
-					
-					if(parsed_correctly){
-						$("#parsetoggler").trigger("click");
-						
-						Ic.cloneBoard("main", "parsed");
-						
-						Ic.getBoard("main").isHidden=false;
-						
-						Ic.getBoard("main").refreshUi((animate_last_move*1), true);
-					}
-					
-					return false;
-				});
-				
-				$("#parsetoggler").click(function(){
-					$("#parsebox").toggle();
-					$(this).text($("#parsebox").is(":visible") ? "▲" : "▼");
-					
-					return false;
-				});
-				
-				$(".theme_changer").click(function(){
-					IcUi.setCfg("chessTheme", $(this).attr("data-theme"));
-					
-					return false;
-				});
-				
-				$("#parseinput").val("1. e4 e5 2. Nf3 Nc6 3. Bc4 f6 4. O-O");
-			});
-		</script>
-	</head>
-	<body>
-		<div class="ic_ui_main flex_wrapper">
-			<div id="left_elm" class="flex_child">
-				<div class="ic_ui_board">
-					<div id="ic_ui_board"></div>
-				</div>
-			</div>
-			
-			<div id="right_elm" class="flex_child">
-				<div id="parsebox">
-					<div class="padded">
-						<div class="whitebox">
-							<p><strong>Input</strong> (<em>FEN position</em> • <em>PGN game</em> • <em>UCI move list</em>):</p>
-							
-							<textarea id="parseinput" name="parseinput"></textarea>
-							
-							<br>
-							
-							<input id="parsebtn" value="Load" type="button">
-						</div>
-					</div>
-				</div>
-				
-				<div id="parsetoggler">▲</div>
-				
-				<div class="padded">
-					<div class="whitebox">
-						<div class="ic_ui_header">
-							<h3>GitHub: <a href="https://github.com/ajax333221/isepic-chess">isepic-chess</a> | <a href="https://github.com/ajax333221/isepic-chess-ui">isepic-chess-ui</a></h3>
-						</div>
-					</div>
-					
-					<div class="whitebox">
-						<div class="ic_ui_controls">
-							<div>
-								<input id="ic_ui_nav_first" value="|<" type="button">
-								<input id="ic_ui_nav_previous" value="<" type="button">
-								<input id="ic_ui_nav_next" value=">" type="button">
-								<input id="ic_ui_nav_last" value=">|" type="button">
-								<input id="ic_ui_rotate" value="rotate" type="button">
-								
-								<select id="ic_ui_promote">
-									<option value="5" selected="selected">queen</option>
-									<option value="4">rook</option>
-									<option value="3">bishop</option>
-									<option value="2">knight</option>
-								</select>
-							</div>
-							
-							<br>
-							
-							<div class="ic_ui_move_list">
-								<div id="ic_ui_move_list"></div>
-							</div>
-							
-							<br>
-							
-							<div>
-								<input id="ic_ui_fen" value="" type="text">
-							</div>
-						</div>
-						
-						<br>
-						
-						<div class="ic_ui_material_diff">
-							<div id="ic_ui_material_diff"></div>
-						</div>
-						
-						<br>
-						
-						<div>
-							<p><strong>Theme:</strong> <a class="theme_changer wood" data-theme="wood" href="#">■ wood</a> | <a class="theme_changer olive" data-theme="olive" href="#">■ olive</a> | <a class="theme_changer magenta" data-theme="magenta" href="#">■ magenta</a> | <a class="theme_changer aqua" data-theme="aqua" href="#">■ aqua</a></p>
-						</div>
-					</div>
-					
-					<div class="whitebox">
-						<div class="ic_ui_debug">
-							<a id="ic_ui_debug_toggler" href="#">Debug ▲</a>
-							<div id="ic_ui_debug" style="display:none;"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Isepic Chess UI - Demo</title>
+
+    <link rel="stylesheet" href="./css/isepic-chess-ui.css" />
+
+    <style>
+      html,
+      body,
+      .flex_wrapper {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      .flex_wrapper {
+        display: flex;
+        align-items: stretch;
+        justify-content: space-around;
+        width: 100%;
+      }
+
+      .flex_child {
+        min-height: 100%;
+        width: 100%;
+        overflow-y: auto;
+      }
+
+      .ic_ui_main {
+        min-width: 100%; /*this is an overwrite*/
+      }
+
+      #ic_ui_material_diff {
+        display: inline-block; /*this is an overwrite*/
+      }
+
+      .ic_ui_board {
+        margin: 0 auto; /*this is an overwrite*/
+      }
+
+      .ic_ui_debug {
+        color: #fff; /*this is an overwrite*/
+        font-size: 13px; /*this is an overwrite*/
+      }
+
+      .ic_ui_debug ul {
+        color: #dbda70; /*this is an overwrite*/
+      }
+
+      .ic_ui_debug li strong {
+        color: #c2ffc3; /*this is an overwrite*/
+      }
+
+      #ic_ui_debug {
+        padding: 8px 4px;
+        margin: 10px 0;
+        max-height: 300px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background: #182e1f;
+      }
+
+      #parsebox {
+        text-align: center;
+        background: #dbf2d7;
+        padding-bottom: 10px;
+      }
+
+      #parsebox p {
+        color: #555;
+        font-size: 13px;
+        margin: 0px;
+      }
+
+      #parsebox textarea {
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        background: #fafafa;
+        height: 80px;
+        width: 100%;
+        padding: 15px;
+        margin-top: 10px;
+      }
+
+      #parsebox input {
+        font-size: 15px;
+        border: 1px solid #ccc;
+        background: #fafafa;
+        cursor: pointer;
+        padding: 9px 40px;
+        margin-top: 10px;
+      }
+
+      #parsebox input:hover {
+        color: #3e6640;
+        background: #fff;
+      }
+
+      #parsetoggler {
+        text-align: center;
+        background: #fff;
+        border: 1px solid #d5d5d5;
+        border-left: 0px;
+        border-right: 0px;
+        cursor: pointer;
+        padding: 5px;
+      }
+
+      #parsetoggler:hover {
+        background: #f6f6f6;
+      }
+
+      a.theme_changer.wood {
+        color: #968a56;
+      }
+      a.theme_changer.olive {
+        color: #729656;
+      }
+      a.theme_changer.magenta {
+        color: #96565a;
+      }
+      a.theme_changer.aqua {
+        color: #568196;
+      }
+
+      a.theme_changer.wood:hover {
+        color: #b9af85;
+      }
+      a.theme_changer.olive:hover {
+        color: #9bb985;
+      }
+      a.theme_changer.magenta:hover {
+        color: #b98588;
+      }
+      a.theme_changer.aqua:hover {
+        color: #85a8b9;
+      }
+
+      .padded {
+        padding: 5px 10px;
+      }
+
+      .whitebox {
+        padding: 10px 20px;
+        margin-top: 10px;
+        background: #fff;
+        border: 1px solid #e6e6e6;
+        box-shadow: 2px 2px 3px 1px rgba(0, 0, 0, 0.05);
+      }
+
+      #left_elm {
+        background: #f0f0f0;
+      }
+
+      #right_elm {
+        background: #f9f9f9;
+        border-left: 1px solid #ccc;
+      }
+    </style>
+
+    <script src="./js/jquery-3.3.1.min.js"></script>
+    <script src="./js/isepic-chess.js"></script>
+    <script src="./js/isepic-chess-ui.js"></script>
+
+    <script>
+      function stretch_board() {
+        var elm_flex_wrapper, w_temp, h_temp;
+
+        elm_flex_wrapper = $('#right_elm');
+
+        w_temp = elm_flex_wrapper.width();
+        h_temp = elm_flex_wrapper.height();
+
+        $('#ic_ui_board')
+          .parent()
+          .css({
+            width: Math.min(w_temp, h_temp),
+            height: Math.min(w_temp, h_temp),
+          });
+      }
+
+      $(function () {
+        Ic.setSilentMode(false);
+        IcUi.setCfg('arrowKeysNavigation', true);
+
+        Ic.initBoard({
+          boardName: 'main',
+        });
+
+        $(window).on('resize', stretch_board);
+
+        stretch_board();
+
+        $('#parsebtn').click(function () {
+          var val, animate_last_move, parsed_correctly;
+
+          val = $('#parseinput').val();
+
+          animate_last_move = false;
+          parsed_correctly = false;
+
+          //if(!parsed_correctly){
+          if (Ic.isLegalFen(val)) {
+            parsed_correctly = !!Ic.initBoard({
+              boardName: 'parsed',
+              fen: val,
+              validOrBreak: true,
+              isHidden: true,
+            });
+          }
+          //}
+
+          if (!parsed_correctly) {
+            parsed_correctly = !!Ic.initBoard({
+              boardName: 'parsed',
+              pgn: val,
+              validOrBreak: true,
+              isHidden: true,
+            });
+
+            animate_last_move = parsed_correctly;
+          }
+
+          if (!parsed_correctly) {
+            parsed_correctly = !!Ic.initBoard({
+              boardName: 'parsed',
+              uci: val,
+              validOrBreak: true,
+              isHidden: true,
+            });
+
+            animate_last_move = parsed_correctly;
+          }
+
+          if (parsed_correctly) {
+            $('#parsetoggler').trigger('click');
+
+            Ic.cloneBoard('main', 'parsed');
+
+            Ic.getBoard('main').isHidden = false;
+
+            Ic.getBoard('main').refreshUi(animate_last_move * 1, true);
+          }
+
+          return false;
+        });
+
+        $('#parsetoggler').click(function () {
+          $('#parsebox').toggle();
+          $(this).text($('#parsebox').is(':visible') ? '▲' : '▼');
+
+          return false;
+        });
+
+        $('.theme_changer').click(function () {
+          IcUi.setCfg('chessTheme', $(this).attr('data-theme'));
+
+          return false;
+        });
+
+        $('#parseinput').val('1. e4 e5 2. Nf3 Nc6 3. Bc4 f6 4. O-O');
+      });
+    </script>
+  </head>
+  <body>
+    <div class="ic_ui_main flex_wrapper">
+      <div id="left_elm" class="flex_child">
+        <div class="ic_ui_board">
+          <div id="ic_ui_board"></div>
+        </div>
+      </div>
+
+      <div id="right_elm" class="flex_child">
+        <div id="parsebox">
+          <div class="padded">
+            <div class="whitebox">
+              <p><strong>Input</strong> (<em>FEN position</em> • <em>PGN game</em> • <em>UCI move list</em>):</p>
+
+              <textarea id="parseinput" name="parseinput"></textarea>
+
+              <br />
+
+              <input id="parsebtn" value="Load" type="button" />
+            </div>
+          </div>
+        </div>
+
+        <div id="parsetoggler">▲</div>
+
+        <div class="padded">
+          <div class="whitebox">
+            <div class="ic_ui_header">
+              <h3>
+                GitHub: <a href="https://github.com/ajax333221/isepic-chess">isepic-chess</a> |
+                <a href="https://github.com/ajax333221/isepic-chess-ui">isepic-chess-ui</a>
+              </h3>
+            </div>
+          </div>
+
+          <div class="whitebox">
+            <div class="ic_ui_controls">
+              <div>
+                <input id="ic_ui_nav_first" value="|<" type="button" />
+                <input id="ic_ui_nav_previous" value="<" type="button" />
+                <input id="ic_ui_nav_next" value=">" type="button" />
+                <input id="ic_ui_nav_last" value=">|" type="button" />
+                <input id="ic_ui_rotate" value="rotate" type="button" />
+
+                <select id="ic_ui_promote">
+                  <option value="5" selected="selected">queen</option>
+                  <option value="4">rook</option>
+                  <option value="3">bishop</option>
+                  <option value="2">knight</option>
+                </select>
+              </div>
+
+              <br />
+
+              <div class="ic_ui_move_list">
+                <div id="ic_ui_move_list"></div>
+              </div>
+
+              <br />
+
+              <div>
+                <input id="ic_ui_fen" value="" type="text" />
+              </div>
+            </div>
+
+            <br />
+
+            <div class="ic_ui_material_diff">
+              <div id="ic_ui_material_diff"></div>
+            </div>
+
+            <br />
+
+            <div>
+              <p>
+                <strong>Theme:</strong> <a class="theme_changer wood" data-theme="wood" href="#">■ wood</a> |
+                <a class="theme_changer olive" data-theme="olive" href="#">■ olive</a> |
+                <a class="theme_changer magenta" data-theme="magenta" href="#">■ magenta</a> |
+                <a class="theme_changer aqua" data-theme="aqua" href="#">■ aqua</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="whitebox">
+            <div class="ic_ui_debug">
+              <a id="ic_ui_debug_toggler" href="#">Debug ▲</a>
+              <div id="ic_ui_debug" style="display: none"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

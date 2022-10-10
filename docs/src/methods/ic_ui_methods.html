@@ -1,82 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Doco. Generator (Ic Ui methods)</title>
-	</head>
-	<body>
-		<h1>ic-ui-methods.md</h1>
-		<textarea id="result" style="width:100%; height:400px;">...</textarea>
-	</body>
-	<script src="../doco-gen.js"></script>
-	<script>
-		var icui, res;
-		
-		icui={
-			setCfg: {
-				index: 1,
-				name: "setCfg",
-				refreshUi: true
-			}
-		};
-		
-		//start: setCfg
-		icui.setCfg.params={
-			children: [
-				{name: "option", type: "String"},
-				{name: "value", type: "mixed types"}
-			]
-		};
-		
-		icui.setCfg.returnVal={};
-		
-		icui.setCfg.description=[];
-		icui.setCfg.description.push("Overwrites a configuration option with a new value.");
-		icui.setCfg.description.push("Valid options are:<ul><li>**chessFont**<ul><li>Default: `\"merida\" (String)`</li></ul></li><li>**chessTheme**<ul><li>Default: `\"wood\" (String)`</li></ul></li><li>**boardLabels**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**boardInteractions**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**soundEffects**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**pieceAnimations**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**pieceDragging**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**highlightChecks**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**highlightLastMove**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**highlightLegalMoves**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**highlightSelected**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**scrollNavigation**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**arrowKeysNavigation**<ul><li>Default: `false (Boolean)`</li></ul></li><li>**puzzleMode**<ul><li>Default: `false (Boolean)`</li></ul></li><li>**animationTime**<ul><li>Default: `300 (Number)`</li></ul></li><li>**draggingTime**<ul><li>Default: `50 (Number)`</li></ul></li><li>**scrollingTime**<ul><li>Default: `60 (Number)`</li></ul></li></ul>");
-		
-		icui.setCfg.examples=[];
-		icui.setCfg.examples.push("IcUi.setCfg(\"arrowKeysNavigation\", true)");
-		icui.setCfg.examples.push("IcUi.setCfg(\"soundEffects\", false)");
-		//end: setCfg
-		
-		res="";
-		
-		res+="<p align=\"center\">"+urlHrefLink(["« Return", "#book-documentation"])+"</p>";
-		
-		res+="\n\n";
-		
-		res+="<h1 align=\"center\">Ic Ui methods</h1>";
-		
-		res+="\n\n";
-		
-		res+="Isepic Chess UI library `isepic-chess-ui.js` has the following available methods:";
-		
-		res+="\n\n";
-		
-		res+="<ul>\n<li>IcUi."+docoGenMethodList(icui).join("()</li>\n<li>IcUi.")+"()</li>\n</ul>";
-		
-		res+="\n\n";
-		
-		res+="#### Table `IcUi.<methods>(...)`:";
-		
-		res+="\n\n";
-		
-		res+="Function | Parameters | Return | UI refresh? | Description";
-		
-		res+="\n";
-		
-		res+="-------- | ---------- | ------ | ----------- | -----------";
-		
-		res+="\n";
-		
-		res+=docoGenMethodTable(icui).join("\n");
-		
-		res+="\n\n";
-		
-		res+="<p align=\"center\">"+urlHrefLink(["« Return", "#book-documentation"])+"</p>";
-		
-		res+="\n";
-		
-		document.getElementById("result").value=res;
-	</script>
+  <head>
+    <meta charset="utf-8" />
+    <title>Doco. Generator (Ic Ui methods)</title>
+  </head>
+  <body>
+    <h1>ic-ui-methods.md</h1>
+    <textarea id="result" style="width: 100%; height: 400px">...</textarea>
+  </body>
+  <script src="../doco-gen.js"></script>
+  <script>
+    var icui, res;
+
+    icui = {
+      setCfg: {
+        index: 1,
+        name: 'setCfg',
+        refreshUi: true,
+      },
+    };
+
+    //start: setCfg
+    icui.setCfg.params = {
+      children: [
+        { name: 'option', type: 'String' },
+        { name: 'value', type: 'mixed types' },
+      ],
+    };
+
+    icui.setCfg.returnVal = {};
+
+    icui.setCfg.description = [];
+    icui.setCfg.description.push('Overwrites a configuration option with a new value.');
+    icui.setCfg.description.push(
+      'Valid options are:<ul><li>**chessFont**<ul><li>Default: `"merida" (String)`</li></ul></li><li>**chessTheme**<ul><li>Default: `"wood" (String)`</li></ul></li><li>**boardLabels**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**boardInteractions**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**soundEffects**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**pieceAnimations**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**pieceDragging**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**highlightChecks**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**highlightLastMove**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**highlightLegalMoves**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**highlightSelected**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**scrollNavigation**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**arrowKeysNavigation**<ul><li>Default: `false (Boolean)`</li></ul></li><li>**puzzleMode**<ul><li>Default: `false (Boolean)`</li></ul></li><li>**animationTime**<ul><li>Default: `300 (Number)`</li></ul></li><li>**draggingTime**<ul><li>Default: `50 (Number)`</li></ul></li><li>**scrollingTime**<ul><li>Default: `60 (Number)`</li></ul></li></ul>'
+    );
+
+    icui.setCfg.examples = [];
+    icui.setCfg.examples.push('IcUi.setCfg("arrowKeysNavigation", true)');
+    icui.setCfg.examples.push('IcUi.setCfg("soundEffects", false)');
+    //end: setCfg
+
+    res = '';
+
+    res += '<p align="center">' + urlHrefLink(['« Return', '#book-documentation']) + '</p>';
+
+    res += '\n\n';
+
+    res += '<h1 align="center">Ic Ui methods</h1>';
+
+    res += '\n\n';
+
+    res += 'Isepic Chess UI library `isepic-chess-ui.js` has the following available methods:';
+
+    res += '\n\n';
+
+    res += '<ul>\n<li>IcUi.' + docoGenMethodList(icui).join('()</li>\n<li>IcUi.') + '()</li>\n</ul>';
+
+    res += '\n\n';
+
+    res += '#### Table `IcUi.<methods>(...)`:';
+
+    res += '\n\n';
+
+    res += 'Function | Parameters | Return | UI refresh? | Description';
+
+    res += '\n';
+
+    res += '-------- | ---------- | ------ | ----------- | -----------';
+
+    res += '\n';
+
+    res += docoGenMethodTable(icui).join('\n');
+
+    res += '\n\n';
+
+    res += '<p align="center">' + urlHrefLink(['« Return', '#book-documentation']) + '</p>';
+
+    res += '\n';
+
+    document.getElementById('result').value = res;
+  </script>
 </html>

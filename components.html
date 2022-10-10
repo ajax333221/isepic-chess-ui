@@ -1,421 +1,515 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>Isepic Chess UI - Components</title>
-		
-		<link rel="stylesheet" href="./css/isepic-chess-ui.css">
-		
-		<style>
-			html, body{
-				height: 100%;
-				padding: 0;
-				margin: 0;
-			}
-			
-			h1{
-				padding: 0;
-				margin: 0;
-			}
-			
-			.danger{
-				padding: 4px;
-				color: #888a1c;
-				background: #f6f7c1;
-			}
-			
-			p{
-				padding: 0;
-				margin: 0;
-				margin-top: 20px;
-				line-height: 25px;
-			}
-			
-			p.component_first_p{
-				padding-top: 10px;
-				border-top: 2px solid #f0f0f0;
-			}
-			
-			ul.component_list{
-				padding: 10px;
-				margin: 0;
-				margin-top: 10px;
-				background: #e4f0ef;
-			}
-			
-			ul.component_list li{
-				margin: 3px 0 3px 25px;
-			}
-			
-			code{
-				padding: 4px;
-				color: #fff;
-				background: #6c8c68;
-				border-radius: 10px;
-			}
-			
-			.component_anchor{
-				display: block;
-				font-size: 20px;
-				padding-bottom: 10px;
-				margin-bottom: 20px;
-				border-bottom: 2px solid #f0f0f0;
-			}
-			
-			.component_holder{
-				background: #fff;
-				padding: 20px;
-				margin: 30px 10px;
-			}
-			
-			.component_holder>pre{
-				color: #4d4d0f;
-				padding: 10px;
-				margin: 0;
-				margin-top: 20px;
-				background: #ffffdb;
-				border: 2px solid #e0e0bc;
-			}
-		</style>
-		
-		<script src="./js/jquery-3.3.1.min.js"></script>
-		<script src="./js/isepic-chess.js"></script>
-		<script src="./js/isepic-chess-ui.js"></script>
-		
-		<script>
-			$(function(){
-				IcUi.setCfg("scrollNavigation", false);
-				IcUi.setCfg("arrowKeysNavigation", false);
-				
-				Ic.initBoard({
-					boardName: "main"
-				});
-				
-				Ic.initBoard({
-					boardName: "other_board",
-					fen: "r1bqkbnr/pppp2pp/2n2p2/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4"
-				});
-				
-				Ic.initBoard({
-					boardName: "xyz",
-					uci: "f2f3 e7e6 g2g4 d8h4"
-				});
-				
-				Ic.getBoard("main").refreshUi();
-			});
-		</script>
-	</head>
-	<body>
-		<div class="ic_ui_main">
-			<div id="header" class="component_holder">
-				<div class="ic_ui_header">
-					<h3>GitHub: <a href="https://github.com/ajax333221/isepic-chess">isepic-chess</a> | <a href="https://github.com/ajax333221/isepic-chess-ui">isepic-chess-ui</a></h3>
-				</div>
-			</div>
-			
-			<div id="components" class="component_holder">
-				<h1>Ui Components:</h1>
-				
-				<ul class="component_list">
-					<li><a href="#board">#ic_ui_board</a></li>
-					<li><a href="#board_tabs">#ic_ui_board_tabs</a></li>
-					<li><a href="#material_diff">#ic_ui_material_diff</a></li>
-					<li>
-						Controls:
-						<ul>
-							<li><a href="#first">#ic_ui_nav_first</a></li>
-							<li><a href="#previous">#ic_ui_nav_previous</a></li>
-							<li><a href="#next">#ic_ui_nav_next</a></li>
-							<li><a href="#last">#ic_ui_nav_last</a></li>
-							<li><a href="#rotate">#ic_ui_rotate</a></li>
-							<li><a href="#promote">#ic_ui_promote</a></li>
-							<li><a href="#move_list">#ic_ui_move_list</a></li>
-							<li><a href="#fen">#ic_ui_fen</a></li>
-						</ul>
-					</li>
-					<li>
-						Debug:
-						<ul>
-							<li><a href="#debug_toggler">#ic_ui_debug_toggler</a></li>
-							<li><a href="#debug">#ic_ui_debug</a></li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-			
-			<div id="board" class="component_holder">
-				<a href="#board" class="component_anchor">#ic_ui_board</a>
-				
-				<div style="height:400px; width:400px;"><!-- The parent must have defined height and width -->
-					<div class="ic_ui_board">
-						<div id="ic_ui_board"></div>
-					</div>
-				</div>
-				
-<pre>&lt;div style="height:400px; width:400px;"&gt;&lt;!-- The parent must have defined height and width --&gt;
+  <head>
+    <meta charset="utf-8" />
+    <title>Isepic Chess UI - Components</title>
+
+    <link rel="stylesheet" href="./css/isepic-chess-ui.css" />
+
+    <style>
+      html,
+      body {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      h1 {
+        padding: 0;
+        margin: 0;
+      }
+
+      .danger {
+        padding: 4px;
+        color: #888a1c;
+        background: #f6f7c1;
+      }
+
+      p {
+        padding: 0;
+        margin: 0;
+        margin-top: 20px;
+        line-height: 25px;
+      }
+
+      p.component_first_p {
+        padding-top: 10px;
+        border-top: 2px solid #f0f0f0;
+      }
+
+      ul.component_list {
+        padding: 10px;
+        margin: 0;
+        margin-top: 10px;
+        background: #e4f0ef;
+      }
+
+      ul.component_list li {
+        margin: 3px 0 3px 25px;
+      }
+
+      code {
+        padding: 4px;
+        color: #fff;
+        background: #6c8c68;
+        border-radius: 10px;
+      }
+
+      .component_anchor {
+        display: block;
+        font-size: 20px;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+
+      .component_holder {
+        background: #fff;
+        padding: 20px;
+        margin: 30px 10px;
+      }
+
+      .component_holder > pre {
+        color: #4d4d0f;
+        padding: 10px;
+        margin: 0;
+        margin-top: 20px;
+        background: #ffffdb;
+        border: 2px solid #e0e0bc;
+      }
+    </style>
+
+    <script src="./js/jquery-3.3.1.min.js"></script>
+    <script src="./js/isepic-chess.js"></script>
+    <script src="./js/isepic-chess-ui.js"></script>
+
+    <script>
+      $(function () {
+        IcUi.setCfg('scrollNavigation', false);
+        IcUi.setCfg('arrowKeysNavigation', false);
+
+        Ic.initBoard({
+          boardName: 'main',
+        });
+
+        Ic.initBoard({
+          boardName: 'other_board',
+          fen: 'r1bqkbnr/pppp2pp/2n2p2/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 4',
+        });
+
+        Ic.initBoard({
+          boardName: 'xyz',
+          uci: 'f2f3 e7e6 g2g4 d8h4',
+        });
+
+        Ic.getBoard('main').refreshUi();
+      });
+    </script>
+  </head>
+  <body>
+    <div class="ic_ui_main">
+      <div id="header" class="component_holder">
+        <div class="ic_ui_header">
+          <h3>
+            GitHub: <a href="https://github.com/ajax333221/isepic-chess">isepic-chess</a> |
+            <a href="https://github.com/ajax333221/isepic-chess-ui">isepic-chess-ui</a>
+          </h3>
+        </div>
+      </div>
+
+      <div id="components" class="component_holder">
+        <h1>Ui Components:</h1>
+
+        <ul class="component_list">
+          <li><a href="#board">#ic_ui_board</a></li>
+          <li><a href="#board_tabs">#ic_ui_board_tabs</a></li>
+          <li><a href="#material_diff">#ic_ui_material_diff</a></li>
+          <li>
+            Controls:
+            <ul>
+              <li><a href="#first">#ic_ui_nav_first</a></li>
+              <li><a href="#previous">#ic_ui_nav_previous</a></li>
+              <li><a href="#next">#ic_ui_nav_next</a></li>
+              <li><a href="#last">#ic_ui_nav_last</a></li>
+              <li><a href="#rotate">#ic_ui_rotate</a></li>
+              <li><a href="#promote">#ic_ui_promote</a></li>
+              <li><a href="#move_list">#ic_ui_move_list</a></li>
+              <li><a href="#fen">#ic_ui_fen</a></li>
+            </ul>
+          </li>
+          <li>
+            Debug:
+            <ul>
+              <li><a href="#debug_toggler">#ic_ui_debug_toggler</a></li>
+              <li><a href="#debug">#ic_ui_debug</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div id="board" class="component_holder">
+        <a href="#board" class="component_anchor">#ic_ui_board</a>
+
+        <div style="height: 400px; width: 400px">
+          <!-- The parent must have defined height and width -->
+          <div class="ic_ui_board">
+            <div id="ic_ui_board"></div>
+          </div>
+        </div>
+
+        <pre>
+&lt;div style="height:400px; width:400px;"&gt;&lt;!-- The parent must have defined height and width --&gt;
   &lt;div class="ic_ui_board"&gt;
     &lt;div id="ic_ui_board"&gt;&lt;/div&gt;
   &lt;/div&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">Like all the other components, the board component is optional.</p>
-				
-				<p>The board is responsive and will expand 100% to the parent element. One of the parents must have defined height and width (and it should be the same value for both, a square of NxN).</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_board</code> is optional. <span class="danger">However, there would be usability issues without it (unless you style the classes yourself).</span></p>
-			</div>
-			
-			<div id="board_tabs" class="component_holder">
-				<a href="#board_tabs" class="component_anchor">#ic_ui_board_tabs</a>
-				
-				<div class="ic_ui_board_tabs">
-					<div id="ic_ui_board_tabs"></div>
-				</div>
-				
-<pre>&lt;div class="ic_ui_board_tabs"&gt;
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">Like all the other components, the board component is optional.</p>
+
+        <p>
+          The board is responsive and will expand 100% to the parent element. One of the parents must have defined
+          height and width (and it should be the same value for both, a square of NxN).
+        </p>
+
+        <p>
+          The wrapper parent class <code>.ic_ui_board</code> is optional.
+          <span class="danger"
+            >However, there would be usability issues without it (unless you style the classes yourself).</span
+          >
+        </p>
+      </div>
+
+      <div id="board_tabs" class="component_holder">
+        <a href="#board_tabs" class="component_anchor">#ic_ui_board_tabs</a>
+
+        <div class="ic_ui_board_tabs">
+          <div id="ic_ui_board_tabs"></div>
+        </div>
+
+        <pre>
+&lt;div class="ic_ui_board_tabs"&gt;
   &lt;div id="ic_ui_board_tabs"&gt;&lt;/div&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">Clicking a board link will trigger a <code>board.refreshUi(0, false);</code>.</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_board_tabs</code> is optional.</p>
-			</div>
-			
-			<div id="material_diff" class="component_holder">
-				<a href="#material_diff" class="component_anchor">#ic_ui_material_diff</a>
-				
-				<div class="ic_ui_material_diff">
-					<div id="ic_ui_material_diff"></div>
-				</div>
-				
-<pre>&lt;div class="ic_ui_material_diff"&gt;
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">Clicking a board link will trigger a <code>board.refreshUi(0, false);</code>.</p>
+
+        <p>The wrapper parent class <code>.ic_ui_board_tabs</code> is optional.</p>
+      </div>
+
+      <div id="material_diff" class="component_holder">
+        <a href="#material_diff" class="component_anchor">#ic_ui_material_diff</a>
+
+        <div class="ic_ui_material_diff">
+          <div id="ic_ui_material_diff"></div>
+        </div>
+
+        <pre>
+&lt;div class="ic_ui_material_diff"&gt;
   &lt;div id="ic_ui_material_diff"&gt;&lt;/div&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">The wrapper parent class <code>.ic_ui_material_diff</code> is optional.</p>
-				
-				<p>Adding the CSS <code>display: inline-block;</code> to the component (or to the parent wrapper) will make the horizontal line only expand as the component expands.</p>
-			</div>
-			
-			<div id="first" class="component_holder">
-				<a href="#first" class="component_anchor">#ic_ui_nav_first</a>
-				
-				<div class="ic_ui_controls">
-					<input id="ic_ui_nav_first" value="|<" type="button">
-				</div>
-				
-<pre>&lt;div class="ic_ui_controls"&gt;
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">The wrapper parent class <code>.ic_ui_material_diff</code> is optional.</p>
+
+        <p>
+          Adding the CSS <code>display: inline-block;</code> to the component (or to the parent wrapper) will make the
+          horizontal line only expand as the component expands.
+        </p>
+      </div>
+
+      <div id="first" class="component_holder">
+        <a href="#first" class="component_anchor">#ic_ui_nav_first</a>
+
+        <div class="ic_ui_controls">
+          <input id="ic_ui_nav_first" value="|<" type="button" />
+        </div>
+
+        <pre>
+&lt;div class="ic_ui_controls"&gt;
   &lt;input id="ic_ui_nav_first" value="|&lt;" type="button"&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">This component triggers a <code>board.navFirst();</code>.</p>
-				
-				<p>It can be a <code>&lt;a&gt;...&lt;/a&gt;</code> styled as a button. When this is the case, a <code>return false;</code> will automatically happen to prevent unwanted scrolling to the top.</p>
-				
-				<p>Will get automatically disabled/enabled depending on the current move and the move list length.</p>
-				
-				<p>You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
-			</div>
-			
-			<div id="previous" class="component_holder">
-				<a href="#previous" class="component_anchor">#ic_ui_nav_previous</a>
-				
-				<div class="ic_ui_controls">
-					<input id="ic_ui_nav_previous" value="<" type="button">
-				</div>
-				
-<pre>&lt;div class="ic_ui_controls"&gt;
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">This component triggers a <code>board.navFirst();</code>.</p>
+
+        <p>
+          It can be a <code>&lt;a&gt;...&lt;/a&gt;</code> styled as a button. When this is the case, a
+          <code>return false;</code> will automatically happen to prevent unwanted scrolling to the top.
+        </p>
+
+        <p>Will get automatically disabled/enabled depending on the current move and the move list length.</p>
+
+        <p>
+          You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.
+        </p>
+
+        <p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
+      </div>
+
+      <div id="previous" class="component_holder">
+        <a href="#previous" class="component_anchor">#ic_ui_nav_previous</a>
+
+        <div class="ic_ui_controls">
+          <input id="ic_ui_nav_previous" value="<" type="button" />
+        </div>
+
+        <pre>
+&lt;div class="ic_ui_controls"&gt;
   &lt;input id="ic_ui_nav_previous" value="&lt;" type="button"&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">This component triggers a <code>board.navPrevious();</code>.</p>
-				
-				<p>It can be a <code>&lt;a&gt;...&lt;/a&gt;</code> styled as a button. When this is the case, a <code>return false;</code> will automatically happen to prevent unwanted scrolling to the top.</p>
-				
-				<p>Will get automatically disabled/enabled depending on the current move and the move list length.</p>
-				
-				<p>You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
-			</div>
-			
-			<div id="next" class="component_holder">
-				<a href="#next" class="component_anchor">#ic_ui_nav_next</a>
-				
-				<div class="ic_ui_controls">
-					<input id="ic_ui_nav_next" value=">" type="button">
-				</div>
-				
-<pre>&lt;div class="ic_ui_controls"&gt;
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">This component triggers a <code>board.navPrevious();</code>.</p>
+
+        <p>
+          It can be a <code>&lt;a&gt;...&lt;/a&gt;</code> styled as a button. When this is the case, a
+          <code>return false;</code> will automatically happen to prevent unwanted scrolling to the top.
+        </p>
+
+        <p>Will get automatically disabled/enabled depending on the current move and the move list length.</p>
+
+        <p>
+          You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.
+        </p>
+
+        <p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
+      </div>
+
+      <div id="next" class="component_holder">
+        <a href="#next" class="component_anchor">#ic_ui_nav_next</a>
+
+        <div class="ic_ui_controls">
+          <input id="ic_ui_nav_next" value=">" type="button" />
+        </div>
+
+        <pre>
+&lt;div class="ic_ui_controls"&gt;
   &lt;input id="ic_ui_nav_next" value="&gt;" type="button"&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">This component triggers a <code>board.navNext();</code>.</p>
-				
-				<p>It can be a <code>&lt;a&gt;...&lt;/a&gt;</code> styled as a button. When this is the case, a <code>return false;</code> will automatically happen to prevent unwanted scrolling to the top.</p>
-				
-				<p>Will get automatically disabled/enabled depending on the current move and the move list length.</p>
-				
-				<p>You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
-			</div>
-			
-			<div id="last" class="component_holder">
-				<a href="#last" class="component_anchor">#ic_ui_nav_last</a>
-				
-				<div class="ic_ui_controls">
-					<input id="ic_ui_nav_last" value=">|" type="button">
-				</div>
-				
-<pre>&lt;div class="ic_ui_controls"&gt;
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">This component triggers a <code>board.navNext();</code>.</p>
+
+        <p>
+          It can be a <code>&lt;a&gt;...&lt;/a&gt;</code> styled as a button. When this is the case, a
+          <code>return false;</code> will automatically happen to prevent unwanted scrolling to the top.
+        </p>
+
+        <p>Will get automatically disabled/enabled depending on the current move and the move list length.</p>
+
+        <p>
+          You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.
+        </p>
+
+        <p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
+      </div>
+
+      <div id="last" class="component_holder">
+        <a href="#last" class="component_anchor">#ic_ui_nav_last</a>
+
+        <div class="ic_ui_controls">
+          <input id="ic_ui_nav_last" value=">|" type="button" />
+        </div>
+
+        <pre>
+&lt;div class="ic_ui_controls"&gt;
   &lt;input id="ic_ui_nav_last" value="&gt;|" type="button"&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">This component triggers a <code>board.navLast();</code>.</p>
-				
-				<p>It can be a <code>&lt;a&gt;...&lt;/a&gt;</code> styled as a button. When this is the case, a <code>return false;</code> will automatically happen to prevent unwanted scrolling to the top.</p>
-				
-				<p>Will get automatically disabled/enabled depending on the current move and the move list length.</p>
-				
-				<p>You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
-			</div>
-			
-			<div id="rotate" class="component_holder">
-				<a href="#rotate" class="component_anchor">#ic_ui_rotate</a>
-				
-				<div class="ic_ui_controls">
-					<input id="ic_ui_rotate" value="rotate" type="button">
-				</div>
-				
-<pre>&lt;div class="ic_ui_controls"&gt;
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">This component triggers a <code>board.navLast();</code>.</p>
+
+        <p>
+          It can be a <code>&lt;a&gt;...&lt;/a&gt;</code> styled as a button. When this is the case, a
+          <code>return false;</code> will automatically happen to prevent unwanted scrolling to the top.
+        </p>
+
+        <p>Will get automatically disabled/enabled depending on the current move and the move list length.</p>
+
+        <p>
+          You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.
+        </p>
+
+        <p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
+      </div>
+
+      <div id="rotate" class="component_holder">
+        <a href="#rotate" class="component_anchor">#ic_ui_rotate</a>
+
+        <div class="ic_ui_controls">
+          <input id="ic_ui_rotate" value="rotate" type="button" />
+        </div>
+
+        <pre>
+&lt;div class="ic_ui_controls"&gt;
   &lt;input id="ic_ui_rotate" value="rotate" type="button"&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">This component triggers a <code>board.toggleIsRotated();</code>.</p>
-				
-				<p>It can be a <code>&lt;a&gt;...&lt;/a&gt;</code> styled as a button. When this is the case, a <code>return false;</code> will automatically happen to prevent unwanted scrolling to the top.</p>
-				
-				<p>You can disable the component by adding the class <code>.ic_disabled</code>. <span class="danger">However, if you do this make sure it is wrapped inside a parent class <code>.ic_ui_controls</code> or there would be usability issues (unless you style the disabled class yourself).</span></p>
-				
-				<p>You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
-			</div>
-			
-			<div id="promote" class="component_holder">
-				<a href="#promote" class="component_anchor">#ic_ui_promote</a>
-				
-				<div class="ic_ui_controls">
-					<select id="ic_ui_promote">
-						<option value="5" selected="selected">queen</option>
-						<option value="4">rook</option>
-						<option value="3">bishop</option>
-						<option value="2">knight</option>
-					</select>
-				</div>
-				
-<pre>&lt;div class="ic_ui_controls"&gt;
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">This component triggers a <code>board.toggleIsRotated();</code>.</p>
+
+        <p>
+          It can be a <code>&lt;a&gt;...&lt;/a&gt;</code> styled as a button. When this is the case, a
+          <code>return false;</code> will automatically happen to prevent unwanted scrolling to the top.
+        </p>
+
+        <p>
+          You can disable the component by adding the class <code>.ic_disabled</code>.
+          <span class="danger"
+            >However, if you do this make sure it is wrapped inside a parent class <code>.ic_ui_controls</code> or there
+            would be usability issues (unless you style the disabled class yourself).</span
+          >
+        </p>
+
+        <p>
+          You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.
+        </p>
+
+        <p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
+      </div>
+
+      <div id="promote" class="component_holder">
+        <a href="#promote" class="component_anchor">#ic_ui_promote</a>
+
+        <div class="ic_ui_controls">
+          <select id="ic_ui_promote">
+            <option value="5" selected="selected">queen</option>
+            <option value="4">rook</option>
+            <option value="3">bishop</option>
+            <option value="2">knight</option>
+          </select>
+        </div>
+
+        <pre>
+&lt;div class="ic_ui_controls"&gt;
   &lt;select id="ic_ui_promote"&gt;
     &lt;option value="5" selected="selected"&gt;queen&lt;/option&gt;
     &lt;option value="4"&gt;rook&lt;/option&gt;
     &lt;option value="3"&gt;bishop&lt;/option&gt;
     &lt;option value="2"&gt;knight&lt;/option&gt;
   &lt;/select&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">This component triggers a <code>board.setPromoteTo($(this).val());</code>.</p>
-				
-				<p>You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
-			</div>
-			
-			<div id="move_list" class="component_holder">
-				<a href="#move_list" class="component_anchor">#ic_ui_move_list</a>
-				
-				<div class="ic_ui_controls">
-					<div class="ic_ui_move_list">
-						<div id="ic_ui_move_list"></div>
-					</div>
-				</div>
-				
-<pre>&lt;div class="ic_ui_controls"&gt;
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">This component triggers a <code>board.setPromoteTo($(this).val());</code>.</p>
+
+        <p>
+          You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.
+        </p>
+
+        <p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
+      </div>
+
+      <div id="move_list" class="component_holder">
+        <a href="#move_list" class="component_anchor">#ic_ui_move_list</a>
+
+        <div class="ic_ui_controls">
+          <div class="ic_ui_move_list">
+            <div id="ic_ui_move_list"></div>
+          </div>
+        </div>
+
+        <pre>
+&lt;div class="ic_ui_controls"&gt;
   &lt;div class="ic_ui_move_list"&gt;
     &lt;div id="ic_ui_move_list"&gt;&lt;/div&gt;
   &lt;/div&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">Clicking a move link will trigger a <code>board.navLinkMove($(this).attr("data-index"));</code>.</p>
-				
-				<p>You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_move_list</code> is optional. <span class="danger">However, there would be usability issues without it (unless you style the classes yourself).</span></p>
-			</div>
-			
-			<div id="fen" class="component_holder">
-				<a href="#fen" class="component_anchor">#ic_ui_fen</a>
-				
-				<div class="ic_ui_controls">
-					<input id="ic_ui_fen" value="" type="text">
-				</div>
-				
-<pre>&lt;div class="ic_ui_controls"&gt;
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">
+          Clicking a move link will trigger a <code>board.navLinkMove($(this).attr("data-index"));</code>.
+        </p>
+
+        <p>
+          You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.
+        </p>
+
+        <p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
+
+        <p>
+          The wrapper parent class <code>.ic_ui_move_list</code> is optional.
+          <span class="danger"
+            >However, there would be usability issues without it (unless you style the classes yourself).</span
+          >
+        </p>
+      </div>
+
+      <div id="fen" class="component_holder">
+        <a href="#fen" class="component_anchor">#ic_ui_fen</a>
+
+        <div class="ic_ui_controls">
+          <input id="ic_ui_fen" value="" type="text" />
+        </div>
+
+        <pre>
+&lt;div class="ic_ui_controls"&gt;
   &lt;input id="ic_ui_fen" value="" type="text"&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">Clicking this component will autoselect the FEN <code>$(this).select();</code>.</p>
-				
-				<p>You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
-			</div>
-			
-			<div id="debug_toggler" class="component_holder">
-				<a href="#debug_toggler" class="component_anchor">#ic_ui_debug_toggler</a>
-				
-				<div class="ic_ui_debug">
-					<a id="ic_ui_debug_toggler" href="#">Debug ▼</a>
-				</div>
-				
-<pre>&lt;div class="ic_ui_debug"&gt;
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">Clicking this component will autoselect the FEN <code>$(this).select();</code>.</p>
+
+        <p>
+          You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.
+        </p>
+
+        <p>The wrapper parent class <code>.ic_ui_controls</code> is optional.</p>
+      </div>
+
+      <div id="debug_toggler" class="component_holder">
+        <a href="#debug_toggler" class="component_anchor">#ic_ui_debug_toggler</a>
+
+        <div class="ic_ui_debug">
+          <a id="ic_ui_debug_toggler" href="#">Debug ▼</a>
+        </div>
+
+        <pre>
+&lt;div class="ic_ui_debug"&gt;
   &lt;a id="ic_ui_debug_toggler" href="#"&gt;Debug ▼&lt;/a&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">This component triggers a <code>$("#ic_ui_debug").toggle();</code>.</p>
-				
-				<p>Upon clicking, its arrow direction is updated to reflect the current visibility state of <code>#ic_ui_debug</code>.</p>
-				
-				<p>A <code>return false;</code> will automatically happen to prevent unwanted scrolling to the top.</p>
-				
-				<p>In the case that you change the initial visibility of <code>#ic_ui_debug</code> to not visible, you should also change the initial arrow to point upwards <code>Debug ▲</code> instead of downwards.</p>
-				
-				<p>You can group together multiple components under a single wrapper parent class <code>.ic_ui_debug</code>.</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_debug</code> is optional.</p>
-			</div>
-			
-			<div id="debug" class="component_holder">
-				<a href="#debug" class="component_anchor">#ic_ui_debug</a>
-				
-				<div class="ic_ui_debug">
-					<div id="ic_ui_debug"></div>
-				</div>
-				
-<pre>&lt;div class="ic_ui_debug"&gt;
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">This component triggers a <code>$("#ic_ui_debug").toggle();</code>.</p>
+
+        <p>
+          Upon clicking, its arrow direction is updated to reflect the current visibility state of
+          <code>#ic_ui_debug</code>.
+        </p>
+
+        <p>A <code>return false;</code> will automatically happen to prevent unwanted scrolling to the top.</p>
+
+        <p>
+          In the case that you change the initial visibility of <code>#ic_ui_debug</code> to not visible, you should
+          also change the initial arrow to point upwards <code>Debug ▲</code> instead of downwards.
+        </p>
+
+        <p>You can group together multiple components under a single wrapper parent class <code>.ic_ui_debug</code>.</p>
+
+        <p>The wrapper parent class <code>.ic_ui_debug</code> is optional.</p>
+      </div>
+
+      <div id="debug" class="component_holder">
+        <a href="#debug" class="component_anchor">#ic_ui_debug</a>
+
+        <div class="ic_ui_debug">
+          <div id="ic_ui_debug"></div>
+        </div>
+
+        <pre>
+&lt;div class="ic_ui_debug"&gt;
   &lt;div id="ic_ui_debug"&gt;&lt;/div&gt;
-&lt;/div&gt;</pre>
-				
-				<p class="component_first_p">You can group together multiple components under a single wrapper parent class <code>.ic_ui_debug</code>.</p>
-				
-				<p>The wrapper parent class <code>.ic_ui_debug</code> is optional.</p>
-			</div>
-		</div>
-	</body>
+&lt;/div&gt;</pre
+        >
+
+        <p class="component_first_p">
+          You can group together multiple components under a single wrapper parent class <code>.ic_ui_debug</code>.
+        </p>
+
+        <p>The wrapper parent class <code>.ic_ui_debug</code> is optional.</p>
+      </div>
+    </div>
+  </body>
 </html>
