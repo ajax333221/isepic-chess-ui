@@ -6,7 +6,7 @@
 
 (function (windw, $, Ic) {
   var IcUi = (function () {
-    var _VERSION = '4.5.1';
+    var _VERSION = '4.5.2';
 
     var _CFG = {
       chessFont: 'merida',
@@ -31,10 +31,8 @@
     var _POS_Y = 0;
     var _POS_X = 0;
     var _INTERVAL = 0;
-
     var _RAN_ONCE = false;
     var _SCROLLING_WAITING = false;
-
     var _BOARD_NAME = '';
     var _SELECTED_BOS = '';
     var _DRAGGING_BOS = '';
@@ -45,9 +43,7 @@
       var arr, default_elm;
 
       default_elm = 'merida';
-
       arr = [default_elm, 'isepic'];
-
       chess_font = ('' + chess_font).replace(/\s/g, '').toLowerCase();
 
       if (arr.indexOf(chess_font) === -1) {
@@ -61,9 +57,7 @@
       var arr, default_elm;
 
       default_elm = 'wood';
-
       arr = [default_elm, 'olive', 'magenta', 'aqua'];
-
       chess_theme = ('' + chess_theme).replace(/\s/g, '').toLowerCase();
 
       if (arr.indexOf(chess_theme) === -1) {
@@ -95,7 +89,6 @@
 
       if (_DRAGGING_BOS) {
         $('#ic_ui_board .ic_drag_shown').remove();
-
         $('#ic_ui_board .ic_drag_hidden').show().removeClass('ic_drag_hidden');
       }
 
@@ -111,7 +104,6 @@
         var elm, elm_top, elm_right, elm_bottom, elm_left;
 
         elm = $(this);
-
         elm_top = elm.offset().top;
         elm_right = elm.offset().left + elm.width();
         elm_bottom = elm.offset().top + elm.height();
@@ -120,7 +112,6 @@
         if (x >= elm_left && x <= elm_right) {
           if (y >= elm_top && y <= elm_bottom) {
             rtn = elm;
-
             return false;
           }
         }
@@ -143,9 +134,7 @@
 
       to_square.html("<div class='" + ('ic_piece_holder' + piece_class) + "'></div>");
       piece_elm = to_square.children('.ic_piece_holder');
-
       temp = piece_elm.clone().appendTo('#ic_ui_board');
-
       piece_elm.hide().attr('class', 'ic_piece_holder' + (promotion_class || piece_class));
 
       temp
@@ -190,15 +179,12 @@
         limit_left;
 
       _cancelDragging();
-
       _DRAGGING_BOS = square_bos;
-
       limit = document.body;
 
       if (limit) {
         limit_top = $(limit).offset().top + $(document).scrollTop();
         limit_left = $(limit).offset().left + $(document).scrollLeft();
-
         limit_right = limit_left + $(limit).innerWidth();
         limit_bottom = limit_top + $(limit).innerHeight();
       }
@@ -209,11 +195,8 @@
       piece_w = target_square.width();
 
       piece_elm = target_square.children('.ic_piece_holder');
-
       piece_offset = piece_elm.offset();
-
       dragged_elm = piece_elm.clone().appendTo('#ic_ui_board');
-
       piece_elm.addClass('ic_drag_hidden').hide();
 
       centered_top = initial_y - piece_h / 2;
@@ -234,7 +217,6 @@
 
       _POS_Y = initial_y;
       _POS_X = initial_x;
-
       old_y = _POS_Y;
       old_x = _POS_X;
 
@@ -273,7 +255,6 @@
 
       if (!_RAN_ONCE) {
         _RAN_ONCE = true;
-
         doc = $(document);
 
         doc.off('click.icuifen').on('click.icuifen', '#ic_ui_fen', function () {
@@ -282,7 +263,6 @@
 
         doc.off('click.icuidebug').on('click.icuidebug', '#ic_ui_debug_toggler', function () {
           $(this).text('Debug ' + ($('#ic_ui_debug').is(':visible') ? '▲' : '▼'));
-
           $('#ic_ui_debug').toggle();
 
           if ($(this).prop('tagName') === 'A') {
@@ -626,7 +606,6 @@
                   for (i = 0, len = legal_moves.length; i < len; i++) {
                     //0<len
                     square = board.getSquare(legal_moves[i]);
-
                     temp = 'ic_highlight';
 
                     if (!square.isEmptySquare && square.sign === board[board.nonActiveColor].sign) {
@@ -708,7 +687,6 @@
           //0<len
           new_html += i ? ' | ' : '';
           current_board_name = board_list[i];
-
           current_board = Ic.getBoard(current_board_name);
 
           if (current_board === null) {
@@ -756,7 +734,6 @@
       temp.push('ic_theme_' + _chessThemeHelper(_CFG.chessTheme));
 
       new_class = temp.join(' ');
-
       new_html = "<table cellpadding='0' cellspacing='0'>";
 
       if (is_labeled) {
@@ -773,7 +750,6 @@
       for (i = 0; i < 8; i++) {
         //0...7
         rank_bos = is_rotated ? i + 1 : 8 - i;
-
         new_html += '<tr>';
 
         if (is_labeled) {
@@ -783,7 +759,6 @@
         for (j = 0; j < 8; j++) {
           //0...7
           current_bos = Ic.toBos(is_rotated ? [7 - i, 7 - j] : [i, j]);
-
           new_html +=
             "<td id='" +
             ('ic_ui_' + current_bos) +
@@ -830,7 +805,6 @@
       var that, temp, puzzle_advance, rtn;
 
       that = this;
-
       rtn = false;
 
       if (that.isLegalMove(mov)) {
@@ -880,10 +854,8 @@
 
       if ((that.currentMove !== 0 || is_reversed) && (that.currentMove !== that.moveList.length - 1 || !is_reversed)) {
         temp = that.moveList[that.currentMove + is_reversed];
-
         from_bos = temp.fromBos;
         to_bos = temp.toBos;
-
         piece_class = Ic.toClassName(Ic.toAbsVal(temp.piece) * Ic.getSign(temp.colorMoved === 'b'));
         piece_class = piece_class ? ' ic_' + piece_class : '';
 
@@ -892,14 +864,12 @@
         } else {
           promotion_class = Ic.toClassName(Ic.toAbsVal(temp.promotion) * Ic.getSign(temp.colorMoved === 'b'));
           promotion_class = promotion_class ? ' ic_' + promotion_class : '';
-
           _animatePiece(from_bos, to_bos, piece_class, promotion_class);
         }
 
         if (temp.san.slice(0, 2) === 'O-') {
           from_bos = Ic.toBos([Ic.getRankPos(temp.toBos), temp.san === 'O-O-O' ? 0 : 7]);
           to_bos = Ic.toBos([Ic.getRankPos(temp.toBos), temp.san === 'O-O-O' ? 3 : 5]);
-
           piece_class = Ic.toClassName(Ic.toAbsVal('r') * Ic.getSign(temp.colorMoved === 'b'));
           piece_class = piece_class ? ' ic_' + piece_class : '';
 
@@ -923,7 +893,6 @@
           //0...7
           reset_class = (i + j) % 2 ? 'ic_bs' : 'ic_ws';
           current_square = that.getSquare(that.isRotated ? [7 - i, 7 - j] : [i, j]);
-
           square_class = current_square.className;
           square_class = square_class ? ' ic_' + square_class : '';
 
@@ -956,7 +925,6 @@
           //0...1
           current_side = that.isRotated === !i ? that.w : that.b;
           matdiff_html += i ? '<hr>' : '';
-
           temp = '';
 
           for (j = 0, len = current_side.materialDiff.length; j < len; j++) {
@@ -989,7 +957,6 @@
 
       if ($('#ic_ui_move_list').length) {
         move_list = that.moveList;
-
         black_starts = move_list[0].colorToPlay === 'b';
 
         initial_full_move =
@@ -999,7 +966,6 @@
           1;
 
         result_tag_ow = '*';
-
         new_html = '';
 
         for (i = 0, len = move_list.length; i < len; i++) {
@@ -1095,7 +1061,6 @@
         new_html += '<li><strong>En Passant square:</strong> <span>' + (that.enPassantBos || '-') + '</span></li>';
         new_html += '<li><strong>Active color:</strong> <span>' + that.activeColor + '</span></li>';
         new_html += '<li><strong>Non active color:</strong> <span>' + that.nonActiveColor + '</span></li>';
-
         new_html += '<li>';
         new_html += '<strong>W</strong>';
         new_html += '<ul>';
@@ -1108,7 +1073,6 @@
           '<li><strong>material difference:</strong> <span>[' + that.w.materialDiff.join(', ') + ']</span></li>';
         new_html += '</ul>';
         new_html += '</li>';
-
         new_html += '<li>';
         new_html += '<strong>B</strong>';
         new_html += '<ul>';
@@ -1121,7 +1085,6 @@
           '<li><strong>material difference:</strong> <span>[' + that.b.materialDiff.join(', ') + ']</span></li>';
         new_html += '</ul>';
         new_html += '</li>';
-
         new_html += '<li><strong>Half moves:</strong> <span>' + that.halfMove + '</span></li>';
         new_html += '<li><strong>Full moves:</strong> <span>' + that.fullMove + '</span></li>';
         new_html += '<li><strong>Current move:</strong> <span>' + that.currentMove + '</span></li>';
@@ -1130,7 +1093,6 @@
           Ic.toBal(that.promoteTo * that[that.activeColor].sign) +
           '</span></li>';
         new_html += '<li><strong>Manual result:</strong> <span>' + that.manualResult + '</span></li>';
-
         new_html += '<li>';
         new_html += '<strong>Squares</strong>';
         new_html += '<ul>';
@@ -1142,7 +1104,6 @@
           for (j = 0; j < 8; j++) {
             //0...7
             current_square = that.getSquare([i, j]);
-
             temp = '' + current_square.val;
 
             if (temp.length === 1) {
@@ -1163,9 +1124,7 @@
 
         new_html += '</ul>';
         new_html += '</li>';
-
         new_html += '<li><strong>FEN:</strong> <span>' + that.fen + '</span></li>';
-
         temp = '';
 
         for (i = 0, len = that.legalUci.length; i < len; i++) {
@@ -1174,11 +1133,9 @@
         }
 
         new_html += '<li><strong>Legal UCI:</strong> <span>[' + temp + ']</span></li>';
-
         new_html += '<li>';
         new_html += '<strong>Legal UCI tree</strong>';
         new_html += '<ul>';
-
         temp = Object.keys(that.legalUciTree);
 
         for (i = 0, len = temp.length; i < len; i++) {
@@ -1188,7 +1145,6 @@
 
         new_html += '</ul>';
         new_html += '</li>';
-
         new_html += '<li>';
         new_html += '<strong>Legal reversed tree</strong>';
         new_html += '<ul>';
@@ -1199,7 +1155,6 @@
           //0<len
           new_html += '<li><strong>' + temp[i] + ':</strong>';
           new_html += ' {';
-
           temp2 = Object.keys(that.legalRevTree[temp[i]]);
 
           for (j = 0, len2 = temp2.length; j < len2; j++) {
@@ -1218,7 +1173,6 @@
 
         new_html += '</ul>';
         new_html += '</li>';
-
         new_html += '<li><strong>Version:</strong> <span>[Ic_v' + Ic.version + '] [IcUi_v' + _VERSION + ']</span></li>';
         new_html += '</ul>';
 
@@ -1232,7 +1186,6 @@
       var board;
 
       _CFG['' + key] = val;
-
       board = Ic.getBoard(_BOARD_NAME);
 
       if (board !== null) {
@@ -1251,7 +1204,6 @@
         _cancelSelected();
         _cancelDragging();
         _cancelAnimations();
-
         _bindOnce();
 
         board_elm = $('#ic_ui_board');
@@ -1271,15 +1223,11 @@
         }
 
         $('#ic_ui_fen').val(that.fen);
-
         $('#ic_ui_promote').val(that.promoteTo);
 
         _refreshDebug.apply(that, []);
-
         _refreshBoardTabs(that.boardName);
-
         _refreshMaterialDifference.apply(that, []);
-
         _refreshMoveList.apply(that, []);
 
         $(
@@ -1296,7 +1244,6 @@
 
         if (board_elm.length) {
           _refreshPieceClasses.apply(that, []);
-
           _refreshActiveDot(that[that.activeColor].isBlack);
 
           if (_CFG.pieceAnimations && animation_type) {
