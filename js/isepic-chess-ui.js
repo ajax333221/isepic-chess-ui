@@ -6,7 +6,7 @@
 
 (function (windw, $, Ic) {
   var IcUi = (function () {
-    var _VERSION = '4.5.2';
+    var _VERSION = '4.5.3';
 
     var _CFG = {
       chessFont: 'merida',
@@ -691,7 +691,6 @@
 
           if (current_board === null) {
             Ic.utilityMisc.consoleLog('Warning[_refreshBoardTabs]: board not found');
-
             continue;
           }
 
@@ -951,7 +950,7 @@
     }
 
     function _refreshMoveList() {
-      var i, len, that, result_tag_ow, move_list, black_starts, initial_full_move, new_html;
+      var i, len, that, result_tag_ow, move_list, black_starts, initial_full_move, current_move, new_html;
 
       that = this;
 
@@ -975,15 +974,11 @@
               continue;
             }
 
+            current_move = initial_full_move + Math.floor((i + black_starts - 1) / 2);
+
             new_html += i !== 1 ? ' ' : '';
-
-            new_html +=
-              black_starts === !(i % 2)
-                ? "<span class='ic_pgn_number'>" +
-                  (initial_full_move + Math.floor((i + black_starts - 1) / 2)) +
-                  '. </span>'
-                : '';
-
+            new_html += move_list[i - 1].comment && black_starts === !!(i % 2) ? current_move + '...' : '';
+            new_html += black_starts === !(i % 2) ? "<span class='ic_pgn_number'>" + current_move + '. </span>' : '';
             new_html +=
               "<span class='" +
               (i !== that.currentMove ? 'ic_pgn_link' : 'ic_pgn_active') +
