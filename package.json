@@ -24,7 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "jquery": ">=3.3.1",
-    "isepic-chess": ">=8.4.9"
+    "isepic-chess": ">=8.5.0"
   },
   "devDependencies": {
     "prettier": "^2.7.1"
