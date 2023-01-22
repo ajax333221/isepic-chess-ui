@@ -1,6 +1,6 @@
 {
   "name": "isepic-chess-ui",
-  "version": "4.5.3",
+  "version": "4.5.4",
   "title": "isepic-chess-ui.js",
   "description": "UI of isepic-chess.js",
   "main": "js/isepic-chess-ui.js",
@@ -24,7 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "jquery": ">=3.3.1",
-    "isepic-chess": ">=8.5.0"
+    "isepic-chess": ">=8.5.1"
   },
   "devDependencies": {
     "prettier": "^2.7.1"
