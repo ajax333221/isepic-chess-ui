@@ -509,6 +509,78 @@
 }
 /*end(move_list) ---*/
 
+/*start(push_alerts) ---*/
+.ic_ui_push_alerts #ic_ui_push_alerts_top,
+.ic_ui_push_alerts #ic_ui_push_alerts_bottom {
+  position: fixed;
+  right: 20px;
+}
+
+.ic_ui_push_alerts .ic_alert_box {
+  width: 300px;
+  position: relative;
+  padding: 15px 50px 15px 20px;
+  cursor: default;
+  font-size: 15px;
+  text-align: left;
+  border: 1px solid #efefef;
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  background-color: #fafafa;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 3.5s, top 0.2s, visibility 0.2s;
+  z-index: 9999;
+}
+
+.ic_ui_push_alerts .ic_alert_animation {
+  visibility: visible;
+  opacity: 1;
+  animation: slide_animation 0.7s ease forwards;
+  transition: margin-top 0.7s;
+}
+
+@keyframes slide_animation {
+  0% {
+    transform: translateX(100%);
+  }
+  40% {
+    transform: translateX(-13%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.ic_ui_push_alerts .ic_alert_close {
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 15px;
+  text-align: center;
+  color: #333;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background-color: #ddd;
+  padding: 5px;
+}
+
+.ic_ui_push_alerts .ic_alert_close:hover {
+  background-color: #ccc;
+}
+
+.ic_ui_push_alerts .ic_alert_hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s linear;
+}
+/*end(push_alerts) ---*/
+
 /*start(debug) ---*/
 .ic_ui_debug {
   color: #333;

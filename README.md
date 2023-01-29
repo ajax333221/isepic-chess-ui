@@ -68,6 +68,8 @@ https://ajax333221.github.io/isepic-chess-ui/
   - [Promotion dropdown](https://ajax333221.github.io/isepic-chess-ui/components.html#promote)
   - SAN [move list](https://ajax333221.github.io/isepic-chess-ui/components.html#move_list) (with _jump-to-move_ links)
   - Selectable [FEN](https://ajax333221.github.io/isepic-chess-ui/components.html#fen) text
+  - [Push alerts top](https://ajax333221.github.io/isepic-chess-ui/components.html#push_alerts_top)
+  - [Push alerts bottom](https://ajax333221.github.io/isepic-chess-ui/components.html#push_alerts_bottom)
   - [Debug toggler](https://ajax333221.github.io/isepic-chess-ui/components.html#debug_toggler)
   - [Debug](https://ajax333221.github.io/isepic-chess-ui/components.html#debug)
 - Automatic component binding, no need to do anything manually to the DOM elements (they will simply work just by having their correct id property at any given time)
@@ -79,6 +81,8 @@ https://ajax333221.github.io/isepic-chess-ui/
 - Sound effects
 - Move navigation via scrolling and arrow keys
 - Puzzle mode (:construction: work in progress :construction:)
+- Push alerts (:construction: work in progress :construction:)
+  - The idea is to have dimissible boxes with game events, board events, ui events, debug errors, etc.
 
 ## :book: Documentation
 

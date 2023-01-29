@@ -6,7 +6,7 @@
 
 (function (windw, $, Ic) {
   var IcUi = (function () {
-    var _VERSION = '4.5.4';
+    var _VERSION = '4.6.0';
 
     var _CFG = {
       chessFont: 'merida',
@@ -26,11 +26,13 @@
       animationTime: 300,
       draggingTime: 50,
       scrollingTime: 60,
+      pushAlertsTime: 5000,
     };
 
     var _POS_Y = 0;
     var _POS_X = 0;
     var _INTERVAL = 0;
+    var _ALERT_COUNT = 0;
     var _RAN_ONCE = false;
     var _SCROLLING_WAITING = false;
     var _BOARD_NAME = '';
@@ -65,6 +67,64 @@
       }
 
       return chess_theme;
+    }
+
+    function _pushAlertHelper(alert_msg, auto_dimiss, from_top) {
+      var timeout_id, alert_id, top_or_bottom, alert_holder, alert_box, close_btn;
+
+      auto_dimiss = typeof auto_dimiss === 'boolean' ? auto_dimiss : true;
+      from_top = from_top === true;
+
+      block: {
+        top_or_bottom = from_top ? 'top' : 'bottom';
+        alert_holder = $(`#ic_ui_push_alerts_${top_or_bottom}`);
+
+        if (!alert_holder.length) {
+          break block;
+        }
+
+        timeout_id = null;
+        alert_id = `ic_alert-${++_ALERT_COUNT}`;
+
+        if (auto_dimiss && _CFG.pushAlertsTime > 0) {
+          timeout_id = setTimeout(function () {
+            var alert_box;
+
+            alert_box = $(`#${alert_id}`);
+
+            if (alert_box.length) {
+              alert_box
+                .addClass('ic_alert_hidden')
+                .off('transitionend.icuiautodimiss')
+                .on('transitionend.icuiautodimiss', () => {
+                  if (alert_box.length) {
+                    alert_box.remove();
+                  }
+                  clearTimeout(timeout_id);
+                });
+            }
+          }, _CFG.pushAlertsTime);
+        }
+
+        alert_box = $('<div></div>')
+          .attr('id', alert_id)
+          .attr('class', 'ic_alert_box ic_alert_animation')
+          .text(alert_msg);
+        alert_holder.append(alert_box);
+
+        close_btn = $('<div></div>')
+          .attr('class', 'ic_alert_close')
+          .attr('data-target', alert_id)
+          .attr('data-timeout', timeout_id)
+          .text('X');
+        alert_box.append(close_btn);
+
+        $('.ic_alert_box').each(function () {
+          $(this).css(`margin-${top_or_bottom}`, '20px');
+        });
+
+        alert_holder.css(top_or_bottom, '0px');
+      }
     }
 
     //---------------- utilities
@@ -250,6 +310,11 @@
       }, _CFG.draggingTime);
     }
 
+    function _pushAlert(alert_msg, auto_dimiss) {
+      _pushAlertHelper(alert_msg, auto_dimiss, true);
+      _pushAlertHelper(alert_msg, auto_dimiss, false);
+    }
+
     function _bindOnce() {
       var doc;
 
@@ -309,6 +374,27 @@
             }
 
             return false;
+          }
+        });
+
+        doc.off('click.icuidclosebtn').on('click.icuidclosebtn', '.ic_alert_close', function () {
+          var alert_box, target_id, timeout_id;
+
+          target_id = $(this).attr('data-target');
+          timeout_id = $(this).attr('data-timeout');
+
+          alert_box = $(`#${target_id}`);
+
+          if (alert_box.length) {
+            alert_box
+              .addClass('ic_alert_hidden')
+              .off('transitionend.icuimanualdimiss')
+              .on('transitionend.icuimanualdimiss', () => {
+                if (alert_box.length) {
+                  alert_box.remove();
+                }
+                clearTimeout(timeout_id);
+              });
           }
         });
 
@@ -1195,6 +1281,8 @@
 
       if (!that.isHidden) {
         _BOARD_NAME = that.boardName;
+
+        _pushAlert('UI refresh (board = ' + that.boardName + ').');
 
         _cancelSelected();
         _cancelDragging();
