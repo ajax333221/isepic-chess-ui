@@ -510,10 +510,16 @@
 /*end(move_list) ---*/
 
 /*start(push_alerts) ---*/
-.ic_ui_push_alerts #ic_ui_push_alerts_top,
+.ic_ui_push_alerts #ic_ui_push_alerts_top {
+  position: fixed;
+  right: 20px;
+  top: 0px;
+}
+
 .ic_ui_push_alerts #ic_ui_push_alerts_bottom {
   position: fixed;
   right: 20px;
+  bottom: 0px;
 }
 
 .ic_ui_push_alerts .ic_alert_box {

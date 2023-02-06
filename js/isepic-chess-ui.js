@@ -6,7 +6,7 @@
 
 (function (windw, $, Ic) {
   var IcUi = (function () {
-    var _VERSION = '4.6.0';
+    var _VERSION = '4.6.1';
 
     var _CFG = {
       chessFont: 'merida',
@@ -109,6 +109,7 @@
         alert_box = $('<div></div>')
           .attr('id', alert_id)
           .attr('class', 'ic_alert_box ic_alert_animation')
+          .css(`margin-${top_or_bottom}`, '20px')
           .text(alert_msg);
         alert_holder.append(alert_box);
 
@@ -118,12 +119,6 @@
           .attr('data-timeout', timeout_id)
           .text('X');
         alert_box.append(close_btn);
-
-        $('.ic_alert_box').each(function () {
-          $(this).css(`margin-${top_or_bottom}`, '20px');
-        });
-
-        alert_holder.css(top_or_bottom, '0px');
       }
     }
 
@@ -1264,14 +1259,22 @@
     //---------------- ic ui
 
     function setCfg(key, val) {
-      var board;
+      var board, rtn_changed;
 
-      _CFG['' + key] = val;
-      board = Ic.getBoard(_BOARD_NAME);
+      rtn_changed = false;
+      key = String(key);
 
-      if (board !== null) {
-        refreshUi.apply(board, [0, false]);
+      if (val !== _CFG[key]) {
+        rtn_changed = true;
+        _CFG[key] = val;
+        board = Ic.getBoard(_BOARD_NAME);
+
+        if (board !== null) {
+          refreshUi.apply(board, [0, false]);
+        }
       }
+
+      return rtn_changed;
     }
 
     function refreshUi(animation_type, play_sounds) {
