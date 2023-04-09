@@ -366,11 +366,11 @@
   color: #375361;
 }
 
-.ic_ui_board .ic_b_color {
+.ic_ui_board .ic_b_color .ic_char {
   color: #010101;
 }
 
-.ic_ui_board .ic_w_color {
+.ic_ui_board .ic_w_color .ic_char {
   color: #fefefe;
 }
 /*end(board) ---*/

@@ -6,7 +6,7 @@
 
 (function (windw, $, Ic) {
   var IcUi = (function () {
-    var _VERSION = '4.6.1';
+    var _VERSION = '4.6.2';
 
     var _CFG = {
       chessFont: 'merida',
