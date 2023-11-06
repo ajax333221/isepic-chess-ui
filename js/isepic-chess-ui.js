@@ -6,7 +6,7 @@
 
 (function (windw, $, Ic) {
   var IcUi = (function () {
-    var _VERSION = '4.6.2';
+    var _VERSION = '4.7.0';
 
     var _CFG = {
       chessFont: 'merida',
@@ -22,7 +22,6 @@
       highlightSelected: true,
       scrollNavigation: true,
       arrowKeysNavigation: false,
-      puzzleMode: false,
       animationTime: 300,
       draggingTime: 50,
       scrollingTime: 60,
@@ -622,7 +621,9 @@
             }
 
             if (old_drg !== current_bos) {
-              _playMoveCaller.apply(board, [[old_drg, current_bos], true]);
+              if (!board.playMove([old_drg, current_bos], { isInanimated: true, playSounds: true })) {
+                _cancelSelected();
+              }
             }
           }
         });
@@ -668,7 +669,7 @@
 
             if (
               !old_sel ||
-              (old_sel !== current_bos && !_playMoveCaller.apply(board, [[old_sel, current_bos], false]))
+              (old_sel !== current_bos && !board.playMove([old_sel, current_bos], { playSounds: true }))
             ) {
               if (square.className) {
                 _SELECTED_BOS = current_bos;
@@ -881,52 +882,6 @@
 
     //---------------- utilities (this=apply)
 
-    function _playMoveCaller(mov, is_inanimated) {
-      var that, temp, puzzle_advance, rtn;
-
-      that = this;
-      rtn = false;
-
-      if (that.isLegalMove(mov)) {
-        if (_CFG.puzzleMode) {
-          puzzle_advance = false;
-
-          if (that.currentMove < that.moveList.length - 1) {
-            temp = that.playMove(mov, { isMockMove: true, isLegalMove: true });
-            temp = temp ? temp.san : '';
-
-            if (temp === that.moveList[that.currentMove + 1].san) {
-              puzzle_advance = true;
-            }
-          }
-
-          if (puzzle_advance) {
-            if (is_inanimated && that.currentMove + 1 >= that.moveList.length - 1) {
-              that.setCurrentMove(that.moveList.length - 1, true);
-            } else {
-              that.setCurrentMove(2, false);
-            }
-
-            rtn = true;
-          } else {
-            _cancelSelected();
-
-            if (that.currentMove !== that.moveList.length - 1) {
-              Ic.utilityMisc.consoleLog('Puzzle: wrong move');
-            }
-          }
-
-          if (that.currentMove === that.moveList.length - 1) {
-            Ic.utilityMisc.consoleLog('Puzzle: finished');
-          }
-        } else {
-          rtn = !!that.playMove(mov, { isInanimated: !!is_inanimated, playSounds: true, isLegalMove: true });
-        }
-      }
-
-      return rtn;
-    }
-
     function _animateCaller(is_reversed) {
       var that, temp, from_bos, to_bos, piece_class, promotion_class;
 
@@ -1051,7 +1006,7 @@
         for (i = 0, len = move_list.length; i < len; i++) {
           //0<len
           if (i) {
-            if (_CFG.puzzleMode && i > that.currentMove) {
+            if (that.isPuzzleMode && i > that.currentMove) {
               continue;
             }
 
@@ -1102,8 +1057,8 @@
           }
         }
 
-        if (_CFG.puzzleMode) {
-          if (that.currentMove + 1 === that.moveList.length) {
+        if (that.isPuzzleMode) {
+          if (that.currentMove === that.moveList.length - 1) {
             new_html += "<br><span class='ic_pgn_complete'>Puzzle complete!</span>";
           } else {
             new_html += " *<br><span class='ic_pgn_find'>Find the best move.</span>";
@@ -1320,11 +1275,11 @@
           '#ic_ui_nav_first.ic_disabled, #ic_ui_nav_previous.ic_disabled, #ic_ui_nav_next.ic_disabled, #ic_ui_nav_last.ic_disabled'
         ).removeClass('ic_disabled');
 
-        if (!that.currentMove) {
+        if (that.isPuzzleMode || !that.currentMove) {
           $('#ic_ui_nav_first, #ic_ui_nav_previous').addClass('ic_disabled');
         }
 
-        if (that.currentMove === that.moveList.length - 1) {
+        if (that.isPuzzleMode || that.currentMove === that.moveList.length - 1) {
           $('#ic_ui_nav_next, #ic_ui_nav_last').addClass('ic_disabled');
         }
 
