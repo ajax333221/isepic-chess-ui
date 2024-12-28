@@ -194,7 +194,7 @@
         stretch_board();
 
         $('#parsebtn').click(function () {
-          var val, animate_last_move, parsed_correctly;
+          var val, animate_last_move, parsed_correctly, is_rotated_cache, promote_to_cache;
 
           val = $('#parseinput').val();
 
@@ -237,9 +237,17 @@
           if (parsed_correctly) {
             $('#parsetoggler').trigger('click');
 
-            Ic.cloneBoard('main', 'parsed');
-            Ic.getBoard('main').isHidden = false;
-            Ic.getBoard('main').refreshUi(animate_last_move * 1, true);
+            is_rotated_cache = Ic('main').board.isRotated;
+            promote_to_cache = Ic('main').board.promoteTo;
+
+            Ic('parsed').cloneBoardTo('main');
+            Ic.removeBoard('parsed');
+
+            Ic('main').board.isRotated = is_rotated_cache;
+            Ic('main').board.promoteTo = promote_to_cache;
+
+            Ic('main').board.isHidden = false;
+            Ic('main').refreshUi(animate_last_move * 1, true);
           }
 
           return false;
@@ -318,6 +326,12 @@
 
               <div class="ic_ui_move_list">
                 <div id="ic_ui_move_list"></div>
+              </div>
+
+              <br />
+
+              <div class="ic_ui_board_tabs">
+                <div id="ic_ui_board_tabs"></div>
               </div>
 
               <br />
