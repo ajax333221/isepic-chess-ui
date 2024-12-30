@@ -18,6 +18,11 @@
         name: 'setCfg',
         refreshUi: true,
       },
+      pushAlert: {
+        index: 2,
+        name: 'pushAlert',
+        refreshUi: false,
+      },
     };
 
     //start: setCfg
@@ -42,6 +47,35 @@
     icui.setCfg.examples.push('IcUi.setCfg("arrowKeysNavigation", true)');
     icui.setCfg.examples.push('IcUi.setCfg("soundEffects", false)');
     //end: setCfg
+
+    //start: pushAlert
+    icui.pushAlert.params = {
+      children: [
+        { name: 'message', type: 'String', icon: 'eight_spoked_asterisk' },
+        { name: 'className', type: 'String', icon: 'eight_spoked_asterisk' },
+      ],
+    };
+
+    icui.pushAlert.returnVal = {};
+
+    icui.pushAlert.description = [];
+    icui.pushAlert.description.push('Pushes an alert directly to **#ic_ui_push_alerts_top** and **#ic_ui_push_alerts_bottom** components.');
+    icui.pushAlert.description.push(
+      'Valid options for **className** are:<ul><li>"light" (default)</li><li>"dark"</li><li>"success"</li><li>"warning"</li><li>"error"</li></ul>'
+    );
+    icui.pushAlert.description.push(
+      ':zap:**Tip:** to both push the alert to the UI and to the console (`console.log()`, `console.warn()` or `console.error()` depending on the **className**) you can use `Ic.utilityMisc.consoleLog(...)` instead, just make sure **silent mode** is not on (you can disable it with `Ic.setSilentMode(false)`)'
+    );
+
+    icui.pushAlert.examples = [];
+    icui.pushAlert.examples.push('IcUi.pushAlert("Simple alert")');
+    icui.pushAlert.examples.push('IcUi.pushAlert("[Header]: simple alert with header")');
+    icui.pushAlert.examples.push('IcUi.pushAlert("Alert with light style", "light")');
+    icui.pushAlert.examples.push('IcUi.pushAlert("Alert with dark style", "dark")');
+    icui.pushAlert.examples.push('IcUi.pushAlert("Alert with success style", "success")');
+    icui.pushAlert.examples.push('IcUi.pushAlert("Alert with warning style", "warning")');
+    icui.pushAlert.examples.push('IcUi.pushAlert("Alert with error style", "error")');
+    //end: pushAlert
 
     res = '';
 

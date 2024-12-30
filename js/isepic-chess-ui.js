@@ -6,7 +6,7 @@
 
 (function (windw, $, Ic) {
   var IcUi = (function () {
-    var _VERSION = '4.8.0';
+    var _VERSION = '4.8.1';
 
     var _CFG = {
       chessFont: 'merida',
@@ -38,6 +38,9 @@
     var _SELECTED_BOS = '';
     var _DRAGGING_BOS = '';
 
+    var _ALERT_WARNING = 'warning';
+    var _ALERT_ERROR = 'error';
+
     //---------------- helpers
 
     function _chessFontHelper(chess_font) {
@@ -68,10 +71,10 @@
       return chess_theme;
     }
 
-    function _pushAlertHelper(alert_msg, auto_dimiss, from_top) {
+    function _pushAlertHelper(alert_msg, from_top, class_name) {
       var timeout_id, alert_id, top_or_bottom, alert_holder, alert_box, close_btn;
 
-      auto_dimiss = typeof auto_dimiss === 'boolean' ? auto_dimiss : true;
+      class_name = class_name || '';
       from_top = from_top === true;
 
       block: {
@@ -85,7 +88,7 @@
         timeout_id = null;
         alert_id = `ic_alert-${++_ALERT_COUNT}`;
 
-        if (auto_dimiss && _CFG.pushAlertsTime > 0) {
+        if (_CFG.pushAlertsTime > 0) {
           timeout_id = setTimeout(function () {
             var alert_box;
 
@@ -107,16 +110,18 @@
 
         alert_box = $('<div></div>')
           .attr('id', alert_id)
-          .attr('class', 'ic_alert_box ic_alert_animation')
+          .attr('class', 'ic_alert_box ic_alert_animation' + (class_name ? ' ' + class_name : ''))
           .css(`margin-${top_or_bottom}`, '20px')
-          .text(alert_msg);
+          .html(
+            (alert_msg || '').replace(/^([^ ]*)\[[^\]]+]: /, (x) => `<span class='ic_alert_header'>${x.trim()}</span>`)
+          );
         alert_holder.append(alert_box);
 
         close_btn = $('<div></div>')
           .attr('class', 'ic_alert_close')
           .attr('data-target', alert_id)
           .attr('data-timeout', timeout_id)
-          .text('X');
+          .html('&times;');
         alert_box.append(close_btn);
       }
     }
@@ -304,11 +309,6 @@
       }, _CFG.draggingTime);
     }
 
-    function _pushAlert(alert_msg, auto_dimiss) {
-      _pushAlertHelper(alert_msg, auto_dimiss, true);
-      _pushAlertHelper(alert_msg, auto_dimiss, false);
-    }
-
     function _bindOnce() {
       var doc;
 
@@ -344,7 +344,7 @@
             board = Ic.getBoard(_BOARD_NAME);
 
             if (board === null) {
-              Ic.utilityMisc.consoleLog('Error[keydown]: board not found');
+              Ic.utilityMisc.consoleLog('[keydown]: board not found', _ALERT_ERROR);
               break block;
             }
 
@@ -364,7 +364,7 @@
                 board.navLast();
                 break;
               default:
-                Ic.utilityMisc.consoleLog('Error[keydown]: invalid case "' + current_nav + '"');
+                Ic.utilityMisc.consoleLog('[keydown]: invalid case "' + current_nav + '"', _ALERT_ERROR);
             }
 
             return false;
@@ -403,7 +403,7 @@
             board = Ic.getBoard(_BOARD_NAME);
 
             if (board === null) {
-              Ic.utilityMisc.consoleLog('Error[#ic_ui_nav_first]: board not found');
+              Ic.utilityMisc.consoleLog('[#ic_ui_nav_first]: board not found', _ALERT_ERROR);
               break block;
             }
 
@@ -426,7 +426,7 @@
             board = Ic.getBoard(_BOARD_NAME);
 
             if (board === null) {
-              Ic.utilityMisc.consoleLog('Error[#ic_ui_nav_previous]: board not found');
+              Ic.utilityMisc.consoleLog('[#ic_ui_nav_previous]: board not found', _ALERT_ERROR);
               break block;
             }
 
@@ -449,7 +449,7 @@
             board = Ic.getBoard(_BOARD_NAME);
 
             if (board === null) {
-              Ic.utilityMisc.consoleLog('Error[#ic_ui_nav_next]: board not found');
+              Ic.utilityMisc.consoleLog('[#ic_ui_nav_next]: board not found', _ALERT_ERROR);
               break block;
             }
 
@@ -472,7 +472,7 @@
             board = Ic.getBoard(_BOARD_NAME);
 
             if (board === null) {
-              Ic.utilityMisc.consoleLog('Error[#ic_ui_nav_last]: board not found');
+              Ic.utilityMisc.consoleLog('[#ic_ui_nav_last]: board not found', _ALERT_ERROR);
               break block;
             }
 
@@ -495,7 +495,7 @@
             board = Ic.getBoard(_BOARD_NAME);
 
             if (board === null) {
-              Ic.utilityMisc.consoleLog('Error[#ic_ui_rotate]: board not found');
+              Ic.utilityMisc.consoleLog('[#ic_ui_rotate]: board not found', _ALERT_ERROR);
               break block;
             }
 
@@ -514,7 +514,7 @@
             board = Ic.getBoard(_BOARD_NAME);
 
             if (board === null) {
-              Ic.utilityMisc.consoleLog('Error[#ic_ui_promote]: board not found');
+              Ic.utilityMisc.consoleLog('[#ic_ui_promote]: board not found', _ALERT_ERROR);
               break block;
             }
 
@@ -529,14 +529,14 @@
             board_name = $(this).attr('data-rebindboardname');
 
             if (!board_name) {
-              Ic.utilityMisc.consoleLog('Error[.ic_changeboard]: missing data-rebindboardname');
+              Ic.utilityMisc.consoleLog('[.ic_changeboard]: missing data-rebindboardname', _ALERT_ERROR);
               break block;
             }
 
             board = Ic.getBoard(board_name);
 
             if (board === null) {
-              Ic.utilityMisc.consoleLog('Error[.ic_changeboard]: board not found');
+              Ic.utilityMisc.consoleLog('[.ic_changeboard]: board not found', _ALERT_ERROR);
               break block;
             }
 
@@ -555,14 +555,14 @@
             pgn_index = $(this).attr('data-index');
 
             if (!pgn_index) {
-              Ic.utilityMisc.consoleLog('Error[.ic_pgn_link]: missing data-index');
+              Ic.utilityMisc.consoleLog('[.ic_pgn_link]: missing data-index', _ALERT_ERROR);
               break block;
             }
 
             board = Ic.getBoard(_BOARD_NAME);
 
             if (board === null) {
-              Ic.utilityMisc.consoleLog('Error[.ic_pgn_link]: board not found');
+              Ic.utilityMisc.consoleLog('[.ic_pgn_link]: board not found', _ALERT_ERROR);
               break block;
             }
 
@@ -603,7 +603,7 @@
             board = Ic.getBoard(_BOARD_NAME);
 
             if (board === null) {
-              Ic.utilityMisc.consoleLog('Error[mouseup]: board not found');
+              Ic.utilityMisc.consoleLog('[mouseup]: board not found', _ALERT_ERROR);
               break block;
             }
 
@@ -616,7 +616,7 @@
             current_bos = temp.attr('data-bos');
 
             if (!current_bos) {
-              Ic.utilityMisc.consoleLog('Error[mouseup]: missing data-bos');
+              Ic.utilityMisc.consoleLog('[mouseup]: missing data-bos', _ALERT_ERROR);
               break block;
             }
 
@@ -643,7 +643,7 @@
             board = Ic.getBoard(_BOARD_NAME);
 
             if (board === null) {
-              Ic.utilityMisc.consoleLog('Error[mousedown]: board not found');
+              Ic.utilityMisc.consoleLog('[mousedown]: board not found', _ALERT_ERROR);
               break block;
             }
 
@@ -656,14 +656,14 @@
             current_bos = temp.attr('data-bos');
 
             if (!current_bos) {
-              Ic.utilityMisc.consoleLog('Error[mousedown]: missing data-bos');
+              Ic.utilityMisc.consoleLog('[mousedown]: missing data-bos', _ALERT_ERROR);
               break block;
             }
 
             square = board.getSquare(current_bos);
 
             if (square === null) {
-              Ic.utilityMisc.consoleLog('Error[mousedown]: square not found');
+              Ic.utilityMisc.consoleLog('[mousedown]: square not found', _ALERT_ERROR);
               break block;
             }
 
@@ -737,7 +737,7 @@
             board = Ic.getBoard(_BOARD_NAME);
 
             if (board === null) {
-              Ic.utilityMisc.consoleLog('Error[wheel]: board not found');
+              Ic.utilityMisc.consoleLog('[wheel]: board not found', _ALERT_ERROR);
               break block;
             }
 
@@ -772,7 +772,7 @@
           current_board = Ic.getBoard(current_board_name);
 
           if (current_board === null) {
-            Ic.utilityMisc.consoleLog('Warning[_refreshBoardTabs]: board not found');
+            Ic.utilityMisc.consoleLog('[_refreshBoardTabs]: board not found', _ALERT_WARNING);
             continue;
           }
 
@@ -1232,6 +1232,13 @@
       return rtn_changed;
     }
 
+    function pushAlert(alert_msg, class_name) {
+      _pushAlertHelper(alert_msg, true, class_name);
+      _pushAlertHelper(alert_msg, false, class_name);
+    }
+
+    //---------------- board (this=apply)
+
     function refreshUi(animation_type, play_sounds) {
       var that, temp, board_elm;
 
@@ -1240,7 +1247,7 @@
       if (!that.isHidden) {
         _BOARD_NAME = that.boardName;
 
-        _pushAlert('UI refresh (board = ' + that.boardName + ').');
+        Ic.utilityMisc.consoleLog('[refreshUi]: refreshed UI board = ' + that.boardName);
 
         _cancelSelected();
         _cancelDragging();
@@ -1314,6 +1321,7 @@
       ? {
           version: _VERSION,
           setCfg: setCfg,
+          pushAlert: pushAlert,
           refreshUi: refreshUi,
         }
       : null;

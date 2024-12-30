@@ -527,9 +527,10 @@
   position: relative;
   padding: 15px 50px 15px 20px;
   cursor: default;
+  color: #333;
   font-size: 15px;
   text-align: left;
-  border: 1px solid #efefef;
+  border: 1px solid #d4d4d4;
   border-radius: 5px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   background-color: #fafafa;
@@ -537,6 +538,38 @@
   opacity: 0;
   transition: opacity 3.5s, top 0.2s, visibility 0.2s;
   z-index: 9999;
+}
+
+.ic_ui_push_alerts .ic_alert_box .ic_alert_header {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+  display: block;
+}
+
+.ic_ui_push_alerts .ic_alert_box.light {
+  background-color: #fafafa;
+  border-color: #d4d4d4;
+}
+
+.ic_ui_push_alerts .ic_alert_box.dark {
+  background-color: #d5d9db;
+  border-color: #b2b9bd;
+}
+
+.ic_ui_push_alerts .ic_alert_box.success {
+  background-color: #d1e8d6;
+  border-color: #a4d1ae;
+}
+
+.ic_ui_push_alerts .ic_alert_box.warning {
+  background-color: #f7edcb;
+  border-color: #eed890;
+}
+
+.ic_ui_push_alerts .ic_alert_box.error {
+  background-color: #edced1;
+  border-color: #db9da3;
 }
 
 .ic_ui_push_alerts .ic_alert_animation {
@@ -565,19 +598,17 @@
   top: 50%;
   right: 10px;
   cursor: pointer;
-  font-size: 10px;
-  font-weight: bold;
+  font-size: 20px;
   line-height: 15px;
   text-align: center;
-  color: #333;
   transform: translateY(-50%);
   border-radius: 50%;
-  background-color: #ddd;
+  background-color: rgba(100, 100, 100, 0.1);
   padding: 5px;
 }
 
 .ic_ui_push_alerts .ic_alert_close:hover {
-  background-color: #ccc;
+  background-color: rgba(100, 100, 100, 0.05);
 }
 
 .ic_ui_push_alerts .ic_alert_hidden {

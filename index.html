@@ -64,7 +64,7 @@
 
       #parsebox {
         text-align: center;
-        background: #dbf2d7;
+        background: #e6e3da;
         padding-bottom: 10px;
       }
 
@@ -204,7 +204,7 @@
           //if(!parsed_correctly){
           if (Ic.isLegalFen(val)) {
             parsed_correctly = !!Ic.initBoard({
-              boardName: 'parsed',
+              boardName: 'parsing_temp_board',
               fen: val,
               validOrBreak: true,
               isHidden: true,
@@ -214,7 +214,7 @@
 
           if (!parsed_correctly) {
             parsed_correctly = !!Ic.initBoard({
-              boardName: 'parsed',
+              boardName: 'parsing_temp_board',
               pgn: val,
               validOrBreak: true,
               isHidden: true,
@@ -225,7 +225,7 @@
 
           if (!parsed_correctly) {
             parsed_correctly = !!Ic.initBoard({
-              boardName: 'parsed',
+              boardName: 'parsing_temp_board',
               uci: val,
               validOrBreak: true,
               isHidden: true,
@@ -240,8 +240,8 @@
             is_rotated_cache = Ic('main').board.isRotated;
             promote_to_cache = Ic('main').board.promoteTo;
 
-            Ic('parsed').cloneBoardTo('main');
-            Ic.removeBoard('parsed');
+            Ic('parsing_temp_board').cloneBoardTo('main');
+            Ic.removeBoard('parsing_temp_board');
 
             Ic('main').board.isRotated = is_rotated_cache;
             Ic('main').board.promoteTo = promote_to_cache;

@@ -80,9 +80,8 @@ https://ajax333221.github.io/isepic-chess-ui/
 - Chess themes: _"wood"_ (default), _"olive"_, _"magenta"_ and _"aqua"_
 - Sound effects
 - Move navigation via scrolling and arrow keys
+- Push alerts
 - Puzzle mode (:construction: work in progress :construction:)
-- Push alerts (:construction: work in progress :construction:)
-  - The idea is to have dimissible boxes with game events, board events, ui events, debug errors, etc.
 
 ## :book: Documentation
 
