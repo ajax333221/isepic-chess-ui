@@ -1,12 +1,8 @@
-/** Copyright (c) 2025 Ajax Isepic (ajax333221) Licensed MIT */
-
-/* jshint undef:true, unused:true, jquery:true, curly:true, latedef:nofunc, bitwise:false, eqeqeq:true, esversion:9 */
-
-/* globals Ic */
+/*! Copyright (c) 2025 Ajax Isepic (ajax333221) Licensed MIT */
 
 (function (windw, $, Ic) {
   var IcUi = (function () {
-    var _VERSION = '4.8.1';
+    var _VERSION = '4.9.0';
 
     var _CFG = {
       chessFont: 'merida',
@@ -41,7 +37,7 @@
     var _ALERT_WARNING = 'warning';
     var _ALERT_ERROR = 'error';
 
-    //---------------- helpers
+    //!---------------- helpers
 
     function _chessFontHelper(chess_font) {
       var arr, default_elm;
@@ -126,7 +122,7 @@
       }
     }
 
-    //---------------- utilities
+    //!---------------- utilities
 
     function _cancelAnimations() {
       $('#ic_ui_board .ic_piece_holder').finish();
@@ -880,7 +876,7 @@
       $('#ic_ui_board').attr('class', new_class).html(new_html);
     }
 
-    //---------------- utilities (this=apply)
+    //!---------------- utilities (this=apply)
 
     function _animateCaller(is_reversed) {
       var that, temp, from_bos, to_bos, piece_class, promotion_class;
@@ -1211,7 +1207,7 @@
       }
     }
 
-    //---------------- ic ui
+    //!---------------- ic ui
 
     function setCfg(key, val) {
       var board, rtn_changed;
@@ -1237,7 +1233,7 @@
       _pushAlertHelper(alert_msg, false, class_name);
     }
 
-    //---------------- board (this=apply)
+    //!---------------- board (this=apply)
 
     function refreshUi(animation_type, play_sounds) {
       var that, temp, board_elm;
