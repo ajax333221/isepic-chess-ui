@@ -81,7 +81,7 @@ https://ajax333221.github.io/isepic-chess-ui/
 - Sound effects
 - Move navigation via scrolling and arrow keys
 - Push alerts
-- Puzzle mode (:construction: work in progress :construction:)
+- Puzzle mode (&#x1f6a7; work in progress &#x1f6a7;)
 
 ## :book: Documentation
 
