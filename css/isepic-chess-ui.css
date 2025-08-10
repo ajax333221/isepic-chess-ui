@@ -76,7 +76,6 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  cursor: pointer;
 }
 
 .ic_ui_board {
@@ -102,6 +101,7 @@
 .ic_ui_board td {
   text-align: center;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 .ic_ui_board .ic_piece_holder {
