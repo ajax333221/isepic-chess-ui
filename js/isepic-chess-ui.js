@@ -771,12 +771,16 @@
           clearTimeout(_BOARD_TOOLTIP_TIMEOUT);
 
           block: {
-            if (!$('#ic_board_tooltip').length) {
+            if (!_CFG.pgnBoardTooltip) {
+              break block;
+            }
+
+            if (!$('#ic_ui_board_tooltip').length) {
               Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: missing board tooltip component', _ALERT_ERROR);
               break block;
             }
 
-            board_tooltip = $('#ic_board_tooltip');
+            board_tooltip = $('#ic_ui_board_tooltip');
 
             pgn_index = $(this).attr('data-index');
 
@@ -844,13 +848,17 @@
 
         doc.off('mouseleave.icuipgnlinks').on('mouseleave.icuipgnlinks', '.ic_pgn_link, .ic_pgn_active', function () {
           block: {
-            if (!$('#ic_board_tooltip').length) {
+            if (!_CFG.pgnBoardTooltip) {
+              break block;
+            }
+
+            if (!$('#ic_ui_board_tooltip').length) {
               Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: missing board tooltip component', _ALERT_ERROR);
               break block;
             }
 
             _BOARD_TOOLTIP_TIMEOUT = setTimeout(function () {
-              $('#ic_board_tooltip').removeClass('tooltip_visible');
+              $('#ic_ui_board_tooltip').removeClass('tooltip_visible');
             }, 150);
           }
         });

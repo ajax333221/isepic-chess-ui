@@ -66,7 +66,7 @@ https://ajax333221.github.io/isepic-chess-ui/
   - Navigation buttons ([first](https://ajax333221.github.io/isepic-chess-ui/components.html#first), [previous](https://ajax333221.github.io/isepic-chess-ui/components.html#previous), [next](https://ajax333221.github.io/isepic-chess-ui/components.html#next) and [last](https://ajax333221.github.io/isepic-chess-ui/components.html#last))
   - [Rotate](https://ajax333221.github.io/isepic-chess-ui/components.html#rotate) board button
   - [Promotion dropdown](https://ajax333221.github.io/isepic-chess-ui/components.html#promote)
-  - SAN [move list](https://ajax333221.github.io/isepic-chess-ui/components.html#move_list) (with _jump-to-move_ links)
+  - SAN [move list](https://ajax333221.github.io/isepic-chess-ui/components.html#move_list) (with _jump-to-move_ links and _board-tooltip_ preview)
   - Selectable [FEN](https://ajax333221.github.io/isepic-chess-ui/components.html#fen) text
   - [Push alerts top](https://ajax333221.github.io/isepic-chess-ui/components.html#push_alerts_top)
   - [Push alerts bottom](https://ajax333221.github.io/isepic-chess-ui/components.html#push_alerts_bottom)
