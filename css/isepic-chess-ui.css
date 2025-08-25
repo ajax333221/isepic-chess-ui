@@ -59,14 +59,18 @@
 .ic_ui_board #ic_ui_board,
 .ic_ui_board table,
 .ic_ui_board .ic_piece_holder,
-.ic_ui_board .ic_char {
+.ic_ui_board .ic_char,
+#ic_board_tooltip,
+#ic_board_tooltip table,
+#ic_board_tooltip .ic_piece_holder {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
 }
 
-.ic_ui_board {
+.ic_ui_board,
+#ic_board_tooltip {
   color: #333;
   font-size: 16px;
   -webkit-tap-highlight-color: transparent;
@@ -98,13 +102,15 @@
   cursor: default;
 }
 
-.ic_ui_board td {
+.ic_ui_board td,
+#ic_board_tooltip td {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
 }
 
-.ic_ui_board .ic_piece_holder {
+.ic_ui_board .ic_piece_holder,
+#ic_board_tooltip .ic_piece_holder {
   background-repeat: no-repeat;
   background-position: 50% 50%;
   display: table;
@@ -114,75 +120,97 @@
   background-size: 80%;
 }
 
-.ic_ui_board .ic_font_isepic .ic_piece_holder {
+.ic_ui_board .ic_font_isepic .ic_piece_holder,
+#ic_board_tooltip .ic_piece_holder {
   background-size: 70%;
 }
 
-.ic_ui_board .ic_ws {
+.ic_ui_board .ic_ws,
+#ic_board_tooltip .ic_ws {
   background-color: #e0e0e0;
 }
-.ic_ui_board .ic_theme_wood .ic_ws {
+.ic_ui_board .ic_theme_wood .ic_ws,
+#ic_board_tooltip.ic_theme_wood .ic_ws {
   background-color: #eedbd2;
 }
-.ic_ui_board .ic_theme_olive .ic_ws {
+.ic_ui_board .ic_theme_olive .ic_ws,
+#ic_board_tooltip.ic_theme_olive .ic_ws {
   background-color: #eceed2;
 }
-.ic_ui_board .ic_theme_magenta .ic_ws {
+.ic_ui_board .ic_theme_magenta .ic_ws,
+#ic_board_tooltip.ic_theme_magenta .ic_ws {
   background-color: #eed2e2;
 }
-.ic_ui_board .ic_theme_aqua .ic_ws {
+.ic_ui_board .ic_theme_aqua .ic_ws,
+#ic_board_tooltip.ic_theme_aqua .ic_ws {
   background-color: #d2eee9;
 }
 
-.ic_ui_board .ic_bs {
+.ic_ui_board .ic_bs,
+#ic_board_tooltip .ic_bs {
   background-color: #767676;
 }
-.ic_ui_board .ic_theme_wood .ic_bs {
+.ic_ui_board .ic_theme_wood .ic_bs,
+#ic_board_tooltip.ic_theme_wood .ic_bs {
   background-color: #968a56;
 }
-.ic_ui_board .ic_theme_olive .ic_bs {
+.ic_ui_board .ic_theme_olive .ic_bs,
+#ic_board_tooltip.ic_theme_olive .ic_bs {
   background-color: #729656;
 }
-.ic_ui_board .ic_theme_magenta .ic_bs {
+.ic_ui_board .ic_theme_magenta .ic_bs,
+#ic_board_tooltip.ic_theme_magenta .ic_bs {
   background-color: #96565a;
 }
-.ic_ui_board .ic_theme_aqua .ic_bs {
+.ic_ui_board .ic_theme_aqua .ic_bs,
+#ic_board_tooltip.ic_theme_aqua .ic_bs {
   background-color: #568196;
 }
 
-.ic_ui_board .ic_ws.ic_lastmove {
+.ic_ui_board .ic_ws.ic_lastmove,
+#ic_board_tooltip .ic_ws.ic_lastmove {
   background-color: #c8c8c8;
 }
-.ic_ui_board .ic_theme_wood .ic_ws.ic_lastmove {
+.ic_ui_board .ic_theme_wood .ic_ws.ic_lastmove,
+#ic_board_tooltip.ic_theme_wood .ic_ws.ic_lastmove {
   background-color: #acbbe5;
 }
-.ic_ui_board .ic_theme_olive .ic_ws.ic_lastmove {
+.ic_ui_board .ic_theme_olive .ic_ws.ic_lastmove,
+#ic_board_tooltip.ic_theme_olive .ic_ws.ic_lastmove {
   background-color: #edace5;
 }
-.ic_ui_board .ic_theme_magenta .ic_ws.ic_lastmove {
+.ic_ui_board .ic_theme_magenta .ic_ws.ic_lastmove,
+#ic_board_tooltip.ic_theme_magenta .ic_ws.ic_lastmove {
   background-color: #ace5ee;
 }
-.ic_ui_board .ic_theme_aqua .ic_ws.ic_lastmove {
+.ic_ui_board .ic_theme_aqua .ic_ws.ic_lastmove,
+#ic_board_tooltip.ic_theme_aqua .ic_ws.ic_lastmove {
   background-color: #e5dbaa;
 }
 
-.ic_ui_board .ic_bs.ic_lastmove {
+.ic_ui_board .ic_bs.ic_lastmove,
+#ic_board_tooltip .ic_bs.ic_lastmove {
   background-color: #8c8c8c;
 }
-.ic_ui_board .ic_theme_wood .ic_bs.ic_lastmove {
+.ic_ui_board .ic_theme_wood .ic_bs.ic_lastmove,
+#ic_board_tooltip.ic_theme_wood .ic_bs.ic_lastmove {
   background-color: #7a8d9f;
 }
-.ic_ui_board .ic_theme_olive .ic_bs.ic_lastmove {
+.ic_ui_board .ic_theme_olive .ic_bs.ic_lastmove,
+#ic_board_tooltip.ic_theme_olive .ic_bs.ic_lastmove {
   background-color: #a87a9f;
 }
-.ic_ui_board .ic_theme_magenta .ic_bs.ic_lastmove {
+.ic_ui_board .ic_theme_magenta .ic_bs.ic_lastmove,
+#ic_board_tooltip.ic_theme_magenta .ic_bs.ic_lastmove {
   background-color: #7a9fa1;
 }
-.ic_ui_board .ic_theme_aqua .ic_bs.ic_lastmove {
+.ic_ui_board .ic_theme_aqua .ic_bs.ic_lastmove,
+#ic_board_tooltip.ic_theme_aqua .ic_bs.ic_lastmove {
   background-color: #9f9d7a;
 }
 
-.ic_ui_board .ic_incheck {
+.ic_ui_board .ic_incheck,
+#ic_board_tooltip .ic_incheck {
   background-image: radial-gradient(rgba(240, 115, 85, 0.8) 60%, transparent 100%);
 }
 
@@ -255,77 +283,101 @@
   background-color: #e9d213;
 }
 
-.ic_ui_board .ic_font_merida .ic_bp {
+.ic_ui_board .ic_font_merida .ic_bp,
+#ic_board_tooltip.ic_font_merida .ic_bp {
   background-image: url('./images/chess-fonts/merida/bp.png');
 }
-.ic_ui_board .ic_font_merida .ic_br {
+.ic_ui_board .ic_font_merida .ic_br,
+#ic_board_tooltip.ic_font_merida .ic_br {
   background-image: url('./images/chess-fonts/merida/br.png');
 }
-.ic_ui_board .ic_font_merida .ic_bn {
+.ic_ui_board .ic_font_merida .ic_bn,
+#ic_board_tooltip.ic_font_merida .ic_bn {
   background-image: url('./images/chess-fonts/merida/bn.png');
 }
-.ic_ui_board .ic_font_merida .ic_bb {
+.ic_ui_board .ic_font_merida .ic_bb,
+#ic_board_tooltip.ic_font_merida .ic_bb {
   background-image: url('./images/chess-fonts/merida/bb.png');
 }
-.ic_ui_board .ic_font_merida .ic_bq {
+.ic_ui_board .ic_font_merida .ic_bq,
+#ic_board_tooltip.ic_font_merida .ic_bq {
   background-image: url('./images/chess-fonts/merida/bq.png');
 }
-.ic_ui_board .ic_font_merida .ic_bk {
+.ic_ui_board .ic_font_merida .ic_bk,
+#ic_board_tooltip.ic_font_merida .ic_bk {
   background-image: url('./images/chess-fonts/merida/bk.png');
 }
-.ic_ui_board .ic_font_merida .ic_wp {
+.ic_ui_board .ic_font_merida .ic_wp,
+#ic_board_tooltip.ic_font_merida .ic_wp {
   background-image: url('./images/chess-fonts/merida/wp.png');
 }
-.ic_ui_board .ic_font_merida .ic_wr {
+.ic_ui_board .ic_font_merida .ic_wr,
+#ic_board_tooltip.ic_font_merida .ic_wr {
   background-image: url('./images/chess-fonts/merida/wr.png');
 }
-.ic_ui_board .ic_font_merida .ic_wn {
+.ic_ui_board .ic_font_merida .ic_wn,
+#ic_board_tooltip.ic_font_merida .ic_wn {
   background-image: url('./images/chess-fonts/merida/wn.png');
 }
-.ic_ui_board .ic_font_merida .ic_wb {
+.ic_ui_board .ic_font_merida .ic_wb,
+#ic_board_tooltip.ic_font_merida .ic_wb {
   background-image: url('./images/chess-fonts/merida/wb.png');
 }
-.ic_ui_board .ic_font_merida .ic_wq {
+.ic_ui_board .ic_font_merida .ic_wq,
+#ic_board_tooltip.ic_font_merida .ic_wq {
   background-image: url('./images/chess-fonts/merida/wq.png');
 }
-.ic_ui_board .ic_font_merida .ic_wk {
+.ic_ui_board .ic_font_merida .ic_wk,
+#ic_board_tooltip.ic_font_merida .ic_wk {
   background-image: url('./images/chess-fonts/merida/wk.png');
 }
 
-.ic_ui_board .ic_font_isepic .ic_bp {
+.ic_ui_board .ic_font_isepic .ic_bp,
+#ic_board_tooltip.ic_font_isepic .ic_bp {
   background-image: url('./images/chess-fonts/isepic/bp.png');
 }
-.ic_ui_board .ic_font_isepic .ic_br {
+.ic_ui_board .ic_font_isepic .ic_br,
+#ic_board_tooltip.ic_font_isepic .ic_br {
   background-image: url('./images/chess-fonts/isepic/br.png');
 }
-.ic_ui_board .ic_font_isepic .ic_bn {
+.ic_ui_board .ic_font_isepic .ic_bn,
+#ic_board_tooltip.ic_font_isepic .ic_bn {
   background-image: url('./images/chess-fonts/isepic/bn.png');
 }
-.ic_ui_board .ic_font_isepic .ic_bb {
+.ic_ui_board .ic_font_isepic .ic_bb,
+#ic_board_tooltip.ic_font_isepic .ic_bb {
   background-image: url('./images/chess-fonts/isepic/bb.png');
 }
-.ic_ui_board .ic_font_isepic .ic_bq {
+.ic_ui_board .ic_font_isepic .ic_bq,
+#ic_board_tooltip.ic_font_isepic .ic_bq {
   background-image: url('./images/chess-fonts/isepic/bq.png');
 }
-.ic_ui_board .ic_font_isepic .ic_bk {
+.ic_ui_board .ic_font_isepic .ic_bk,
+#ic_board_tooltip.ic_font_isepic .ic_bk {
   background-image: url('./images/chess-fonts/isepic/bk.png');
 }
-.ic_ui_board .ic_font_isepic .ic_wp {
+.ic_ui_board .ic_font_isepic .ic_wp,
+#ic_board_tooltip.ic_font_isepic .ic_wp {
   background-image: url('./images/chess-fonts/isepic/wp.png');
 }
-.ic_ui_board .ic_font_isepic .ic_wr {
+.ic_ui_board .ic_font_isepic .ic_wr,
+#ic_board_tooltip.ic_font_isepic .ic_wr {
   background-image: url('./images/chess-fonts/isepic/wr.png');
 }
-.ic_ui_board .ic_font_isepic .ic_wn {
+.ic_ui_board .ic_font_isepic .ic_wn,
+#ic_board_tooltip.ic_font_isepic .ic_wn {
   background-image: url('./images/chess-fonts/isepic/wn.png');
 }
-.ic_ui_board .ic_font_isepic .ic_wb {
+.ic_ui_board .ic_font_isepic .ic_wb,
+#ic_board_tooltip.ic_font_isepic .ic_wb {
   background-image: url('./images/chess-fonts/isepic/wb.png');
 }
-.ic_ui_board .ic_font_isepic .ic_wq {
+.ic_ui_board .ic_font_isepic .ic_wq,
+#ic_board_tooltip.ic_font_isepic .ic_wq {
   background-image: url('./images/chess-fonts/isepic/wq.png');
 }
-.ic_ui_board .ic_font_isepic .ic_wk {
+.ic_ui_board .ic_font_isepic .ic_wk,
+#ic_board_tooltip.ic_font_isepic .ic_wk {
   background-image: url('./images/chess-fonts/isepic/wk.png');
 }
 
@@ -506,6 +558,42 @@
   font-size: 18px;
   line-height: 35px;
   color: #6b6b6b;
+}
+
+.ic_ui_move_list #ic_board_tooltip {
+  position: absolute;
+  z-index: 50;
+  padding: 3px;
+  height: 250px;
+  width: 250px;
+  background-color: #fff;
+  color: #000;
+  border-radius: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.75);
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+  transform: translateY(5px);
+}
+
+.ic_ui_move_list #ic_board_tooltip::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #fff;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ic_ui_move_list #ic_board_tooltip.tooltip_visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 /*end(move_list) ---*/
 

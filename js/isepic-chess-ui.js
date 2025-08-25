@@ -2,7 +2,7 @@
 
 (function (windw, $, Ic) {
   var IcUi = (function () {
-    var _VERSION = '4.9.2';
+    var _VERSION = '4.10.0';
 
     var _CFG = {
       chessFont: 'merida',
@@ -18,6 +18,8 @@
       highlightSelected: true,
       scrollNavigation: true,
       arrowKeysNavigation: false,
+      pgnBoardTooltip: false,
+      tooltipSize: 250,
       animationTime: 300,
       draggingTime: 50,
       scrollingTime: 60,
@@ -26,6 +28,7 @@
 
     var _POS_Y = 0;
     var _POS_X = 0;
+    var _BOARD_TOOLTIP_TIMEOUT = null;
     var _INTERVAL = 0;
     var _ALERT_COUNT = 0;
     var _RAN_ONCE = false;
@@ -742,6 +745,113 @@
             } else {
               board.navNext();
             }
+          }
+        });
+
+        doc.off('mouseenter.icuipgnlinks').on('mouseenter.icuipgnlinks', '.ic_pgn_link, .ic_pgn_active', function () {
+          var i,
+            j,
+            temp,
+            board_tooltip,
+            pgn_index,
+            move,
+            from_bos,
+            to_bos,
+            squares,
+            html,
+            square_color,
+            current_bos,
+            current_square,
+            last_move,
+            square_class,
+            tooltip_top,
+            tooltip_left,
+            board;
+
+          clearTimeout(_BOARD_TOOLTIP_TIMEOUT);
+
+          block: {
+            if (!$('#ic_board_tooltip').length) {
+              Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: missing board tooltip component', _ALERT_ERROR);
+              break block;
+            }
+
+            board_tooltip = $('#ic_board_tooltip');
+
+            pgn_index = $(this).attr('data-index');
+
+            if (!pgn_index) {
+              Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: missing data-index', _ALERT_ERROR);
+              break block;
+            }
+
+            board = Ic.getBoard(_BOARD_NAME);
+
+            if (board === null) {
+              Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: board not found', _ALERT_ERROR);
+              break block;
+            }
+
+            move = board.moveList[pgn_index];
+            from_bos = move.fromBos;
+            to_bos = move.toBos;
+            squares = Ic.fenGet(move.fen, 'squares').squares;
+
+            html = "<table cellpadding='0' cellspacing='0'>";
+
+            for (i = 0; i < 8; i++) {
+              html += '<tr>';
+
+              for (j = 0; j < 8; j++) {
+                square_color = (i + j) % 2 ? 'ic_bs' : 'ic_ws';
+
+                current_bos = Ic.toBos(board.isRotated ? [7 - i, 7 - j] : [i, j]);
+
+                current_square = squares[current_bos].className;
+                current_square = current_square ? ' ic_' + current_square : '';
+
+                last_move = current_bos === from_bos || current_bos === to_bos ? ' ic_lastmove' : '';
+
+                square_class = 'ic_piece_holder' + current_square;
+
+                html += `<td class="${square_color + last_move}"><div class="${square_class}"></div></td>`;
+              }
+
+              html += '</tr>';
+            }
+
+            html += '</table>';
+
+            board_tooltip.html(html);
+
+            tooltip_top = $(this).position().top + $(this).outerHeight() + 20;
+            tooltip_left = $(this).position().left + $(this).outerWidth() / 2 - board_tooltip.outerWidth() / 2;
+
+            temp = ['tooltip_visible'];
+            temp.push('ic_font_' + _chessFontHelper(_CFG.chessFont));
+            temp.push('ic_theme_' + _chessThemeHelper(_CFG.chessTheme));
+
+            board_tooltip
+              .css({
+                top: tooltip_top + 'px',
+                left: tooltip_left + 'px',
+                height: _CFG.tooltipSize + 'px',
+                width: _CFG.tooltipSize + 'px',
+              })
+              .attr('class', temp.join(' '));
+          }
+        });
+
+        doc.off('mouseleave.icuipgnlinks').on('mouseleave.icuipgnlinks', '.ic_pgn_link, .ic_pgn_active', function () {
+          block: {
+            if (!$('#ic_board_tooltip').length) {
+              Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: missing board tooltip component', _ALERT_ERROR);
+              break block;
+            }
+
+            _BOARD_TOOLTIP_TIMEOUT = setTimeout(function () {
+              $('#ic_board_tooltip').removeClass('tooltip_visible');
+            }, 150);
           }
         });
       }
