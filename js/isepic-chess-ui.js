@@ -755,14 +755,13 @@
             board_tooltip,
             pgn_index,
             move,
-            from_bos,
-            to_bos,
             squares,
             html,
             square_color,
             current_bos,
             current_square,
             last_move,
+            in_check,
             square_class,
             tooltip_top,
             tooltip_left,
@@ -797,8 +796,6 @@
             }
 
             move = board.moveList[pgn_index];
-            from_bos = move.fromBos;
-            to_bos = move.toBos;
             squares = Ic.fenGet(move.fen, 'squares').squares;
 
             html = "<table cellpadding='0' cellspacing='0'>";
@@ -814,11 +811,23 @@
                 current_square = squares[current_bos].className;
                 current_square = current_square ? ' ic_' + current_square : '';
 
-                last_move = current_bos === from_bos || current_bos === to_bos ? ' ic_lastmove' : '';
+                last_move =
+                  _CFG.highlightLastMove && (current_bos === move.fromBos || current_bos === move.toBos)
+                    ? ' ic_lastmove'
+                    : '';
+
+                //TODO: isCheck via move property
+                in_check =
+                  _CFG.highlightChecks &&
+                  squares[current_bos].isKing &&
+                  (move.colorMoved === 'w' ? -1 : 1) === squares[current_bos].sign &&
+                  /[+#]/.test(move.san)
+                    ? ' ic_incheck'
+                    : '';
 
                 square_class = 'ic_piece_holder' + current_square;
 
-                html += `<td class="${square_color + last_move}"><div class="${square_class}"></div></td>`;
+                html += `<td class="${square_color + last_move + in_check}"><div class="${square_class}"></div></td>`;
               }
 
               html += '</tr>';
