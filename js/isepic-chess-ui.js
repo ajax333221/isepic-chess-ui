@@ -18,8 +18,8 @@
       highlightSelected: true,
       scrollNavigation: true,
       arrowKeysNavigation: false,
-      pgnBoardTooltip: false,
-      tooltipSize: 250,
+      moveTooltip: false,
+      moveTooltipSize: 250,
       animationTime: 300,
       draggingTime: 50,
       scrollingTime: 60,
@@ -771,16 +771,16 @@
           clearTimeout(_BOARD_TOOLTIP_TIMEOUT);
 
           block: {
-            if (!_CFG.pgnBoardTooltip) {
+            if (!_CFG.moveTooltip) {
               break block;
             }
 
-            if (!$('#ic_ui_board_tooltip').length) {
-              Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: missing board tooltip component', _ALERT_ERROR);
+            if (!$('#ic_ui_move_tooltip').length) {
+              Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: missing move tooltip component', _ALERT_ERROR);
               break block;
             }
 
-            board_tooltip = $('#ic_ui_board_tooltip');
+            board_tooltip = $('#ic_ui_move_tooltip');
 
             pgn_index = $(this).attr('data-index');
 
@@ -839,8 +839,8 @@
               .css({
                 top: tooltip_top + 'px',
                 left: tooltip_left + 'px',
-                height: _CFG.tooltipSize + 'px',
-                width: _CFG.tooltipSize + 'px',
+                height: _CFG.moveTooltipSize + 'px',
+                width: _CFG.moveTooltipSize + 'px',
               })
               .attr('class', temp.join(' '));
           }
@@ -848,17 +848,17 @@
 
         doc.off('mouseleave.icuipgnlinks').on('mouseleave.icuipgnlinks', '.ic_pgn_link, .ic_pgn_active', function () {
           block: {
-            if (!_CFG.pgnBoardTooltip) {
+            if (!_CFG.moveTooltip) {
               break block;
             }
 
-            if (!$('#ic_ui_board_tooltip').length) {
-              Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: missing board tooltip component', _ALERT_ERROR);
+            if (!$('#ic_ui_move_tooltip').length) {
+              Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: missing move tooltip component', _ALERT_ERROR);
               break block;
             }
 
             _BOARD_TOOLTIP_TIMEOUT = setTimeout(function () {
-              $('#ic_ui_board_tooltip').removeClass('tooltip_visible');
+              $('#ic_ui_move_tooltip').removeClass('tooltip_visible');
             }, 150);
           }
         });

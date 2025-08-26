@@ -89,6 +89,7 @@
         Ic.setSilentMode(false);
         IcUi.setCfg('scrollNavigation', false);
         IcUi.setCfg('arrowKeysNavigation', false);
+        IcUi.setCfg('moveTooltip', true);
 
         Ic.initBoard({
           boardName: 'main',
@@ -412,6 +413,7 @@
         <div class="ic_ui_controls">
           <div class="ic_ui_move_list">
             <div id="ic_ui_move_list"></div>
+            <div id="ic_ui_move_tooltip"></div>
           </div>
         </div>
 
@@ -419,12 +421,17 @@
 &lt;div class="ic_ui_controls"&gt;
   &lt;div class="ic_ui_move_list"&gt;
     &lt;div id="ic_ui_move_list"&gt;&lt;/div&gt;
+    &lt;div id="ic_ui_move_tooltip"&gt;&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</pre
         >
 
         <p class="component_first_p">
           Clicking a move link will trigger a <code>board.navLinkMove($(this).attr("data-index"));</code>.
+        </p>
+
+        <p>
+          Hovering a move link will display a chessboard tooltip of the move when enabled <code>moveTooltip = true</code> and the component exists <code>&lt;div id="ic_ui_move_tooltip"&gt;&lt;/div&gt</code>. The size of the tooltip can be configured with <code>IcUi.setCfg('moveTooltipSize', Number);</code> in pixels.
         </p>
 
         <p>
