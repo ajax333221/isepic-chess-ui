@@ -37,6 +37,15 @@
         border-top: 2px solid #f0f0f0;
       }
 
+      ul.custom_list{
+        padding: 0;
+        margin: 0;
+      }
+
+      ul.custom_list li{
+        margin: 10px 0 10px 25px;
+      }
+
       ul.component_list {
         padding: 10px;
         margin: 0;
@@ -89,6 +98,7 @@
         Ic.setSilentMode(false);
         IcUi.setCfg('scrollNavigation', false);
         IcUi.setCfg('arrowKeysNavigation', false);
+        IcUi.setCfg('moveTooltip', true);
 
         Ic.initBoard({
           boardName: 'main',
@@ -412,6 +422,7 @@
         <div class="ic_ui_controls">
           <div class="ic_ui_move_list">
             <div id="ic_ui_move_list"></div>
+            <div id="ic_ui_move_tooltip"></div>
           </div>
         </div>
 
@@ -419,12 +430,30 @@
 &lt;div class="ic_ui_controls"&gt;
   &lt;div class="ic_ui_move_list"&gt;
     &lt;div id="ic_ui_move_list"&gt;&lt;/div&gt;
+    &lt;div id="ic_ui_move_tooltip"&gt;&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</pre
         >
 
         <p class="component_first_p">
           Clicking a move link will trigger a <code>board.navLinkMove($(this).attr("data-index"));</code>.
+        </p>
+
+        <p>
+          Hovering a move link will display a chessboard tooltip of the move when enabled and if the component <code>&lt;div id="ic_ui_move_tooltip"&gt;&lt;/div&gt</code> exists.
+        </p>
+
+        <p>
+          The configuration that can affect the move tooltip board:
+          <ul class="custom_list">
+            <li><code>CFG.moveTooltip</code></li>
+            <li><code>CFG.moveTooltipSize</code></li>
+            <li><code>CFG.chessFont</code></li>
+            <li><code>CFG.chessTheme</code></li>
+            <li><code>CFG.highlightChecks</code></li>
+            <li><code>CFG.highlightLastMove</code></li>
+            <li><code>board.isRotated</code></li>
+          </ul>
         </p>
 
         <p>
