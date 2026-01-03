@@ -1,8 +1,8 @@
-/*! Copyright (c) 2025 Ajax Isepic (ajax333221) Licensed MIT */
+/*! Copyright (c) 2026 Ajax Isepic (ajax333221) Licensed MIT */
 
 (function (windw, $, Ic) {
   var IcUi = (function () {
-    var _VERSION = '4.10.0';
+    var _VERSION = '4.10.1';
 
     var _CFG = {
       chessFont: 'merida',
