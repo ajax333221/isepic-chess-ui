@@ -10,8 +10,7 @@ Boards created by `Ic.initBoard()` have the following available UI methods.
 
 | Method | Returns | UI? | Brief |
 |--------|---------|-----|-------|
-| [`board.refreshUi()`](#boardrefreshui) | - | ✓ | This method will:
-- Refresh the HTML of all the compone... |
+| [`board.refreshUi()`](#boardrefreshui) | - | ✓ | Refreshes the board UI components and manages animation... |
 
 ## Method Details
 
@@ -20,6 +19,8 @@ Boards created by `Ic.initBoard()` have the following available UI methods.
 ### `board.refreshUi(...)`
 
 > 🔄 **Triggers UI refresh**
+
+Refreshes the board UI components and manages animations, sounds, and highlights.
 
 This method will:
 - Refresh the HTML of all the components (if any) to reflect the internal state of the board.
@@ -45,9 +46,7 @@ If `playSounds` is a **truthy-value**, a sound might be played depending on mult
 
 </details>
 
-**Returns:**
-
-*None*
+**Returns:** None
 
 **Examples:**
 

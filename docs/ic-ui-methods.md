@@ -85,9 +85,7 @@ Valid options for **className** are:
 
 </details>
 
-**Returns:**
-
-*None*
+**Returns:** None
 
 **Examples:**
 
