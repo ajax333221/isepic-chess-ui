@@ -40,7 +40,7 @@
     icui.setCfg.description = [];
     icui.setCfg.description.push('Overwrites a configuration option with a new value.');
     icui.setCfg.description.push(
-      'Valid options are:<ul><li>**chessFont**<ul><li>Default: `"merida" (String)`</li></ul></li><li>**chessTheme**<ul><li>Default: `"wood" (String)`</li></ul></li><li>**boardLabels**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**boardInteractions**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**soundEffects**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**pieceAnimations**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**pieceDragging**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**highlightChecks**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**highlightLastMove**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**highlightLegalMoves**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**highlightSelected**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**scrollNavigation**<ul><li>Default: `true (Boolean)`</li></ul></li><li>**arrowKeysNavigation**<ul><li>Default: `false (Boolean)`</li></ul></li><li>**moveTooltip**<ul><li>Default: `false (Boolean)`</li></ul></li><li>**moveTooltipSize**<ul><li>Default: `250 (Number)`</li></ul></li><li>**animationTime**<ul><li>Default: `300 (Number)`</li></ul></li><li>**draggingTime**<ul><li>Default: `50 (Number)`</li></ul></li><li>**scrollingTime**<ul><li>Default: `60 (Number)`</li></ul></li><li>**pushAlertsTime**<ul><li>Default: `5000 (Number)`</li></ul></li></ul>'
+      'Valid options are:\n- **chessFont** — Default: `"merida"` (String)\n- **chessTheme** — Default: `"wood"` (String)\n- **boardLabels** — Default: `true` (Boolean)\n- **boardInteractions** — Default: `true` (Boolean)\n- **soundEffects** — Default: `true` (Boolean)\n- **pieceAnimations** — Default: `true` (Boolean)\n- **pieceDragging** — Default: `true` (Boolean)\n- **highlightChecks** — Default: `true` (Boolean)\n- **highlightLastMove** — Default: `true` (Boolean)\n- **highlightLegalMoves** — Default: `true` (Boolean)\n- **highlightSelected** — Default: `true` (Boolean)\n- **scrollNavigation** — Default: `true` (Boolean)\n- **arrowKeysNavigation** — Default: `false` (Boolean)\n- **moveTooltip** — Default: `false` (Boolean)\n- **moveTooltipSize** — Default: `250` (Number)\n- **animationTime** — Default: `300` (Number)\n- **draggingTime** — Default: `50` (Number)\n- **scrollingTime** — Default: `60` (Number)\n- **pushAlertsTime** — Default: `5000` (Number)'
     );
 
     icui.setCfg.examples = [];
@@ -59,12 +59,14 @@
     icui.pushAlert.returnVal = {};
 
     icui.pushAlert.description = [];
-    icui.pushAlert.description.push('Pushes an alert directly to **#ic_ui_push_alerts_top** and **#ic_ui_push_alerts_bottom** components.');
     icui.pushAlert.description.push(
-      'Valid options for **className** are:<ul><li>"light" (default)</li><li>"dark"</li><li>"success"</li><li>"warning"</li><li>"error"</li></ul>'
+      'Pushes an alert directly to **#ic_ui_push_alerts_top** and **#ic_ui_push_alerts_bottom** components.'
     );
     icui.pushAlert.description.push(
-      ':zap:**Tip:** to both push the alert to the UI and to the console (`console.log()`, `console.warn()` or `console.error()` depending on the **className**) you can use `Ic.utilityMisc.consoleLog(...)` instead, just make sure **silent mode** is not on (you can disable it with `Ic.setSilentMode(false)`)'
+      'Valid options for **className** are:\n- `"light"` (default)\n- `"dark"`\n- `"success"`\n- `"warning"`\n- `"error"`'
+    );
+    icui.pushAlert.description.push(
+      '> [!TIP]\n> To both push the alert to the UI and to the console (`console.log()`, `console.warn()` or `console.error()` depending on the **className**) you can use `Ic.utilityMisc.consoleLog(...)` instead, just make sure **silent mode** is not on (you can disable it with `Ic.setSilentMode(false)`).'
     );
 
     icui.pushAlert.examples = [];
@@ -83,33 +85,29 @@
 
     res += '\n\n';
 
-    res += '<h1 align="center">Ic Ui methods</h1>';
+    res += '# IcUi Methods';
 
     res += '\n\n';
 
-    res += 'Isepic Chess UI library `isepic-chess-ui.js` has the following available methods:';
+    res += 'Isepic Chess UI library `isepic-chess-ui.js` has the following available methods.';
 
     res += '\n\n';
 
-    res += '<ul>\n<li>IcUi.' + docoGenMethodList(icui).join('()</li>\n<li>IcUi.') + '()</li>\n</ul>';
+    res += '## Quick Reference';
 
     res += '\n\n';
 
-    res += '#### Table `IcUi.<methods>(...)`:';
-
-    res += '\n\n';
-
-    res += 'Function | Parameters | Return | UI refresh? | Description';
+    res += docoGenQuickRef(icui, 'IcUi.', 'IcUi.');
 
     res += '\n';
 
-    res += '-------- | ---------- | ------ | ----------- | -----------';
-
-    res += '\n';
-
-    res += docoGenMethodTable(icui).join('\n');
+    res += '## Method Details';
 
     res += '\n\n';
+
+    res += docoGenMethods(icui, 'IcUi.').join('');
+
+    res += '\n';
 
     res += '<p align="center">' + urlHrefLink(['« Return', '#book-documentation']) + '</p>';
 
