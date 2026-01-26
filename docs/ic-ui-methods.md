@@ -1,4 +1,4 @@
-<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui#book-documentation">« Return</a></p>
+<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui?tab=readme-ov-file#book-documentation">« Return</a></p>
 
 # IcUi Methods
 
@@ -101,4 +101,4 @@ IcUi.pushAlert('Alert with warning style', 'warning');
 IcUi.pushAlert('Alert with error style', 'error');
 ```
 
-<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui#book-documentation">« Return</a></p>
+<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui?tab=readme-ov-file#book-documentation">« Return</a></p>

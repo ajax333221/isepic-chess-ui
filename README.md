@@ -1,18 +1,18 @@
 <p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui"><img width="100" src="https://github.com/ajax333221/isepic-chess-ui/raw/master/css/images/ic_ui_logo.png" alt="IcUi logo"></a></p>
 
-<h1 align="center">isepic-chess-ui</h1>
+<h1 align="center" id="isepic-chessui">isepic-chess-ui</h1>
 
 Isepic Chess UI is the user interface for [isepic-chess.js](https://github.com/ajax333221/isepic-chess). It uses jQuery for DOM manipulation and animations.
 
 ## :pushpin: Table of contents
 
-- [isepic-chess-ui](https://github.com/ajax333221/isepic-chess-ui#isepic-chess-ui)
-- [Table of contents](https://github.com/ajax333221/isepic-chess-ui#pushpin-table-of-contents)
-- [How to use?](https://github.com/ajax333221/isepic-chess-ui#computer_mouse-how-to-use)
-- [Demo](https://github.com/ajax333221/isepic-chess-ui#eye-demo)
-- [Features](https://github.com/ajax333221/isepic-chess-ui#rocket-features)
-- [Documentation](https://github.com/ajax333221/isepic-chess-ui#book-documentation)
-- [Copyright and license](https://github.com/ajax333221/isepic-chess-ui#page_facing_up-copyright-and-license)
+- [isepic-chess-ui](#isepic-chessui)
+- [Table of contents](#pushpin-table-of-contents)
+- [How to use?](#computer_mouse-how-to-use)
+- [Demo](#eye-demo)
+- [Features](#rocket-features)
+- [Documentation](#book-documentation)
+- [Copyright and license](#page_facing_up-copyright-and-license)
 
 ## :computer_mouse: How to use?
 

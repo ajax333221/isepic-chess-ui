@@ -1,4 +1,4 @@
-<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui#book-documentation">« Return</a></p>
+<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui?tab=readme-ov-file#book-documentation">« Return</a></p>
 
 # Board UI Methods
 
@@ -60,4 +60,4 @@ board.refreshUi(1, true);
 board.refreshUi(-1, false);
 ```
 
-<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui#book-documentation">« Return</a></p>
+<p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui?tab=readme-ov-file#book-documentation">« Return</a></p>
