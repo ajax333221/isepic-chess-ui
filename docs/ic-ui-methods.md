@@ -6,10 +6,10 @@ Isepic Chess UI library `isepic-chess-ui.js` has the following available methods
 
 ## Quick Reference
 
-| Method | Returns | UI? | Brief |
-|--------|---------|-----|-------|
-| [`IcUi.setCfg()`](#icuisetcfg) | `Boolean` | ✓ | Overwrites a configuration option with a new value. |
-| [`IcUi.pushAlert()`](#icuipushalert) | - | - | Pushes an alert directly to #ic_ui_push_alerts_top and ... |
+| Method                               | Returns   | UI? | Brief                                                      |
+| ------------------------------------ | --------- | --- | ---------------------------------------------------------- |
+| [`IcUi.setCfg()`](#icuisetcfg)       | `Boolean` | ✓   | Overwrites a configuration option with a new value.        |
+| [`IcUi.pushAlert()`](#icuipushalert) | -         | -   | Pushes an alert directly to #ic_ui_push_alerts_top and ... |
 
 ## Method Details
 
@@ -22,6 +22,7 @@ Isepic Chess UI library `isepic-chess-ui.js` has the following available methods
 Overwrites a configuration option with a new value.
 
 Valid options are:
+
 - **chessFont** — Default: `"merida"` (String)
 - **chessTheme** — Default: `"wood"` (String)
 - **boardLabels** — Default: `true` (Boolean)
@@ -57,8 +58,8 @@ Valid options are:
 **Examples:**
 
 ```javascript
-IcUi.setCfg("arrowKeysNavigation", true)
-IcUi.setCfg("soundEffects", false)
+IcUi.setCfg('arrowKeysNavigation', true);
+IcUi.setCfg('soundEffects', false);
 ```
 
 ---
@@ -68,6 +69,7 @@ IcUi.setCfg("soundEffects", false)
 Pushes an alert directly to **#ic_ui_push_alerts_top** and **#ic_ui_push_alerts_bottom** components.
 
 Valid options for **className** are:
+
 - `"light"` (default)
 - `"dark"`
 - `"success"`
@@ -80,8 +82,8 @@ Valid options for **className** are:
 <details>
 <summary><strong>Parameters</strong></summary>
 
-- `message` `(String)` — *optional*
-- `className` `(String)` — *optional*
+- `message` `(String)` — _optional_
+- `className` `(String)` — _optional_
 
 </details>
 
@@ -90,14 +92,13 @@ Valid options for **className** are:
 **Examples:**
 
 ```javascript
-IcUi.pushAlert("Simple alert")
-IcUi.pushAlert("[Header]: simple alert with header")
-IcUi.pushAlert("Alert with light style", "light")
-IcUi.pushAlert("Alert with dark style", "dark")
-IcUi.pushAlert("Alert with success style", "success")
-IcUi.pushAlert("Alert with warning style", "warning")
-IcUi.pushAlert("Alert with error style", "error")
+IcUi.pushAlert('Simple alert');
+IcUi.pushAlert('[Header]: simple alert with header');
+IcUi.pushAlert('Alert with light style', 'light');
+IcUi.pushAlert('Alert with dark style', 'dark');
+IcUi.pushAlert('Alert with success style', 'success');
+IcUi.pushAlert('Alert with warning style', 'warning');
+IcUi.pushAlert('Alert with error style', 'error');
 ```
-
 
 <p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui#book-documentation">« Return</a></p>

@@ -8,9 +8,9 @@ Boards created by `Ic.initBoard()` have the following available UI methods.
 
 ## Quick Reference
 
-| Method | Returns | UI? | Brief |
-|--------|---------|-----|-------|
-| [`board.refreshUi()`](#boardrefreshui) | - | ✓ | Refreshes the board UI components and manages animation... |
+| Method                                 | Returns | UI? | Brief                                                      |
+| -------------------------------------- | ------- | --- | ---------------------------------------------------------- |
+| [`board.refreshUi()`](#boardrefreshui) | -       | ✓   | Refreshes the board UI components and manages animation... |
 
 ## Method Details
 
@@ -23,6 +23,7 @@ Boards created by `Ic.initBoard()` have the following available UI methods.
 Refreshes the board UI components and manages animations, sounds, and highlights.
 
 This method will:
+
 - Refresh the HTML of all the components (if any) to reflect the internal state of the board.
 - Finish ongoing piece animations.
 - Cancel ongoing piece dragging.
@@ -41,8 +42,8 @@ If `playSounds` is a **truthy-value**, a sound might be played depending on mult
 <details>
 <summary><strong>Parameters</strong></summary>
 
-- `animationType` `(Number)` — *optional*
-- `playSounds` `(Boolean)` — *optional*
+- `animationType` `(Number)` — _optional_
+- `playSounds` `(Boolean)` — _optional_
 
 </details>
 
@@ -51,13 +52,12 @@ If `playSounds` is a **truthy-value**, a sound might be played depending on mult
 **Examples:**
 
 ```javascript
-board.refreshUi()
-board.refreshUi(0)
-board.refreshUi(1)
-board.refreshUi(-1)
-board.refreshUi(1, true)
-board.refreshUi(-1, false)
+board.refreshUi();
+board.refreshUi(0);
+board.refreshUi(1);
+board.refreshUi(-1);
+board.refreshUi(1, true);
+board.refreshUi(-1, false);
 ```
-
 
 <p align="center"><a href="https://github.com/ajax333221/isepic-chess-ui#book-documentation">« Return</a></p>
