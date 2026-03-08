@@ -179,9 +179,9 @@
       to_square = document.getElementById('ic_ui_' + to_bos);
 
       temp = from_square.querySelector(':scope > .ic_piece_holder').getBoundingClientRect();
-      old_offset = { top: temp.top + window.scrollY, left: temp.left + window.scrollX };
+      old_offset = { top: temp.top, left: temp.left };
       temp = to_square.querySelector(':scope > .ic_piece_holder').getBoundingClientRect();
-      new_offset = { top: temp.top + window.scrollY, left: temp.left + window.scrollX };
+      new_offset = { top: temp.top, left: temp.left };
 
       old_h = from_square.offsetHeight;
       old_w = from_square.offsetWidth;
@@ -194,7 +194,7 @@
       piece_elm.className = 'ic_piece_holder' + (promotion_class || piece_class);
 
       Object.assign(temp.style, {
-        position: 'absolute',
+        position: 'fixed',
         top: old_offset.top + 'px',
         left: old_offset.left + 'px',
         height: old_h + 'px',
@@ -233,10 +233,10 @@
       limit = document.body;
 
       if (limit) {
-        limit_top = limit.getBoundingClientRect().top + window.scrollY;
-        limit_left = limit.getBoundingClientRect().left + window.scrollX;
-        limit_right = limit_left + limit.clientWidth;
-        limit_bottom = limit_top + limit.clientHeight;
+        limit_top = 0;
+        limit_left = 0;
+        limit_right = window.innerWidth;
+        limit_bottom = window.innerHeight;
       }
 
       target_square = document.getElementById('ic_ui_' + square_bos);
@@ -245,17 +245,17 @@
       piece_w = target_square.offsetWidth;
 
       piece_elm = target_square.querySelector(':scope > .ic_piece_holder');
-      piece_offset = { top: piece_elm.getBoundingClientRect().top + window.scrollY, left: piece_elm.getBoundingClientRect().left + window.scrollX };
+      piece_offset = { top: piece_elm.getBoundingClientRect().top, left: piece_elm.getBoundingClientRect().left };
       dragged_elm = piece_elm.cloneNode(true);
       document.getElementById('ic_ui_board').appendChild(dragged_elm);
       piece_elm.classList.add('ic_drag_hidden');
       piece_elm.style.display = 'none';
 
-      centered_top = initial_y - piece_h / 2;
-      centered_left = initial_x - piece_w / 2;
+      centered_top = (initial_y - window.scrollY) - piece_h / 2;
+      centered_left = (initial_x - window.scrollX) - piece_w / 2;
 
       Object.assign(dragged_elm.style, {
-        position: 'absolute',
+        position: 'fixed',
         top: piece_offset.top + 'px',
         left: piece_offset.left + 'px',
         height: piece_h + 'px',
