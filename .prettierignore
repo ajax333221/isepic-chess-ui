@@ -1,6 +1,9 @@
 # Markdown docs
 docs/*.md
 
+# Read only dependency
+js/isepic-chess.js
+
 # Minified js/css
 *.min.js
 *.min.css
