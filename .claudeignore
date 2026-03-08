@@ -1,0 +1,24 @@
+# Dependencias y sistema
+node_modules/
+js/jquery-3.3.1.min.js
+.git/
+.svn/
+.DS_Store
+Thumbs.db
+
+# Build y caché
+dist/
+build/
+.cache/
+.claude/
+
+# Imágenes y assets pesados
+sounds/
+css/images/
+
+# Archivos de configuración y locks
+package-lock.json
+.prettierrc
+.prettierignore
+.gitattributes
+LICENSE
