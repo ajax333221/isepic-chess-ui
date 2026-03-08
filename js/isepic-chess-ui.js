@@ -2,7 +2,7 @@
 
 (function (windw, Ic) {
   var IcUi = (function () {
-    var _VERSION = '5.0.0';
+    var _VERSION = '5.0.1';
 
     var _CFG = {
       chessFont: 'merida',
@@ -784,52 +784,57 @@
           }
         });
 
-        document.addEventListener('wheel', function (e) {
-          var temp, board, is_reversed;
+        document.addEventListener(
+          'wheel',
+          function (e) {
+            var temp, board, is_reversed;
 
-          block: {
-            if (!_CFG.scrollNavigation || _SCROLLING_WAITING) {
-              break block;
+            block: {
+              if (!_CFG.scrollNavigation) {
+                break block;
+              }
+
+              if (!e.target.closest('#ic_ui_board')) {
+                break block;
+              }
+
+              temp = e && e.deltaY ? e.deltaY : 0;
+
+              if (!temp) {
+                //horizontal scrolling or bad event
+                break block;
+              }
+
+              e.preventDefault();
+
+              if (_SCROLLING_WAITING) {
+                break block;
+              }
+
+              _SCROLLING_WAITING = true;
+
+              setTimeout(function () {
+                _SCROLLING_WAITING = false;
+              }, _CFG.scrollingTime);
+
+              is_reversed = temp < 0;
+
+              board = Ic.getBoard(_BOARD_NAME);
+
+              if (board === null) {
+                Ic.utilityMisc.consoleLog('[wheel]: board not found', _ALERT_ERROR);
+                break block;
+              }
+
+              if (is_reversed) {
+                board.navPrevious();
+              } else {
+                board.navNext();
+              }
             }
-
-            _SCROLLING_WAITING = true;
-
-            setTimeout(function () {
-              _SCROLLING_WAITING = false;
-            }, _CFG.scrollingTime);
-
-            temp = 0;
-
-            if (e && e.deltaY) {
-              temp = e.deltaY;
-            }
-
-            if (!temp) {
-              //horizontal scrolling or bad event
-              break block;
-            }
-
-            is_reversed = temp < 0;
-
-            if (!e.target.closest('#ic_ui_board')) {
-              //not a child
-              break block;
-            }
-
-            board = Ic.getBoard(_BOARD_NAME);
-
-            if (board === null) {
-              Ic.utilityMisc.consoleLog('[wheel]: board not found', _ALERT_ERROR);
-              break block;
-            }
-
-            if (is_reversed) {
-              board.navPrevious();
-            } else {
-              board.navNext();
-            }
-          }
-        });
+          },
+          { passive: false }
+        );
 
         document.addEventListener('mouseover', function (e) {
           var this_elm,
