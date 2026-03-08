@@ -192,7 +192,6 @@
       }
     </style>
 
-    <script src="./js/jquery-3.3.1.min.js"></script>
     <script src="./js/isepic-chess.js"></script>
     <script src="./js/isepic-chess-ui.js"></script>
 
@@ -200,20 +199,17 @@
       function stretch_board() {
         var elm_flex_wrapper, w_temp, h_temp;
 
-        elm_flex_wrapper = $('#right_elm');
+        elm_flex_wrapper = document.getElementById('right_elm');
 
-        w_temp = elm_flex_wrapper.width();
-        h_temp = elm_flex_wrapper.height();
+        w_temp = elm_flex_wrapper.clientWidth;
+        h_temp = elm_flex_wrapper.clientHeight;
 
-        $('#ic_ui_board')
-          .parent()
-          .css({
-            width: Math.min(w_temp, h_temp),
-            height: Math.min(w_temp, h_temp),
-          });
+        var board_parent = document.getElementById('ic_ui_board').parentElement;
+        board_parent.style.width = Math.min(w_temp, h_temp) + 'px';
+        board_parent.style.height = Math.min(w_temp, h_temp) + 'px';
       }
 
-      $(function () {
+      document.addEventListener('DOMContentLoaded', function () {
         Ic.setSilentMode(false);
         IcUi.setCfg('arrowKeysNavigation', true);
         IcUi.setCfg('moveTooltip', true);
@@ -224,14 +220,14 @@
           boardName: 'main',
         });
 
-        $(window).on('resize', stretch_board);
+        window.addEventListener('resize', stretch_board);
 
         stretch_board();
 
-        $('#parsebtn').click(function () {
+        document.getElementById('parsebtn').addEventListener('click', function (e) {
           var val, animate_last_move, parsed_correctly, is_rotated_cache, promote_to_cache;
 
-          val = $('#parseinput').val();
+          val = document.getElementById('parseinput').value;
 
           animate_last_move = false;
           parsed_correctly = false;
@@ -270,7 +266,7 @@
           }
 
           if (parsed_correctly) {
-            $('#parsetoggler').trigger('click');
+            document.getElementById('parsetoggler').click();
 
             is_rotated_cache = Ic('main').board.isRotated;
             promote_to_cache = Ic('main').board.promoteTo;
@@ -285,23 +281,26 @@
             Ic('main').refreshUi(animate_last_move * 1, true);
           }
 
-          return false;
+          e.preventDefault();
         });
 
-        $('#parsetoggler').click(function () {
-          $('#parsebox').toggle();
-          $(this).text($('#parsebox').is(':visible') ? '▲' : '▼');
+        document.getElementById('parsetoggler').addEventListener('click', function (e) {
+          var parsebox = document.getElementById('parsebox');
+          parsebox.style.display = parsebox.style.display === 'none' ? '' : 'none';
+          this.textContent = parsebox.style.display !== 'none' ? '▲' : '▼';
 
-          return false;
+          e.preventDefault();
         });
 
-        $('.theme_changer').click(function () {
-          IcUi.setCfg('chessTheme', $(this).attr('data-theme'));
+        document.querySelectorAll('.theme_changer').forEach(function (elm) {
+          elm.addEventListener('click', function (e) {
+            IcUi.setCfg('chessTheme', this.dataset.theme);
 
-          return false;
+            e.preventDefault();
+          });
         });
 
-        $('#parseinput').val('1. e4 e5 2. Nf3 Nc6 3. Bc4 f6 4. O-O');
+        document.getElementById('parseinput').value = '1. e4 e5 2. Nf3 Nc6 3. Bc4 f6 4. O-O';
       });
     </script>
   </head>

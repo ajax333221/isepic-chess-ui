@@ -94,41 +94,36 @@
             alert_box = document.getElementById(alert_id);
 
             if (alert_box) {
-              alert_box
-                .addClass('ic_alert_hidden')
-                .off('transitionend.icuiautodimiss')
-                .on('transitionend.icuiautodimiss', () => {
-                  if (alert_box) {
-                    alert_box.remove();
-                  }
-                  clearTimeout(timeout_id);
-                });
+              alert_box.classList.add('ic_alert_hidden');
+              alert_box.addEventListener('transitionend', function () {
+                alert_box.remove();
+                clearTimeout(timeout_id);
+              }, { once: true });
             }
           }, _CFG.pushAlertsTime);
         }
 
-        alert_box = $('<div></div>')
-          .attr('id', alert_id)
-          .attr('class', 'ic_alert_box ic_alert_animation' + (class_name ? ' ' + class_name : ''))
-          .css(`margin-${top_or_bottom}`, '20px')
-          .html(
-            (alert_msg || '').replace(/^([^ ]*)\[[^\]]+]: /, (x) => `<span class='ic_alert_header'>${x.trim()}</span>`)
-          );
-        alert_holder.append(alert_box);
+        alert_box = document.createElement('div');
+        alert_box.id = alert_id;
+        alert_box.className = 'ic_alert_box ic_alert_animation' + (class_name ? ' ' + class_name : '');
+        alert_box.style.setProperty('margin-' + top_or_bottom, '20px');
+        alert_box.innerHTML = (alert_msg || '').replace(/^([^ ]*)\[[^\]]+]: /, (x) => `<span class='ic_alert_header'>${x.trim()}</span>`);
+        alert_holder.appendChild(alert_box);
 
-        close_btn = $('<div></div>')
-          .attr('class', 'ic_alert_close')
-          .attr('data-target', alert_id)
-          .attr('data-timeout', timeout_id)
-          .html('&times;');
-        alert_box.append(close_btn);
+        close_btn = document.createElement('div');
+        close_btn.className = 'ic_alert_close';
+        close_btn.dataset.target = alert_id;
+        close_btn.dataset.timeout = timeout_id;
+        close_btn.innerHTML = '&times;';
+        alert_box.appendChild(close_btn);
       }
     }
 
     //!---------------- utilities
 
     function _cancelAnimations() {
-      document.querySelectorAll('#ic_ui_board .ic_piece_holder').finish();
+      document.querySelectorAll('#ic_ui_board > .ic_piece_holder').forEach(function (elm) { elm.remove(); });
+      document.querySelectorAll('#ic_ui_board .ic_piece_holder').forEach(function (elm) { elm.style.display = ''; });
     }
 
     function _cancelSelected() {
@@ -146,7 +141,7 @@
       }
 
       if (_DRAGGING_BOS) {
-        document.querySelectorAll('#ic_ui_board .ic_drag_shown').remove();
+        document.querySelectorAll('#ic_ui_board .ic_drag_shown').forEach(function (elm) { elm.remove(); });
         document.querySelectorAll('#ic_ui_board .ic_drag_hidden').forEach(function (elm) {
           elm.style.display = '';
           elm.classList.remove('ic_drag_hidden');
@@ -157,26 +152,22 @@
     }
 
     function _getHoverElement(x, y) {
-      var rtn;
+      var i, elm, rect, squares, rtn;
 
       rtn = null;
+      squares = document.querySelectorAll('#ic_ui_board .ic_ws, #ic_ui_board .ic_bs');
 
-      $('#ic_ui_board .ic_ws, #ic_ui_board .ic_bs').each(function () {
-        var elm, elm_top, elm_right, elm_bottom, elm_left;
+      for (i = 0; i < squares.length; i++) {
+        elm = squares[i];
+        rect = elm.getBoundingClientRect();
 
-        elm = $(this);
-        elm_top = elm.offset().top;
-        elm_right = elm.offset().left + elm.width();
-        elm_bottom = elm.offset().top + elm.height();
-        elm_left = elm.offset().left;
-
-        if (x >= elm_left && x <= elm_right) {
-          if (y >= elm_top && y <= elm_bottom) {
+        if (x >= rect.left + window.scrollX && x <= rect.right + window.scrollX) {
+          if (y >= rect.top + window.scrollY && y <= rect.bottom + window.scrollY) {
             rtn = elm;
-            return false;
+            break;
           }
         }
-      });
+      }
 
       return rtn;
     }
@@ -187,39 +178,37 @@
       from_square = document.getElementById('ic_ui_' + from_bos);
       to_square = document.getElementById('ic_ui_' + to_bos);
 
-      old_offset = from_square.children('.ic_piece_holder').offset();
-      new_offset = to_square.children('.ic_piece_holder').offset();
+      temp = from_square.querySelector(':scope > .ic_piece_holder').getBoundingClientRect();
+      old_offset = { top: temp.top + window.scrollY, left: temp.left + window.scrollX };
+      temp = to_square.querySelector(':scope > .ic_piece_holder').getBoundingClientRect();
+      new_offset = { top: temp.top + window.scrollY, left: temp.left + window.scrollX };
 
-      old_h = from_square.height();
-      old_w = from_square.width();
+      old_h = from_square.offsetHeight;
+      old_w = from_square.offsetWidth;
 
       to_square.innerHTML = "<div class='" + ('ic_piece_holder' + piece_class) + "'></div>";
-      piece_elm = to_square.children('.ic_piece_holder');
-      temp = piece_elm.clone().appendTo('#ic_ui_board');
-      piece_elm.hide().attr('class', 'ic_piece_holder' + (promotion_class || piece_class));
+      piece_elm = to_square.querySelector(':scope > .ic_piece_holder');
+      temp = piece_elm.cloneNode(true);
+      document.getElementById('ic_ui_board').appendChild(temp);
+      piece_elm.style.display = 'none';
+      piece_elm.className = 'ic_piece_holder' + (promotion_class || piece_class);
 
-      temp
-        .css({
-          position: 'absolute',
-          top: old_offset.top,
-          left: old_offset.left,
-          height: old_h,
-          width: old_w,
-          zIndex: 1000,
-        })
-        .animate(
-          {
-            top: new_offset.top,
-            left: new_offset.left,
-          },
-          {
-            duration: _CFG.animationTime,
-            always: function () {
-              piece_elm.show();
-              temp.remove();
-            },
-          }
-        );
+      Object.assign(temp.style, {
+        position: 'absolute',
+        top: old_offset.top + 'px',
+        left: old_offset.left + 'px',
+        height: old_h + 'px',
+        width: old_w + 'px',
+        zIndex: 1000,
+      });
+      void temp.offsetWidth;
+      temp.style.transition = 'top ' + _CFG.animationTime + 'ms, left ' + _CFG.animationTime + 'ms';
+      temp.style.top = new_offset.top + 'px';
+      temp.style.left = new_offset.left + 'px';
+      temp.addEventListener('transitionend', function () {
+        piece_elm.style.display = '';
+        temp.remove();
+      }, { once: true });
     }
 
     function _dragPiece(initial_x, initial_y, square_bos) {
@@ -244,37 +233,37 @@
       limit = document.body;
 
       if (limit) {
-        limit_top = limit.offset().top + window.scrollY;
-        limit_left = limit.offset().left + window.scrollX;
-        limit_right = limit_left + limit.innerWidth();
-        limit_bottom = limit_top + limit.innerHeight();
+        limit_top = limit.getBoundingClientRect().top + window.scrollY;
+        limit_left = limit.getBoundingClientRect().left + window.scrollX;
+        limit_right = limit_left + limit.clientWidth;
+        limit_bottom = limit_top + limit.clientHeight;
       }
 
       target_square = document.getElementById('ic_ui_' + square_bos);
 
-      piece_h = target_square.height();
-      piece_w = target_square.width();
+      piece_h = target_square.offsetHeight;
+      piece_w = target_square.offsetWidth;
 
-      piece_elm = target_square.children('.ic_piece_holder');
-      piece_offset = piece_elm.offset();
-      dragged_elm = piece_elm.clone().appendTo('#ic_ui_board');
-      piece_elm.addClass('ic_drag_hidden').hide();
+      piece_elm = target_square.querySelector(':scope > .ic_piece_holder');
+      piece_offset = { top: piece_elm.getBoundingClientRect().top + window.scrollY, left: piece_elm.getBoundingClientRect().left + window.scrollX };
+      dragged_elm = piece_elm.cloneNode(true);
+      document.getElementById('ic_ui_board').appendChild(dragged_elm);
+      piece_elm.classList.add('ic_drag_hidden');
+      piece_elm.style.display = 'none';
 
       centered_top = initial_y - piece_h / 2;
       centered_left = initial_x - piece_w / 2;
 
-      dragged_elm
-        .css({
-          position: 'absolute',
-          top: piece_offset.top,
-          left: piece_offset.left,
-          height: piece_h,
-          width: piece_w,
-          cursor: 'pointer',
-          zIndex: 1020,
-        })
-        .addClass('ic_drag_shown')
-        .appendTo('#ic_ui_board');
+      Object.assign(dragged_elm.style, {
+        position: 'absolute',
+        top: piece_offset.top + 'px',
+        left: piece_offset.left + 'px',
+        height: piece_h + 'px',
+        width: piece_w + 'px',
+        cursor: 'pointer',
+        zIndex: 1020,
+      });
+      dragged_elm.classList.add('ic_drag_shown');
 
       _POS_Y = initial_y;
       _POS_X = initial_x;
@@ -290,19 +279,19 @@
 
           if (pos_y < limit_top && limit) {
             pos_y = limit_top;
-          } else if (pos_y + dragged_elm.innerHeight() > limit_bottom && limit) {
-            pos_y = limit_bottom - dragged_elm.outerHeight();
+          } else if (pos_y + dragged_elm.clientHeight > limit_bottom && limit) {
+            pos_y = limit_bottom - dragged_elm.offsetHeight;
           }
 
           if (pos_x < limit_left && limit) {
             pos_x = limit_left;
-          } else if (pos_x + dragged_elm.innerWidth() > limit_right && limit) {
-            pos_x = limit_right - dragged_elm.outerWidth();
+          } else if (pos_x + dragged_elm.clientWidth > limit_right && limit) {
+            pos_x = limit_right - dragged_elm.offsetWidth;
           }
 
-          dragged_elm.css({
-            top: pos_y,
-            left: pos_x,
+          Object.assign(dragged_elm.style, {
+            top: pos_y + 'px',
+            left: pos_x + 'px',
           });
         }
 
@@ -312,26 +301,43 @@
     }
 
     function _bindOnce() {
-      var doc;
-
       if (!_RAN_ONCE) {
         _RAN_ONCE = true;
-        doc = document;
 
-        doc.off('click.icuifen').on('click.icuifen', '#ic_ui_fen', function () {
-          $(this).select();
+        document.addEventListener('click', function (e) {
+          var this_elm;
+
+          this_elm = e.target.closest('#ic_ui_fen');
+
+          if (!this_elm) {
+            return;
+          }
+
+          this_elm.select();
         });
 
-        doc.off('click.icuidebug').on('click.icuidebug', '#ic_ui_debug_toggler', function () {
-          $(this).text('Debug ' + ($('#ic_ui_debug').is(':visible') ? '▲' : '▼'));
-          $('#ic_ui_debug').toggle();
+        document.addEventListener('click', function (e) {
+          var this_elm, debug_elm;
 
-          if ($(this).prop('tagName') === 'A') {
-            return false;
+          this_elm = e.target.closest('#ic_ui_debug_toggler');
+
+          if (!this_elm) {
+            return;
+          }
+
+          debug_elm = document.getElementById('ic_ui_debug');
+          this_elm.textContent = 'Debug ' + (debug_elm && debug_elm.offsetParent !== null ? '▲' : '▼');
+
+          if (debug_elm) {
+            debug_elm.style.display = debug_elm.style.display === 'none' ? '' : 'none';
+          }
+
+          if (this_elm.tagName === 'A') {
+            e.preventDefault();
           }
         });
 
-        doc.off('keydown.icuikeynav').on('keydown.icuikeynav', function (e) {
+        document.addEventListener('keydown', function (e) {
           var board, current_nav;
 
           block: {
@@ -369,36 +375,43 @@
                 Ic.utilityMisc.consoleLog('[keydown]: invalid case "' + current_nav + '"', _ALERT_ERROR);
             }
 
-            return false;
+            e.preventDefault();
           }
         });
 
-        doc.off('click.icuidclosebtn').on('click.icuidclosebtn', '.ic_alert_close', function () {
-          var alert_box, target_id, timeout_id;
+        document.addEventListener('click', function (e) {
+          var this_elm, alert_box, target_id, timeout_id;
 
-          target_id = $(this).attr('data-target');
-          timeout_id = $(this).attr('data-timeout');
+          this_elm = e.target.closest('.ic_alert_close');
 
+          if (!this_elm) {
+            return;
+          }
+
+          target_id = this_elm.dataset.target;
+          timeout_id = this_elm.dataset.timeout;
           alert_box = document.getElementById(target_id);
 
           if (alert_box) {
-            alert_box
-              .addClass('ic_alert_hidden')
-              .off('transitionend.icuimanualdimiss')
-              .on('transitionend.icuimanualdimiss', () => {
-                if (alert_box) {
-                  alert_box.remove();
-                }
-                clearTimeout(timeout_id);
-              });
+            alert_box.classList.add('ic_alert_hidden');
+            alert_box.addEventListener('transitionend', function () {
+              alert_box.remove();
+              clearTimeout(timeout_id);
+            }, { once: true });
           }
         });
 
-        doc.off('click.icuifirst').on('click.icuifirst', '#ic_ui_nav_first', function () {
-          var board;
+        document.addEventListener('click', function (e) {
+          var this_elm, board;
 
-          if ($(this).hasClass('ic_disabled')) {
-            return false;
+          this_elm = e.target.closest('#ic_ui_nav_first');
+
+          if (!this_elm) {
+            return;
+          }
+
+          if (this_elm.classList.contains('ic_disabled')) {
+            return;
           }
 
           block: {
@@ -412,16 +425,22 @@
             board.navFirst();
           }
 
-          if ($(this).prop('tagName') === 'A') {
-            return false;
+          if (this_elm.tagName === 'A') {
+            e.preventDefault();
           }
         });
 
-        doc.off('click.icuiprev').on('click.icuiprev', '#ic_ui_nav_previous', function () {
-          var board;
+        document.addEventListener('click', function (e) {
+          var this_elm, board;
 
-          if ($(this).hasClass('ic_disabled')) {
-            return false;
+          this_elm = e.target.closest('#ic_ui_nav_previous');
+
+          if (!this_elm) {
+            return;
+          }
+
+          if (this_elm.classList.contains('ic_disabled')) {
+            return;
           }
 
           block: {
@@ -435,16 +454,22 @@
             board.navPrevious();
           }
 
-          if ($(this).prop('tagName') === 'A') {
-            return false;
+          if (this_elm.tagName === 'A') {
+            e.preventDefault();
           }
         });
 
-        doc.off('click.icuinext').on('click.icuinext', '#ic_ui_nav_next', function () {
-          var board;
+        document.addEventListener('click', function (e) {
+          var this_elm, board;
 
-          if ($(this).hasClass('ic_disabled')) {
-            return false;
+          this_elm = e.target.closest('#ic_ui_nav_next');
+
+          if (!this_elm) {
+            return;
+          }
+
+          if (this_elm.classList.contains('ic_disabled')) {
+            return;
           }
 
           block: {
@@ -458,16 +483,22 @@
             board.navNext();
           }
 
-          if ($(this).prop('tagName') === 'A') {
-            return false;
+          if (this_elm.tagName === 'A') {
+            e.preventDefault();
           }
         });
 
-        doc.off('click.icuilast').on('click.icuilast', '#ic_ui_nav_last', function () {
-          var board;
+        document.addEventListener('click', function (e) {
+          var this_elm, board;
 
-          if ($(this).hasClass('ic_disabled')) {
-            return false;
+          this_elm = e.target.closest('#ic_ui_nav_last');
+
+          if (!this_elm) {
+            return;
+          }
+
+          if (this_elm.classList.contains('ic_disabled')) {
+            return;
           }
 
           block: {
@@ -481,16 +512,22 @@
             board.navLast();
           }
 
-          if ($(this).prop('tagName') === 'A') {
-            return false;
+          if (this_elm.tagName === 'A') {
+            e.preventDefault();
           }
         });
 
-        doc.off('click.icuirotate').on('click.icuirotate', '#ic_ui_rotate', function () {
-          var board;
+        document.addEventListener('click', function (e) {
+          var this_elm, board;
 
-          if ($(this).hasClass('ic_disabled')) {
-            return false;
+          this_elm = e.target.closest('#ic_ui_rotate');
+
+          if (!this_elm) {
+            return;
+          }
+
+          if (this_elm.classList.contains('ic_disabled')) {
+            return;
           }
 
           block: {
@@ -504,13 +541,19 @@
             board.toggleIsRotated();
           }
 
-          if ($(this).prop('tagName') === 'A') {
-            return false;
+          if (this_elm.tagName === 'A') {
+            e.preventDefault();
           }
         });
 
-        doc.off('change.icuipromote').on('change.icuipromote', '#ic_ui_promote', function () {
-          var board;
+        document.addEventListener('change', function (e) {
+          var this_elm, board;
+
+          this_elm = e.target.closest('#ic_ui_promote');
+
+          if (!this_elm) {
+            return;
+          }
 
           block: {
             board = Ic.getBoard(_BOARD_NAME);
@@ -520,15 +563,21 @@
               break block;
             }
 
-            board.setPromoteTo($(this).val());
+            board.setPromoteTo(this_elm.value);
           }
         });
 
-        doc.off('click.icuichange').on('click.icuichange', '.ic_changeboard', function () {
-          var board, board_name;
+        document.addEventListener('click', function (e) {
+          var this_elm, board, board_name;
+
+          this_elm = e.target.closest('.ic_changeboard');
+
+          if (!this_elm) {
+            return;
+          }
 
           block: {
-            board_name = $(this).attr('data-rebindboardname');
+            board_name = this_elm.dataset.rebindboardname;
 
             if (!board_name) {
               Ic.utilityMisc.consoleLog('[.ic_changeboard]: missing data-rebindboardname', _ALERT_ERROR);
@@ -545,16 +594,22 @@
             refreshUi.apply(board, [0, false]);
           }
 
-          if ($(this).prop('tagName') === 'A') {
-            return false;
+          if (this_elm.tagName === 'A') {
+            e.preventDefault();
           }
         });
 
-        doc.off('click.icuipgnlinks').on('click.icuipgnlinks', '.ic_pgn_link', function () {
-          var pgn_index, board;
+        document.addEventListener('click', function (e) {
+          var this_elm, pgn_index, board;
+
+          this_elm = e.target.closest('.ic_pgn_link');
+
+          if (!this_elm) {
+            return;
+          }
 
           block: {
-            pgn_index = $(this).attr('data-index');
+            pgn_index = this_elm.dataset.index;
 
             if (!pgn_index) {
               Ic.utilityMisc.consoleLog('[.ic_pgn_link]: missing data-index', _ALERT_ERROR);
@@ -571,12 +626,12 @@
             board.navLinkMove(pgn_index);
           }
 
-          if ($(this).prop('tagName') === 'A') {
-            return false;
+          if (this_elm.tagName === 'A') {
+            e.preventDefault();
           }
         });
 
-        doc.off('mousemove.icuirefreshpos').on('mousemove.icuirefreshpos', function (e) {
+        document.addEventListener('mousemove', function (e) {
           block: {
             if (!_CFG.pieceDragging || !_DRAGGING_BOS) {
               break block;
@@ -587,7 +642,7 @@
           }
         });
 
-        doc.off('mouseup.icuirelease').on('mouseup.icuirelease', function (e) {
+        document.addEventListener('mouseup', function (e) {
           var temp, board, current_bos, old_drg;
 
           old_drg = _DRAGGING_BOS;
@@ -615,7 +670,7 @@
               break block;
             }
 
-            current_bos = temp.attr('data-bos');
+            current_bos = temp.dataset.bos;
 
             if (!current_bos) {
               Ic.utilityMisc.consoleLog('[mouseup]: missing data-bos', _ALERT_ERROR);
@@ -630,7 +685,7 @@
           }
         });
 
-        doc.off('mousedown.icuipress').on('mousedown.icuipress', function (e) {
+        document.addEventListener('mousedown', function (e) {
           var i, len, temp, legal_moves, board, square, current_bos, old_sel;
 
           old_sel = _SELECTED_BOS;
@@ -655,7 +710,7 @@
               break block;
             }
 
-            current_bos = temp.attr('data-bos');
+            current_bos = temp.dataset.bos;
 
             if (!current_bos) {
               Ic.utilityMisc.consoleLog('[mousedown]: missing data-bos', _ALERT_ERROR);
@@ -704,7 +759,7 @@
           }
         });
 
-        doc.off('wheel.icuiscroll').on('wheel.icuiscroll', function (e) {
+        document.addEventListener('wheel', function (e) {
           var temp, board, is_reversed;
 
           block: {
@@ -720,8 +775,8 @@
 
             temp = 0;
 
-            if (e && e.originalEvent && e.originalEvent.deltaY) {
-              temp = e.originalEvent.deltaY;
+            if (e && e.deltaY) {
+              temp = e.deltaY;
             }
 
             if (!temp) {
@@ -751,8 +806,9 @@
           }
         });
 
-        doc.off('mouseenter.icuipgnlinks').on('mouseenter.icuipgnlinks', '.ic_pgn_link, .ic_pgn_active', function () {
-          var i,
+        document.addEventListener('mouseover', function (e) {
+          var this_elm,
+            i,
             j,
             temp,
             board_tooltip,
@@ -770,6 +826,12 @@
             tooltip_left,
             board;
 
+          this_elm = e.target.closest('.ic_pgn_link, .ic_pgn_active');
+
+          if (!this_elm) {
+            return;
+          }
+
           clearTimeout(_BOARD_TOOLTIP_TIMEOUT);
 
           block: {
@@ -783,8 +845,7 @@
             }
 
             board_tooltip = document.getElementById('ic_ui_move_tooltip');
-
-            pgn_index = $(this).attr('data-index');
+            pgn_index = this_elm.dataset.index;
 
             if (!pgn_index) {
               Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: missing data-index', _ALERT_ERROR);
@@ -840,8 +901,8 @@
 
             board_tooltip.innerHTML = html;
 
-            tooltip_top = $(this).position().top + $(this).outerHeight() + 20;
-            tooltip_left = $(this).position().left + $(this).outerWidth() / 2 - board_tooltip.offsetWidth / 2;
+            tooltip_top = this_elm.offsetTop + this_elm.offsetHeight + 20;
+            tooltip_left = this_elm.offsetLeft + this_elm.offsetWidth / 2 - board_tooltip.offsetWidth / 2;
 
             temp = ['tooltip_visible'];
             temp.push('ic_font_' + _chessFontHelper(_CFG.chessFont));
@@ -857,7 +918,15 @@
           }
         });
 
-        doc.off('mouseleave.icuipgnlinks').on('mouseleave.icuipgnlinks', '.ic_pgn_link, .ic_pgn_active', function () {
+        document.addEventListener('mouseout', function (e) {
+          var this_elm;
+
+          this_elm = e.target.closest('.ic_pgn_link, .ic_pgn_active');
+
+          if (!this_elm || this_elm.contains(e.relatedTarget)) {
+            return;
+          }
+
           block: {
             if (!_CFG.moveTooltip) {
               break block;

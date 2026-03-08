@@ -2,7 +2,7 @@
 
 <h1 align="center" id="isepic-chessui">isepic-chess-ui</h1>
 
-Isepic Chess UI is the user interface for [isepic-chess.js](https://github.com/ajax333221/isepic-chess). It uses jQuery for DOM manipulation and animations.
+Isepic Chess UI is the user interface for [isepic-chess.js](https://github.com/ajax333221/isepic-chess).
 
 ## :pushpin: Table of contents
 
@@ -21,16 +21,15 @@ Isepic Chess UI is the user interface for [isepic-chess.js](https://github.com/a
 ```html
 <link rel="stylesheet" href="./css/isepic-chess-ui.css" />
 
-<script src="./js/jquery-3.3.1.min.js"></script>
 <script src="./js/isepic-chess.js"></script>
 <script src="./js/isepic-chess-ui.js"></script>
 ```
 
-2. Wrap your code inside `$(function(){...});` to wait for the DOM to be ready.
+2. Wrap your code inside `document.addEventListener('DOMContentLoaded', function(){...});` to wait for the DOM to be ready.
 
 ```html
 <script>
-  $(function () {
+  document.addEventListener('DOMContentLoaded', function () {
     //you can overwrite configuration options
     IcUi.setCfg('soundEffects', false);
     IcUi.setCfg('scrollNavigation', false);

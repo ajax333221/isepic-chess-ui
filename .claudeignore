@@ -1,6 +1,5 @@
 # Dependencias y sistema
 node_modules/
-js/jquery-3.3.1.min.js
 .git/
 .svn/
 .DS_Store

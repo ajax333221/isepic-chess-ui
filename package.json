@@ -23,7 +23,6 @@
   "author": "Ajax Isepic",
   "license": "MIT",
   "dependencies": {
-    "jquery": ">=3.3.1",
     "isepic-chess": ">=9.1.1"
   },
   "devDependencies": {
