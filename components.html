@@ -406,7 +406,7 @@
 &lt;/div&gt;</pre
         >
 
-        <p class="component_first_p">This component triggers a <code>board.setPromoteTo($(this).val());</code>.</p>
+        <p class="component_first_p">This component triggers a <code>board.setPromoteTo(this.value);</code>.</p>
 
         <p>
           You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.
@@ -435,7 +435,7 @@
         >
 
         <p class="component_first_p">
-          Clicking a move link will trigger a <code>board.navLinkMove($(this).attr("data-index"));</code>.
+          Clicking a move link will trigger a <code>board.navLinkMove(this.dataset.index);</code>.
         </p>
 
         <p>
@@ -481,7 +481,7 @@
 &lt;/div&gt;</pre
         >
 
-        <p class="component_first_p">Clicking this component will autoselect the FEN <code>$(this).select();</code>.</p>
+        <p class="component_first_p">Clicking this component will autoselect the FEN <code>this.select();</code>.</p>
 
         <p>
           You can group together multiple components under a single wrapper parent class <code>.ic_ui_controls</code>.
@@ -503,7 +503,9 @@
 &lt;/div&gt;</pre
         >
 
-        <p class="component_first_p">This component triggers a <code>$("#ic_ui_debug").toggle();</code>.</p>
+        <p class="component_first_p">
+          This component toggles the visibility of <code>document.getElementById('ic_ui_debug')</code>.
+        </p>
 
         <p>
           Upon clicking, its arrow direction is updated to reflect the current visibility state of
