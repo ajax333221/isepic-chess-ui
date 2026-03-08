@@ -6,8 +6,9 @@
 
 ## Code Style & Rules
 
-- **Internal Variables:** `camelCase` (e.g., `default_elm`).
-- **Function Parameters:** `snake_case` (e.g., `chess_font`).
+- **Functions:** Use `camelCase` (e.g., `tooltipSizeHelper`).
+- **Internal Variables:** Use `snake_case` (e.g., `default_elm`, `max_size`).
+- **Function Parameters:** Use `snake_case` (e.g., `chess_font`, `new_size`).
 - **Private Module Members:** Prefix with underscore `_` (e.g., `_CFG`, `_refreshTable`).
 - **Global Constants:** `UPPER_SNAKE_CASE` (e.g., `_ALERT_ERROR`).
 - **Flow Control (Pseudo-Single Return):** Use labeled blocks `block: { ... }` with `break block;` to exit specific logic segments early. This is a project-specific pattern to avoid deeply nested `if` statements while maintaining a single exit point at the end of the function. Do not refactor these into standard `if/else` or multiple `return` statements.
