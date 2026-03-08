@@ -95,10 +95,14 @@
 
             if (alert_box) {
               alert_box.classList.add('ic_alert_hidden');
-              alert_box.addEventListener('transitionend', function () {
-                alert_box.remove();
-                clearTimeout(timeout_id);
-              }, { once: true });
+              alert_box.addEventListener(
+                'transitionend',
+                function () {
+                  alert_box.remove();
+                  clearTimeout(timeout_id);
+                },
+                { once: true }
+              );
             }
           }, _CFG.pushAlertsTime);
         }
@@ -107,7 +111,10 @@
         alert_box.id = alert_id;
         alert_box.className = 'ic_alert_box ic_alert_animation' + (class_name ? ' ' + class_name : '');
         alert_box.style.setProperty('margin-' + top_or_bottom, '20px');
-        alert_box.innerHTML = (alert_msg || '').replace(/^([^ ]*)\[[^\]]+]: /, (x) => `<span class='ic_alert_header'>${x.trim()}</span>`);
+        alert_box.innerHTML = (alert_msg || '').replace(
+          /^([^ ]*)\[[^\]]+]: /,
+          (x) => `<span class='ic_alert_header'>${x.trim()}</span>`
+        );
         alert_holder.appendChild(alert_box);
 
         close_btn = document.createElement('div');
@@ -122,13 +129,21 @@
     //!---------------- utilities
 
     function _cancelAnimations() {
-      document.querySelectorAll('#ic_ui_board > .ic_piece_holder').forEach(function (elm) { elm.remove(); });
-      document.querySelectorAll('#ic_ui_board .ic_piece_holder').forEach(function (elm) { elm.style.display = ''; });
+      document.querySelectorAll('#ic_ui_board > .ic_piece_holder').forEach(function (elm) {
+        elm.remove();
+      });
+      document.querySelectorAll('#ic_ui_board .ic_piece_holder').forEach(function (elm) {
+        elm.style.display = '';
+      });
     }
 
     function _cancelSelected() {
-      document.querySelectorAll('#ic_ui_board .ic_highlight').forEach(function (elm) { elm.classList.remove('ic_highlight'); });
-      document.querySelectorAll('#ic_ui_board .ic_selected').forEach(function (elm) { elm.classList.remove('ic_selected'); });
+      document.querySelectorAll('#ic_ui_board .ic_highlight').forEach(function (elm) {
+        elm.classList.remove('ic_highlight');
+      });
+      document.querySelectorAll('#ic_ui_board .ic_selected').forEach(function (elm) {
+        elm.classList.remove('ic_selected');
+      });
 
       _SELECTED_BOS = '';
     }
@@ -141,7 +156,9 @@
       }
 
       if (_DRAGGING_BOS) {
-        document.querySelectorAll('#ic_ui_board .ic_drag_shown').forEach(function (elm) { elm.remove(); });
+        document.querySelectorAll('#ic_ui_board .ic_drag_shown').forEach(function (elm) {
+          elm.remove();
+        });
         document.querySelectorAll('#ic_ui_board .ic_drag_hidden').forEach(function (elm) {
           elm.style.display = '';
           elm.classList.remove('ic_drag_hidden');
@@ -205,10 +222,14 @@
       temp.style.transition = 'top ' + _CFG.animationTime + 'ms, left ' + _CFG.animationTime + 'ms';
       temp.style.top = new_offset.top + 'px';
       temp.style.left = new_offset.left + 'px';
-      temp.addEventListener('transitionend', function () {
-        piece_elm.style.display = '';
-        temp.remove();
-      }, { once: true });
+      temp.addEventListener(
+        'transitionend',
+        function () {
+          piece_elm.style.display = '';
+          temp.remove();
+        },
+        { once: true }
+      );
     }
 
     function _dragPiece(initial_x, initial_y, square_bos) {
@@ -251,8 +272,8 @@
       piece_elm.classList.add('ic_drag_hidden');
       piece_elm.style.display = 'none';
 
-      centered_top = (initial_y - window.scrollY) - piece_h / 2;
-      centered_left = (initial_x - window.scrollX) - piece_w / 2;
+      centered_top = initial_y - window.scrollY - piece_h / 2;
+      centered_left = initial_x - window.scrollX - piece_w / 2;
 
       Object.assign(dragged_elm.style, {
         position: 'fixed',
@@ -394,10 +415,14 @@
 
           if (alert_box) {
             alert_box.classList.add('ic_alert_hidden');
-            alert_box.addEventListener('transitionend', function () {
-              alert_box.remove();
-              clearTimeout(timeout_id);
-            }, { once: true });
+            alert_box.addEventListener(
+              'transitionend',
+              function () {
+                alert_box.remove();
+                clearTimeout(timeout_id);
+              },
+              { once: true }
+            );
           }
         });
 
@@ -946,10 +971,12 @@
     }
 
     function _refreshActiveDot(active_is_black) {
-      document.querySelectorAll('#ic_ui_board .ic_w_color, #ic_ui_board .ic_b_color').forEach(function (elm) { elm.classList.remove('ic_w_color', 'ic_b_color'); });
-      document.querySelector('#ic_ui_board ' + (active_is_black ? '.ic_bside' : '.ic_wside')).classList.add(
-        active_is_black ? 'ic_b_color' : 'ic_w_color'
-      );
+      document.querySelectorAll('#ic_ui_board .ic_w_color, #ic_ui_board .ic_b_color').forEach(function (elm) {
+        elm.classList.remove('ic_w_color', 'ic_b_color');
+      });
+      document
+        .querySelector('#ic_ui_board ' + (active_is_black ? '.ic_bside' : '.ic_wside'))
+        .classList.add(active_is_black ? 'ic_b_color' : 'ic_w_color');
     }
 
     function _refreshBoardTabs(board_name) {
@@ -1460,7 +1487,8 @@
             board_elm.classList.contains('ic_frozen') === _CFG.boardInteractions ||
             !board_elm.classList.contains('ic_font_' + _chessFontHelper(_CFG.chessFont)) ||
             !board_elm.classList.contains('ic_theme_' + _chessThemeHelper(_CFG.chessTheme)) ||
-            (!!(document.getElementById('ic_ui_sound_move') || document.getElementById('ic_ui_sound_capture'))) !== _CFG.soundEffects
+            !!(document.getElementById('ic_ui_sound_move') || document.getElementById('ic_ui_sound_capture')) !==
+              _CFG.soundEffects
           ) {
             _refreshTable(that.isRotated, _CFG.boardLabels, _CFG.boardInteractions);
           }
@@ -1474,16 +1502,24 @@
         _refreshMaterialDifference.apply(that, []);
         _refreshMoveList.apply(that, []);
 
-        document.querySelectorAll(
-          '#ic_ui_nav_first.ic_disabled, #ic_ui_nav_previous.ic_disabled, #ic_ui_nav_next.ic_disabled, #ic_ui_nav_last.ic_disabled'
-        ).forEach(function (elm) { elm.classList.remove('ic_disabled'); });
+        document
+          .querySelectorAll(
+            '#ic_ui_nav_first.ic_disabled, #ic_ui_nav_previous.ic_disabled, #ic_ui_nav_next.ic_disabled, #ic_ui_nav_last.ic_disabled'
+          )
+          .forEach(function (elm) {
+            elm.classList.remove('ic_disabled');
+          });
 
         if (that.isPuzzleMode || !that.currentMove) {
-          document.querySelectorAll('#ic_ui_nav_first, #ic_ui_nav_previous').forEach(function (elm) { elm.classList.add('ic_disabled'); });
+          document.querySelectorAll('#ic_ui_nav_first, #ic_ui_nav_previous').forEach(function (elm) {
+            elm.classList.add('ic_disabled');
+          });
         }
 
         if (that.isPuzzleMode || that.currentMove === that.moveList.length - 1) {
-          document.querySelectorAll('#ic_ui_nav_next, #ic_ui_nav_last').forEach(function (elm) { elm.classList.add('ic_disabled'); });
+          document.querySelectorAll('#ic_ui_nav_next, #ic_ui_nav_last').forEach(function (elm) {
+            elm.classList.add('ic_disabled');
+          });
         }
 
         if (board_elm) {
@@ -1528,7 +1564,4 @@
       windw.IcUi = IcUi;
     }
   }
-})(
-  typeof window !== 'undefined' ? window : null,
-  typeof Ic !== 'undefined' ? Ic : null
-);
+})(typeof window !== 'undefined' ? window : null, typeof Ic !== 'undefined' ? Ic : null);
