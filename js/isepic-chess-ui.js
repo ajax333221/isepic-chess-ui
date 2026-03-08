@@ -1,6 +1,6 @@
 /*! Copyright (c) 2026 Ajax Isepic (ajax333221) Licensed MIT */
 
-(function (windw, $, Ic) {
+(function (windw, Ic) {
   var IcUi = (function () {
     var _VERSION = '4.10.1';
 
@@ -78,9 +78,9 @@
 
       block: {
         top_or_bottom = from_top ? 'top' : 'bottom';
-        alert_holder = $(`#ic_ui_push_alerts_${top_or_bottom}`);
+        alert_holder = document.getElementById('ic_ui_push_alerts_' + top_or_bottom);
 
-        if (!alert_holder.length) {
+        if (!alert_holder) {
           break block;
         }
 
@@ -91,14 +91,14 @@
           timeout_id = setTimeout(function () {
             var alert_box;
 
-            alert_box = $(`#${alert_id}`);
+            alert_box = document.getElementById(alert_id);
 
-            if (alert_box.length) {
+            if (alert_box) {
               alert_box
                 .addClass('ic_alert_hidden')
                 .off('transitionend.icuiautodimiss')
                 .on('transitionend.icuiautodimiss', () => {
-                  if (alert_box.length) {
+                  if (alert_box) {
                     alert_box.remove();
                   }
                   clearTimeout(timeout_id);
@@ -128,12 +128,12 @@
     //!---------------- utilities
 
     function _cancelAnimations() {
-      $('#ic_ui_board .ic_piece_holder').finish();
+      document.querySelectorAll('#ic_ui_board .ic_piece_holder').finish();
     }
 
     function _cancelSelected() {
-      $('#ic_ui_board .ic_highlight').removeClass('ic_highlight');
-      $('#ic_ui_board .ic_selected').removeClass('ic_selected');
+      document.querySelectorAll('#ic_ui_board .ic_highlight').forEach(function (elm) { elm.classList.remove('ic_highlight'); });
+      document.querySelectorAll('#ic_ui_board .ic_selected').forEach(function (elm) { elm.classList.remove('ic_selected'); });
 
       _SELECTED_BOS = '';
     }
@@ -146,8 +146,11 @@
       }
 
       if (_DRAGGING_BOS) {
-        $('#ic_ui_board .ic_drag_shown').remove();
-        $('#ic_ui_board .ic_drag_hidden').show().removeClass('ic_drag_hidden');
+        document.querySelectorAll('#ic_ui_board .ic_drag_shown').remove();
+        document.querySelectorAll('#ic_ui_board .ic_drag_hidden').forEach(function (elm) {
+          elm.style.display = '';
+          elm.classList.remove('ic_drag_hidden');
+        });
       }
 
       _DRAGGING_BOS = '';
@@ -181,8 +184,8 @@
     function _animatePiece(from_bos, to_bos, piece_class, promotion_class) {
       var temp, piece_elm, from_square, to_square, old_offset, new_offset, old_h, old_w;
 
-      from_square = $('#ic_ui_' + from_bos);
-      to_square = $('#ic_ui_' + to_bos);
+      from_square = document.getElementById('ic_ui_' + from_bos);
+      to_square = document.getElementById('ic_ui_' + to_bos);
 
       old_offset = from_square.children('.ic_piece_holder').offset();
       new_offset = to_square.children('.ic_piece_holder').offset();
@@ -190,7 +193,7 @@
       old_h = from_square.height();
       old_w = from_square.width();
 
-      to_square.html("<div class='" + ('ic_piece_holder' + piece_class) + "'></div>");
+      to_square.innerHTML = "<div class='" + ('ic_piece_holder' + piece_class) + "'></div>";
       piece_elm = to_square.children('.ic_piece_holder');
       temp = piece_elm.clone().appendTo('#ic_ui_board');
       piece_elm.hide().attr('class', 'ic_piece_holder' + (promotion_class || piece_class));
@@ -241,13 +244,13 @@
       limit = document.body;
 
       if (limit) {
-        limit_top = $(limit).offset().top + $(document).scrollTop();
-        limit_left = $(limit).offset().left + $(document).scrollLeft();
-        limit_right = limit_left + $(limit).innerWidth();
-        limit_bottom = limit_top + $(limit).innerHeight();
+        limit_top = limit.offset().top + window.scrollY;
+        limit_left = limit.offset().left + window.scrollX;
+        limit_right = limit_left + limit.innerWidth();
+        limit_bottom = limit_top + limit.innerHeight();
       }
 
-      target_square = $('#ic_ui_' + square_bos);
+      target_square = document.getElementById('ic_ui_' + square_bos);
 
       piece_h = target_square.height();
       piece_w = target_square.width();
@@ -313,7 +316,7 @@
 
       if (!_RAN_ONCE) {
         _RAN_ONCE = true;
-        doc = $(document);
+        doc = document;
 
         doc.off('click.icuifen').on('click.icuifen', '#ic_ui_fen', function () {
           $(this).select();
@@ -376,14 +379,14 @@
           target_id = $(this).attr('data-target');
           timeout_id = $(this).attr('data-timeout');
 
-          alert_box = $(`#${target_id}`);
+          alert_box = document.getElementById(target_id);
 
-          if (alert_box.length) {
+          if (alert_box) {
             alert_box
               .addClass('ic_alert_hidden')
               .off('transitionend.icuimanualdimiss')
               .on('transitionend.icuimanualdimiss', () => {
-                if (alert_box.length) {
+                if (alert_box) {
                   alert_box.remove();
                 }
                 clearTimeout(timeout_id);
@@ -678,7 +681,7 @@
                 }
 
                 if (_CFG.highlightSelected) {
-                  $('#ic_ui_' + current_bos).addClass('ic_selected');
+                  document.getElementById('ic_ui_' + current_bos).classList.add('ic_selected');
                 }
 
                 if (_CFG.highlightLegalMoves) {
@@ -693,7 +696,7 @@
                       temp += ' ic_capture';
                     }
 
-                    $('#ic_ui_' + square.bos).addClass(temp);
+                    document.getElementById('ic_ui_' + square.bos).classList.add(...temp.split(' '));
                   }
                 }
               }
@@ -728,7 +731,7 @@
 
             is_reversed = temp < 0;
 
-            if (!$(e.target).closest('#ic_ui_board').length) {
+            if (!e.target.closest('#ic_ui_board')) {
               //not a child
               break block;
             }
@@ -774,12 +777,12 @@
               break block;
             }
 
-            if (!$('#ic_ui_move_tooltip').length) {
+            if (!document.getElementById('ic_ui_move_tooltip')) {
               Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: missing move tooltip component', _ALERT_ERROR);
               break block;
             }
 
-            board_tooltip = $('#ic_ui_move_tooltip');
+            board_tooltip = document.getElementById('ic_ui_move_tooltip');
 
             pgn_index = $(this).attr('data-index');
 
@@ -835,23 +838,22 @@
 
             html += '</table>';
 
-            board_tooltip.html(html);
+            board_tooltip.innerHTML = html;
 
             tooltip_top = $(this).position().top + $(this).outerHeight() + 20;
-            tooltip_left = $(this).position().left + $(this).outerWidth() / 2 - board_tooltip.outerWidth() / 2;
+            tooltip_left = $(this).position().left + $(this).outerWidth() / 2 - board_tooltip.offsetWidth / 2;
 
             temp = ['tooltip_visible'];
             temp.push('ic_font_' + _chessFontHelper(_CFG.chessFont));
             temp.push('ic_theme_' + _chessThemeHelper(_CFG.chessTheme));
 
-            board_tooltip
-              .css({
-                top: tooltip_top + 'px',
-                left: tooltip_left + 'px',
-                height: _CFG.moveTooltipSize + 'px',
-                width: _CFG.moveTooltipSize + 'px',
-              })
-              .attr('class', temp.join(' '));
+            Object.assign(board_tooltip.style, {
+              top: tooltip_top + 'px',
+              left: tooltip_left + 'px',
+              height: _CFG.moveTooltipSize + 'px',
+              width: _CFG.moveTooltipSize + 'px',
+            });
+            board_tooltip.className = temp.join(' ');
           }
         });
 
@@ -861,13 +863,13 @@
               break block;
             }
 
-            if (!$('#ic_ui_move_tooltip').length) {
+            if (!document.getElementById('ic_ui_move_tooltip')) {
               Ic.utilityMisc.consoleLog('[.ic_pgn_link|.ic_pgn_active]: missing move tooltip component', _ALERT_ERROR);
               break block;
             }
 
             _BOARD_TOOLTIP_TIMEOUT = setTimeout(function () {
-              $('#ic_ui_move_tooltip').removeClass('tooltip_visible');
+              document.getElementById('ic_ui_move_tooltip').classList.remove('tooltip_visible');
             }, 150);
           }
         });
@@ -875,8 +877,8 @@
     }
 
     function _refreshActiveDot(active_is_black) {
-      $('#ic_ui_board .ic_w_color, #ic_ui_board .ic_b_color').removeClass('ic_w_color ic_b_color');
-      $('#ic_ui_board ' + (active_is_black ? '.ic_bside' : '.ic_wside')).addClass(
+      document.querySelectorAll('#ic_ui_board .ic_w_color, #ic_ui_board .ic_b_color').forEach(function (elm) { elm.classList.remove('ic_w_color', 'ic_b_color'); });
+      document.querySelector('#ic_ui_board ' + (active_is_black ? '.ic_bside' : '.ic_wside')).classList.add(
         active_is_black ? 'ic_b_color' : 'ic_w_color'
       );
     }
@@ -884,7 +886,7 @@
     function _refreshBoardTabs(board_name) {
       var i, len, current_board, current_board_name, board_list, new_html;
 
-      if ($('#ic_ui_board_tabs').length) {
+      if (document.getElementById('ic_ui_board_tabs')) {
         board_list = Ic.getBoardNames();
         new_html = '<strong>Boards:</strong> ';
 
@@ -913,12 +915,12 @@
           }
         }
 
-        $('#ic_ui_board_tabs').html(new_html);
+        document.getElementById('ic_ui_board_tabs').innerHTML = new_html;
       }
     }
 
     function _refreshTable(is_rotated, is_labeled, is_interactive) {
-      var i, j, temp, rank_bos, current_bos, new_class, new_html;
+      var i, j, temp, board_ref, rank_bos, current_bos, new_class, new_html;
 
       temp = [];
 
@@ -1000,7 +1002,9 @@
           "<audio id='ic_ui_sound_capture' src='./sounds/capture.wav' preload='auto' style='display:none;'></audio>";
       }
 
-      $('#ic_ui_board').attr('class', new_class).html(new_html);
+      board_ref = document.getElementById('ic_ui_board');
+      board_ref.className = new_class;
+      board_ref.innerHTML = new_html;
     }
 
     //!---------------- utilities (this=apply)
@@ -1041,7 +1045,7 @@
     }
 
     function _refreshPieceClasses() {
-      var i, j, that, reset_class, current_square, square_class;
+      var i, j, that, reset_class, current_square, square_class, square_elm;
 
       that = this;
 
@@ -1054,14 +1058,14 @@
           square_class = current_square.className;
           square_class = square_class ? ' ic_' + square_class : '';
 
-          $('#ic_ui_' + current_square.bos)
-            .attr('class', reset_class)
-            .html("<div class='" + ('ic_piece_holder' + square_class) + "'></div>");
+          square_elm = document.getElementById('ic_ui_' + current_square.bos);
+          square_elm.className = reset_class;
+          square_elm.innerHTML = "<div class='" + ('ic_piece_holder' + square_class) + "'></div>";
         }
       }
 
       if (_CFG.highlightChecks && that.isCheck) {
-        $('#ic_ui_' + that[that.activeColor].kingBos).addClass('ic_incheck');
+        document.getElementById('ic_ui_' + that[that.activeColor].kingBos).classList.add('ic_incheck');
       }
     }
 
@@ -1070,7 +1074,7 @@
 
       that = this;
 
-      if ($('#ic_ui_material_diff').length) {
+      if (document.getElementById('ic_ui_material_diff')) {
         matdiff_html = '';
 
         img_obj = {
@@ -1104,7 +1108,7 @@
           matdiff_html += temp || '-';
         }
 
-        $('#ic_ui_material_diff').html(matdiff_html);
+        document.getElementById('ic_ui_material_diff').innerHTML = matdiff_html;
       }
     }
 
@@ -1113,7 +1117,7 @@
 
       that = this;
 
-      if ($('#ic_ui_move_list').length) {
+      if (document.getElementById('ic_ui_move_list')) {
         move_list = that.moveList;
         black_starts = move_list[0].colorToPlay === 'b';
 
@@ -1190,7 +1194,7 @@
 
         new_html = new_html || '-';
 
-        $('#ic_ui_move_list').html(new_html);
+        document.getElementById('ic_ui_move_list').innerHTML = new_html;
       }
     }
 
@@ -1199,7 +1203,7 @@
 
       that = this;
 
-      if ($('#ic_ui_debug').length) {
+      if (document.getElementById('ic_ui_debug')) {
         new_html = '<ul>';
         new_html += '<li><strong>Selected board:</strong> <span>' + that.boardName + '</span></li>';
         new_html += '<li><strong>Is rotated?:</strong> <span>' + that.isRotated + '</span></li>';
@@ -1330,7 +1334,7 @@
         new_html += '<li><strong>Version:</strong> <span>[Ic_v' + Ic.version + '] [IcUi_v' + _VERSION + ']</span></li>';
         new_html += '</ul>';
 
-        $('#ic_ui_debug').html(new_html);
+        document.getElementById('ic_ui_debug').innerHTML = new_html;
       }
     }
 
@@ -1377,43 +1381,43 @@
         _cancelAnimations();
         _bindOnce();
 
-        board_elm = $('#ic_ui_board');
+        board_elm = document.getElementById('ic_ui_board');
 
-        if (board_elm.length) {
+        if (board_elm) {
           if (
-            !board_elm.html() ||
-            board_elm.hasClass('ic_rotated') !== that.isRotated ||
-            board_elm.hasClass('ic_unlabeled') === _CFG.boardLabels ||
-            board_elm.hasClass('ic_frozen') === _CFG.boardInteractions ||
-            !board_elm.hasClass('ic_font_' + _chessFontHelper(_CFG.chessFont)) ||
-            !board_elm.hasClass('ic_theme_' + _chessThemeHelper(_CFG.chessTheme)) ||
-            (!!$('#ic_ui_sound_move').length || !!$('#ic_ui_sound_capture').length) !== _CFG.soundEffects
+            !board_elm.innerHTML ||
+            board_elm.classList.contains('ic_rotated') !== that.isRotated ||
+            board_elm.classList.contains('ic_unlabeled') === _CFG.boardLabels ||
+            board_elm.classList.contains('ic_frozen') === _CFG.boardInteractions ||
+            !board_elm.classList.contains('ic_font_' + _chessFontHelper(_CFG.chessFont)) ||
+            !board_elm.classList.contains('ic_theme_' + _chessThemeHelper(_CFG.chessTheme)) ||
+            (!!(document.getElementById('ic_ui_sound_move') || document.getElementById('ic_ui_sound_capture'))) !== _CFG.soundEffects
           ) {
             _refreshTable(that.isRotated, _CFG.boardLabels, _CFG.boardInteractions);
           }
         }
 
-        $('#ic_ui_fen').val(that.fen);
-        $('#ic_ui_promote').val(that.promoteTo);
+        document.getElementById('ic_ui_fen').value = that.fen;
+        document.getElementById('ic_ui_promote').value = that.promoteTo;
 
         _refreshDebug.apply(that, []);
         _refreshBoardTabs(that.boardName);
         _refreshMaterialDifference.apply(that, []);
         _refreshMoveList.apply(that, []);
 
-        $(
+        document.querySelectorAll(
           '#ic_ui_nav_first.ic_disabled, #ic_ui_nav_previous.ic_disabled, #ic_ui_nav_next.ic_disabled, #ic_ui_nav_last.ic_disabled'
-        ).removeClass('ic_disabled');
+        ).forEach(function (elm) { elm.classList.remove('ic_disabled'); });
 
         if (that.isPuzzleMode || !that.currentMove) {
-          $('#ic_ui_nav_first, #ic_ui_nav_previous').addClass('ic_disabled');
+          document.querySelectorAll('#ic_ui_nav_first, #ic_ui_nav_previous').forEach(function (elm) { elm.classList.add('ic_disabled'); });
         }
 
         if (that.isPuzzleMode || that.currentMove === that.moveList.length - 1) {
-          $('#ic_ui_nav_next, #ic_ui_nav_last').addClass('ic_disabled');
+          document.querySelectorAll('#ic_ui_nav_next, #ic_ui_nav_last').forEach(function (elm) { elm.classList.add('ic_disabled'); });
         }
 
-        if (board_elm.length) {
+        if (board_elm) {
           _refreshPieceClasses.apply(that, []);
           _refreshActiveDot(that[that.activeColor].isBlack);
 
@@ -1423,7 +1427,7 @@
 
           if (_CFG.soundEffects && play_sounds) {
             temp = that.moveList[that.currentMove].captured ? 'capture' : 'move';
-            temp = $('#ic_ui_sound_' + temp)[0];
+            temp = document.getElementById('ic_ui_sound_' + temp);
 
             if (temp) {
               temp.pause();
@@ -1433,14 +1437,14 @@
           }
 
           if (_CFG.highlightLastMove && that.currentMove !== 0) {
-            $('#ic_ui_' + that.moveList[that.currentMove].fromBos).addClass('ic_lastmove');
-            $('#ic_ui_' + that.moveList[that.currentMove].toBos).addClass('ic_lastmove');
+            document.getElementById('ic_ui_' + that.moveList[that.currentMove].fromBos).classList.add('ic_lastmove');
+            document.getElementById('ic_ui_' + that.moveList[that.currentMove].toBos).classList.add('ic_lastmove');
           }
         }
       }
     }
 
-    return $ !== null && Ic !== null
+    return Ic !== null
       ? {
           version: _VERSION,
           setCfg: setCfg,
@@ -1457,6 +1461,5 @@
   }
 })(
   typeof window !== 'undefined' ? window : null,
-  typeof jQuery !== 'undefined' ? jQuery : null,
   typeof Ic !== 'undefined' ? Ic : null
 );
