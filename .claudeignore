@@ -1,21 +1,21 @@
-# Dependencias y sistema
+# Dependencies and system files
 node_modules/
 .git/
 .svn/
 .DS_Store
 Thumbs.db
 
-# Build y caché
+# Build and cache files
 dist/
 build/
 .cache/
 .claude/
 
-# Imágenes y assets pesados
+# Images and heavy assets
 sounds/
 css/images/
 
-# Archivos de configuración y locks
+# Configuration files and licenses
 package-lock.json
 .prettierrc
 .prettierignore
