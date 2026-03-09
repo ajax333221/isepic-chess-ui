@@ -17,6 +17,7 @@
       highlightLegalMoves: true,
       highlightSelected: true,
       scrollNavigation: true,
+      interactivePromotion: true,
       arrowKeysNavigation: false,
       moveTooltip: false,
       moveTooltipSize: 250,
@@ -109,8 +110,37 @@
       return cls ? ' ic_' + cls : '';
     }
 
+    function _restoreCheck(board) {
+      document.querySelectorAll('#ic_ui_board .ic_incheck').forEach(function (elm) {
+        elm.classList.remove('ic_incheck');
+      });
+
+      if (_CFG.highlightChecks && board !== null && board.isCheck) {
+        document.getElementById('ic_ui_' + board[board.activeColor].kingBos).classList.add('ic_incheck');
+      }
+    }
+
+    function _restoreLastMove(board) {
+      var move, from_elm, to_elm;
+
+      document.querySelectorAll('#ic_ui_board .ic_lastmove').forEach(function (elm) {
+        elm.classList.remove('ic_lastmove');
+      });
+
+      if (_CFG.highlightLastMove && board !== null && board.currentMove !== 0) {
+        move = board.moveList[board.currentMove];
+        from_elm = document.getElementById('ic_ui_' + move.fromBos);
+        to_elm = document.getElementById('ic_ui_' + move.toBos);
+
+        if (from_elm) from_elm.classList.add('ic_lastmove');
+        if (to_elm) to_elm.classList.add('ic_lastmove');
+      }
+    }
+
     function _exitPromotionMode(is_cancelled) {
-      var i, len, data, board, overlay_elm, opts;
+      var i, len, data, board, overlay_elm, opts, square_elm, holder_elm,
+        from_sq_elm, to_sq_elm, board_elm, rev_pawn_holder, rev_pawn_class,
+        rev_from_rect, rev_to_rect, rev_sq_h, rev_sq_w, rev_anim_pawn, final_uci;
 
       if (!_PROMOTION_MODE || !_PROMOTION_DATA) {
         return;
@@ -136,12 +166,13 @@
 
       if (data.squares && data.squares.length) {
         for (i = 0, len = data.squares.length; i < len; i++) {
-          var square_elm = document.getElementById('ic_ui_' + data.squares[i]);
+          square_elm = document.getElementById('ic_ui_' + data.squares[i]);
 
           if (square_elm) {
-            var holder_elm = square_elm.querySelector(':scope > .ic_piece_holder');
+            holder_elm = square_elm.querySelector(':scope > .ic_piece_holder');
 
-            if (holder_elm) {
+            // Skip fromHolderElm — cancel animation or non-cancel restore handles it below
+            if (holder_elm && holder_elm !== data.fromHolderElm) {
               holder_elm.style.display = '';
             }
           }
@@ -149,18 +180,80 @@
       }
 
       if (is_cancelled) {
+        if (data.fromHolderElm && _CFG.pieceAnimations && _CFG.animationTime > 0) {
+          from_sq_elm = document.getElementById('ic_ui_' + data.fromBos);
+          to_sq_elm = document.getElementById('ic_ui_' + data.toBos);
+          board_elm = document.getElementById('ic_ui_board');
+
+          if (from_sq_elm && to_sq_elm && board_elm) {
+            _restoreLastMove(board);
+            _restoreCheck(board);
+
+            rev_pawn_holder = data.fromHolderElm;
+            rev_pawn_class = rev_pawn_holder.className;
+            rev_from_rect = to_sq_elm.getBoundingClientRect();
+            rev_to_rect = from_sq_elm.getBoundingClientRect();
+            rev_sq_h = from_sq_elm.offsetHeight;
+            rev_sq_w = from_sq_elm.offsetWidth;
+
+            rev_pawn_holder.style.display = 'none';
+
+            rev_anim_pawn = document.createElement('div');
+            rev_anim_pawn.className = rev_pawn_class;
+            Object.assign(rev_anim_pawn.style, {
+              position: 'fixed',
+              top: rev_from_rect.top + 'px',
+              left: rev_from_rect.left + 'px',
+              height: rev_sq_h + 'px',
+              width: rev_sq_w + 'px',
+              zIndex: '1011',
+              pointerEvents: 'none',
+            });
+
+            board_elm.appendChild(rev_anim_pawn);
+
+            void rev_anim_pawn.offsetWidth;
+
+            rev_anim_pawn.style.transition =
+              'top ' + _CFG.animationTime + 'ms, left ' + _CFG.animationTime + 'ms';
+            rev_anim_pawn.style.top = rev_to_rect.top + 'px';
+            rev_anim_pawn.style.left = rev_to_rect.left + 'px';
+
+            rev_anim_pawn.addEventListener('transitionend', function () {
+              rev_pawn_holder.style.display = '';
+              rev_anim_pawn.remove();
+            }, { once: true });
+          } else {
+            data.fromHolderElm.style.display = '';
+            _restoreLastMove(board);
+            _restoreCheck(board);
+          }
+        } else {
+          if (data.fromHolderElm) {
+            data.fromHolderElm.style.display = '';
+          }
+          _restoreLastMove(board);
+        }
+
         _cancelSelected();
       } else {
-        if (board !== null && data.cachedMoveUci) {
-          var final_uci = data.cachedMoveUci.slice(0, 4) + data.pieceBal.toLowerCase();
+        if (data.fromHolderElm) {
+          data.fromHolderElm.style.display = '';
+        }
 
-          board.playMove(final_uci, { isLegalMove: true, playSounds: true });
+        if (board !== null && data.cachedMoveUci) {
+          final_uci = data.cachedMoveUci.slice(0, 4) + data.pieceBal.toLowerCase();
+          board.playMove(final_uci, { isLegalMove: true, isInanimated: true, playSounds: true });
         }
       }
     }
 
-    function _enterPromotionMode(board, from_bos, to_bos, mock_move, cached_move_uci) {
-      var i, len, squares, piece_order, overlay_elm, board_elm;
+    function _enterPromotionMode(board, from_bos, to_bos, mock_move, cached_move_uci, is_click_move) {
+      var i, len, squares, piece_order, overlay_elm, board_elm, from_holder_elm,
+        from_lm_elm, to_lm_elm, r,
+        current_bos, square_elm, holder_elm, promo_class, promo_elm,
+        from_square_elm, pawn_holder, to_square_elm, pawn_class,
+        from_rect, to_rect, sq_h, sq_w, anim_pawn;
 
       if (!mock_move || !mock_move.promotion || !cached_move_uci) {
         return false;
@@ -182,42 +275,111 @@
         return false;
       }
 
+      _cancelSelected();
+
+      document.querySelectorAll('#ic_ui_board .ic_incheck').forEach(function (elm) {
+        elm.classList.remove('ic_incheck');
+      });
+
+      document.querySelectorAll('#ic_ui_board .ic_lastmove').forEach(function (elm) {
+        elm.classList.remove('ic_lastmove');
+      });
+
+      if (_CFG.highlightLastMove) {
+        from_lm_elm = document.getElementById('ic_ui_' + from_bos);
+        to_lm_elm = document.getElementById('ic_ui_' + to_bos);
+
+        if (from_lm_elm) from_lm_elm.classList.add('ic_lastmove');
+        if (to_lm_elm) to_lm_elm.classList.add('ic_lastmove');
+      }
+
+      r = board_elm.getBoundingClientRect();
+
       overlay_elm = document.createElement('div');
       overlay_elm.id = 'ic_ui_promotion_overlay';
       overlay_elm.className = 'ic_promotion_overlay';
       overlay_elm.style.position = 'fixed';
-      overlay_elm.style.top = '0';
-      overlay_elm.style.left = '0';
-      overlay_elm.style.right = '0';
-      overlay_elm.style.bottom = '0';
+      overlay_elm.style.top = r.top + 'px';
+      overlay_elm.style.left = r.left + 'px';
+      overlay_elm.style.width = r.width + 'px';
+      overlay_elm.style.height = r.height + 'px';
       overlay_elm.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+      overlay_elm.style.borderRadius = window.getComputedStyle(board_elm).borderRadius;
       overlay_elm.style.zIndex = '1010';
       document.body.appendChild(overlay_elm);
 
       for (i = 0, len = piece_order.length; i < len && i < squares.length; i++) {
-        var current_bos = squares[i];
-        var square_elm = document.getElementById('ic_ui_' + current_bos);
+        current_bos = squares[i];
+        square_elm = document.getElementById('ic_ui_' + current_bos);
 
         if (!square_elm) {
           continue;
         }
 
-        var holder_elm = square_elm.querySelector(':scope > .ic_piece_holder');
+        holder_elm = square_elm.querySelector(':scope > .ic_piece_holder');
 
         if (holder_elm) {
           holder_elm.style.display = 'none';
         }
 
-        var promo_class = _promotionPieceClassHelper(mock_move.colorMoved, piece_order[i]);
-        var promo_elm = document.createElement('div');
-
+        promo_class = _promotionPieceClassHelper(mock_move.colorMoved, piece_order[i]);
+        promo_elm = document.createElement('div');
         promo_elm.className = 'ic_piece_holder' + promo_class + ' ic_promotion_option';
         promo_elm.dataset.bos = current_bos;
         promo_elm.dataset.piece = piece_order[i];
         promo_elm.style.position = 'relative';
-        promo_elm.style.zIndex = '1011';
+        promo_elm.style.zIndex = '1012';
 
         square_elm.appendChild(promo_elm);
+      }
+
+      from_holder_elm = null;
+      from_square_elm = document.getElementById('ic_ui_' + from_bos);
+
+      if (from_square_elm) {
+        pawn_holder = from_square_elm.querySelector(':scope > .ic_piece_holder');
+
+        if (pawn_holder) {
+          from_holder_elm = pawn_holder;
+          pawn_holder.style.display = 'none';
+
+          if (is_click_move && _CFG.pieceAnimations && _CFG.animationTime > 0) {
+            to_square_elm = document.getElementById('ic_ui_' + to_bos);
+
+            if (to_square_elm) {
+              pawn_class = pawn_holder.className;
+              from_rect = from_square_elm.getBoundingClientRect();
+              to_rect = to_square_elm.getBoundingClientRect();
+              sq_h = from_square_elm.offsetHeight;
+              sq_w = from_square_elm.offsetWidth;
+
+              anim_pawn = document.createElement('div');
+              anim_pawn.className = pawn_class;
+              Object.assign(anim_pawn.style, {
+                position: 'fixed',
+                top: from_rect.top + 'px',
+                left: from_rect.left + 'px',
+                height: sq_h + 'px',
+                width: sq_w + 'px',
+                zIndex: '1011',
+                pointerEvents: 'none',
+              });
+
+              board_elm.appendChild(anim_pawn);
+
+              void anim_pawn.offsetWidth;
+
+              anim_pawn.style.transition =
+                'top ' + _CFG.animationTime + 'ms, left ' + _CFG.animationTime + 'ms';
+              anim_pawn.style.top = to_rect.top + 'px';
+              anim_pawn.style.left = to_rect.left + 'px';
+
+              anim_pawn.addEventListener('transitionend', function () {
+                anim_pawn.remove();
+              }, { once: true });
+            }
+          }
+        }
       }
 
       _PROMOTION_MODE = true;
@@ -227,6 +389,7 @@
         toBos: to_bos,
         cachedMoveUci: cached_move_uci,
         squares: squares,
+        fromHolderElm: from_holder_elm,
       };
 
       return true;
@@ -916,8 +1079,8 @@
                 is_promotion_move = !!mock_move.promotion;
               }
 
-              if (is_promotion_move && is_legal_move) {
-                if (_enterPromotionMode(board, old_drg, current_bos, mock_move, cached_move_uci)) {
+              if (is_promotion_move && is_legal_move && _CFG.interactivePromotion) {
+                if (_enterPromotionMode(board, old_drg, current_bos, mock_move, cached_move_uci, false)) {
                   break block;
                 }
               }
@@ -996,8 +1159,8 @@
                 is_promotion_move = !!mock_move.promotion;
               }
 
-              if (is_promotion_move && is_legal_move) {
-                if (_enterPromotionMode(board, old_sel, current_bos, mock_move, cached_move_uci)) {
+              if (is_promotion_move && is_legal_move && _CFG.interactivePromotion) {
+                if (_enterPromotionMode(board, old_sel, current_bos, mock_move, cached_move_uci, true)) {
                   break block;
                 }
               }
