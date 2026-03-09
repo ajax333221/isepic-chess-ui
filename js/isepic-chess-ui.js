@@ -2,7 +2,7 @@
 
 (function (windw, Ic) {
   var IcUi = (function () {
-    var _VERSION = '5.0.1';
+    var _VERSION = '5.1.0';
 
     var _CFG = {
       chessFont: 'merida',
@@ -17,6 +17,7 @@
       highlightLegalMoves: true,
       highlightSelected: true,
       scrollNavigation: true,
+      interactivePromotion: true,
       arrowKeysNavigation: false,
       moveTooltip: false,
       moveTooltipSize: 250,
@@ -36,6 +37,8 @@
     var _BOARD_NAME = '';
     var _SELECTED_BOS = '';
     var _DRAGGING_BOS = '';
+    var _PROMOTION_MODE = false;
+    var _PROMOTION_DATA = null;
 
     var _ALERT_WARNING = 'warning';
     var _ALERT_ERROR = 'error';
@@ -68,6 +71,406 @@
       }
 
       return chess_theme;
+    }
+
+    function _promotionSquaresHelper(to_bos) {
+      var file_bos, to_rank, interior_dir, i, squares;
+
+      squares = [];
+      file_bos = (to_bos || '').charAt(0);
+      to_rank = parseInt((to_bos || '').charAt(1), 10);
+
+      if (!file_bos || isNaN(to_rank)) {
+        return squares;
+      }
+
+      interior_dir = to_rank === 8 ? -1 : 1;
+
+      for (i = 0; i < 4; i++) {
+        var current_rank = to_rank + interior_dir * i;
+
+        if (current_rank < 1 || current_rank > 8) {
+          break;
+        }
+
+        squares.push(file_bos + current_rank);
+      }
+
+      return squares;
+    }
+
+    function _promotionPieceClassHelper(color_moved, piece_bal) {
+      var balanced_piece, val, cls;
+
+      balanced_piece = color_moved === 'w' ? piece_bal.toUpperCase() : piece_bal.toLowerCase();
+      val = Ic.toVal(balanced_piece);
+      cls = Ic.toClassName(val);
+
+      return cls ? ' ic_' + cls : '';
+    }
+
+    function _restoreCheck(board) {
+      document.querySelectorAll('#ic_ui_board .ic_incheck').forEach(function (elm) {
+        elm.classList.remove('ic_incheck');
+      });
+
+      if (_CFG.highlightChecks && board !== null && board.isCheck) {
+        document.getElementById('ic_ui_' + board[board.activeColor].kingBos).classList.add('ic_incheck');
+      }
+    }
+
+    function _restoreLastMove(board) {
+      var move, from_elm, to_elm;
+
+      document.querySelectorAll('#ic_ui_board .ic_lastmove').forEach(function (elm) {
+        elm.classList.remove('ic_lastmove');
+      });
+
+      if (_CFG.highlightLastMove && board !== null && board.currentMove !== 0) {
+        move = board.moveList[board.currentMove];
+        from_elm = document.getElementById('ic_ui_' + move.fromBos);
+        to_elm = document.getElementById('ic_ui_' + move.toBos);
+
+        if (from_elm) from_elm.classList.add('ic_lastmove');
+        if (to_elm) to_elm.classList.add('ic_lastmove');
+      }
+    }
+
+    function _abortPromotionMode() {
+      var i, len, data, overlay_elm, opts, square_elm, holder_elm;
+
+      if (!_PROMOTION_MODE || !_PROMOTION_DATA) {
+        return;
+      }
+
+      data = _PROMOTION_DATA;
+      _PROMOTION_MODE = false;
+      _PROMOTION_DATA = null;
+
+      overlay_elm = document.getElementById('ic_ui_promotion_overlay');
+
+      if (overlay_elm && overlay_elm.parentNode) {
+        overlay_elm.parentNode.removeChild(overlay_elm);
+      }
+
+      opts = document.querySelectorAll('#ic_ui_board .ic_promotion_option');
+
+      for (i = 0, len = opts.length; i < len; i++) {
+        opts[i].remove();
+      }
+
+      if (data.squares && data.squares.length) {
+        for (i = 0, len = data.squares.length; i < len; i++) {
+          square_elm = document.getElementById('ic_ui_' + data.squares[i]);
+
+          if (square_elm) {
+            holder_elm = square_elm.querySelector(':scope > .ic_piece_holder');
+
+            if (holder_elm) {
+              holder_elm.style.display = '';
+            }
+          }
+        }
+      }
+
+      if (data.fromHolderElm) {
+        data.fromHolderElm.style.display = '';
+      }
+
+      _cancelAnimations();
+    }
+
+    function _exitPromotionMode(is_cancelled) {
+      var i,
+        len,
+        data,
+        board,
+        overlay_elm,
+        opts,
+        square_elm,
+        holder_elm,
+        from_sq_elm,
+        to_sq_elm,
+        board_elm,
+        rev_pawn_holder,
+        rev_pawn_class,
+        rev_from_rect,
+        rev_to_rect,
+        rev_sq_h,
+        rev_sq_w,
+        rev_anim_pawn,
+        final_uci;
+
+      if (!_PROMOTION_MODE || !_PROMOTION_DATA) {
+        return;
+      }
+
+      data = _PROMOTION_DATA;
+      _PROMOTION_MODE = false;
+      _PROMOTION_DATA = null;
+
+      board = Ic.getBoard(data.boardName);
+
+      overlay_elm = document.getElementById('ic_ui_promotion_overlay');
+
+      if (overlay_elm && overlay_elm.parentNode) {
+        overlay_elm.parentNode.removeChild(overlay_elm);
+      }
+
+      opts = document.querySelectorAll('#ic_ui_board .ic_promotion_option');
+
+      for (i = 0, len = opts.length; i < len; i++) {
+        opts[i].remove();
+      }
+
+      if (data.squares && data.squares.length) {
+        for (i = 0, len = data.squares.length; i < len; i++) {
+          square_elm = document.getElementById('ic_ui_' + data.squares[i]);
+
+          if (square_elm) {
+            holder_elm = square_elm.querySelector(':scope > .ic_piece_holder');
+
+            if (holder_elm && holder_elm !== data.fromHolderElm) {
+              holder_elm.style.display = '';
+            }
+          }
+        }
+      }
+
+      if (is_cancelled) {
+        if (data.fromHolderElm && _CFG.pieceAnimations && _CFG.animationTime > 0) {
+          from_sq_elm = document.getElementById('ic_ui_' + data.fromBos);
+          to_sq_elm = document.getElementById('ic_ui_' + data.toBos);
+          board_elm = document.getElementById('ic_ui_board');
+
+          if (from_sq_elm && to_sq_elm && board_elm) {
+            _restoreLastMove(board);
+            _restoreCheck(board);
+
+            rev_pawn_holder = data.fromHolderElm;
+            rev_pawn_class = rev_pawn_holder.className;
+            rev_from_rect = to_sq_elm.getBoundingClientRect();
+            rev_to_rect = from_sq_elm.getBoundingClientRect();
+            rev_sq_h = from_sq_elm.offsetHeight;
+            rev_sq_w = from_sq_elm.offsetWidth;
+
+            rev_pawn_holder.style.display = 'none';
+
+            rev_anim_pawn = document.createElement('div');
+            rev_anim_pawn.className = rev_pawn_class;
+            Object.assign(rev_anim_pawn.style, {
+              position: 'fixed',
+              top: rev_from_rect.top + 'px',
+              left: rev_from_rect.left + 'px',
+              height: rev_sq_h + 'px',
+              width: rev_sq_w + 'px',
+              zIndex: '1011',
+              pointerEvents: 'none',
+            });
+
+            board_elm.appendChild(rev_anim_pawn);
+
+            void rev_anim_pawn.offsetWidth;
+
+            rev_anim_pawn.style.transition = 'top ' + _CFG.animationTime + 'ms, left ' + _CFG.animationTime + 'ms';
+            rev_anim_pawn.style.top = rev_to_rect.top + 'px';
+            rev_anim_pawn.style.left = rev_to_rect.left + 'px';
+
+            rev_anim_pawn.addEventListener(
+              'transitionend',
+              function () {
+                rev_pawn_holder.style.display = '';
+                rev_anim_pawn.remove();
+              },
+              { once: true }
+            );
+          } else {
+            data.fromHolderElm.style.display = '';
+            _restoreLastMove(board);
+            _restoreCheck(board);
+          }
+        } else {
+          if (data.fromHolderElm) {
+            data.fromHolderElm.style.display = '';
+          }
+          _restoreLastMove(board);
+        }
+
+        _cancelSelected();
+      } else {
+        if (data.fromHolderElm) {
+          data.fromHolderElm.style.display = '';
+        }
+
+        if (board !== null && data.cachedMoveUci) {
+          final_uci = data.cachedMoveUci.slice(0, 4) + data.pieceBal.toLowerCase();
+          board.playMove(final_uci, { isLegalMove: true, isInanimated: true, playSounds: true });
+        }
+      }
+    }
+
+    function _enterPromotionMode(board, from_bos, to_bos, mock_move, cached_move_uci, is_click_move) {
+      var i,
+        len,
+        squares,
+        piece_order,
+        overlay_elm,
+        board_elm,
+        from_holder_elm,
+        from_lm_elm,
+        to_lm_elm,
+        current_bos,
+        square_elm,
+        holder_elm,
+        promo_class,
+        promo_elm,
+        from_square_elm,
+        pawn_holder,
+        to_square_elm,
+        pawn_class,
+        from_rect,
+        to_rect,
+        sq_h,
+        sq_w,
+        anim_pawn;
+
+      if (!mock_move || !mock_move.promotion || !cached_move_uci) {
+        return false;
+      }
+
+      to_bos = cached_move_uci.slice(2, 4) || to_bos;
+
+      piece_order = ['q', 'n', 'r', 'b'];
+      squares = _promotionSquaresHelper(to_bos);
+
+      if (!squares.length) {
+        return false;
+      }
+
+      board_elm = document.getElementById('ic_ui_board');
+
+      if (!board_elm) {
+        return false;
+      }
+
+      _cancelSelected();
+
+      document.querySelectorAll('#ic_ui_board .ic_incheck').forEach(function (elm) {
+        elm.classList.remove('ic_incheck');
+      });
+
+      document.querySelectorAll('#ic_ui_board .ic_lastmove').forEach(function (elm) {
+        elm.classList.remove('ic_lastmove');
+      });
+
+      if (_CFG.highlightLastMove) {
+        from_lm_elm = document.getElementById('ic_ui_' + from_bos);
+        to_lm_elm = document.getElementById('ic_ui_' + to_bos);
+
+        if (from_lm_elm) from_lm_elm.classList.add('ic_lastmove');
+        if (to_lm_elm) to_lm_elm.classList.add('ic_lastmove');
+      }
+
+      overlay_elm = document.createElement('div');
+      overlay_elm.id = 'ic_ui_promotion_overlay';
+      overlay_elm.className = 'ic_promotion_overlay';
+      overlay_elm.style.position = 'absolute';
+      overlay_elm.style.top = '0';
+      overlay_elm.style.left = '0';
+      overlay_elm.style.width = '100%';
+      overlay_elm.style.height = '100%';
+      overlay_elm.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+      overlay_elm.style.zIndex = '1010';
+      board_elm.appendChild(overlay_elm);
+
+      for (i = 0, len = piece_order.length; i < len && i < squares.length; i++) {
+        current_bos = squares[i];
+        square_elm = document.getElementById('ic_ui_' + current_bos);
+
+        if (!square_elm) {
+          continue;
+        }
+
+        holder_elm = square_elm.querySelector(':scope > .ic_piece_holder');
+
+        if (holder_elm) {
+          holder_elm.style.display = 'none';
+        }
+
+        promo_class = _promotionPieceClassHelper(mock_move.colorMoved, piece_order[i]);
+        promo_elm = document.createElement('div');
+        promo_elm.className = 'ic_piece_holder' + promo_class + ' ic_promotion_option';
+        promo_elm.dataset.bos = current_bos;
+        promo_elm.dataset.piece = piece_order[i];
+        promo_elm.style.position = 'relative';
+        promo_elm.style.zIndex = '1012';
+
+        square_elm.appendChild(promo_elm);
+      }
+
+      from_holder_elm = null;
+      from_square_elm = document.getElementById('ic_ui_' + from_bos);
+
+      if (from_square_elm) {
+        pawn_holder = from_square_elm.querySelector(':scope > .ic_piece_holder');
+
+        if (pawn_holder) {
+          from_holder_elm = pawn_holder;
+          pawn_holder.style.display = 'none';
+
+          if (is_click_move && _CFG.pieceAnimations && _CFG.animationTime > 0) {
+            to_square_elm = document.getElementById('ic_ui_' + to_bos);
+
+            if (to_square_elm) {
+              pawn_class = pawn_holder.className;
+              from_rect = from_square_elm.getBoundingClientRect();
+              to_rect = to_square_elm.getBoundingClientRect();
+              sq_h = from_square_elm.offsetHeight;
+              sq_w = from_square_elm.offsetWidth;
+
+              anim_pawn = document.createElement('div');
+              anim_pawn.className = pawn_class;
+              Object.assign(anim_pawn.style, {
+                position: 'fixed',
+                top: from_rect.top + 'px',
+                left: from_rect.left + 'px',
+                height: sq_h + 'px',
+                width: sq_w + 'px',
+                zIndex: '1011',
+                pointerEvents: 'none',
+              });
+
+              board_elm.appendChild(anim_pawn);
+
+              void anim_pawn.offsetWidth;
+
+              anim_pawn.style.transition = 'top ' + _CFG.animationTime + 'ms, left ' + _CFG.animationTime + 'ms';
+              anim_pawn.style.top = to_rect.top + 'px';
+              anim_pawn.style.left = to_rect.left + 'px';
+
+              anim_pawn.addEventListener(
+                'transitionend',
+                function () {
+                  anim_pawn.remove();
+                },
+                { once: true }
+              );
+            }
+          }
+        }
+      }
+
+      _PROMOTION_MODE = true;
+      _PROMOTION_DATA = {
+        boardName: board.boardName,
+        fromBos: from_bos,
+        toBos: to_bos,
+        cachedMoveUci: cached_move_uci,
+        squares: squares,
+        fromHolderElm: from_holder_elm,
+      };
+
+      return true;
     }
 
     function _pushAlertHelper(alert_msg, from_top, class_name) {
@@ -335,6 +738,36 @@
           }
 
           this_elm.select();
+        });
+
+        document.addEventListener('click', function (e) {
+          var overlay_elm, opt_elm, piece_bal;
+
+          overlay_elm = document.getElementById('ic_ui_promotion_overlay');
+
+          if (!overlay_elm) {
+            return;
+          }
+
+          opt_elm = e.target.closest('.ic_promotion_option');
+
+          if (opt_elm) {
+            piece_bal = opt_elm.dataset.piece || '';
+
+            if (_PROMOTION_MODE && _PROMOTION_DATA && piece_bal) {
+              _PROMOTION_DATA.pieceBal = piece_bal;
+
+              _exitPromotionMode(false);
+            }
+
+            e.preventDefault();
+            return;
+          }
+
+          if (overlay_elm.contains(e.target)) {
+            _exitPromotionMode(true);
+            e.preventDefault();
+          }
         });
 
         document.addEventListener('click', function (e) {
@@ -668,12 +1101,16 @@
         });
 
         document.addEventListener('mouseup', function (e) {
-          var temp, board, current_bos, old_drg;
+          var temp, board, current_bos, old_drg, is_promotion_move, mock_move, is_legal_move, cached_move_uci;
 
           old_drg = _DRAGGING_BOS;
           _cancelDragging();
 
           block: {
+            if (_PROMOTION_MODE) {
+              break block;
+            }
+
             if (!_CFG.boardInteractions) {
               break block;
             }
@@ -703,7 +1140,27 @@
             }
 
             if (old_drg !== current_bos) {
-              if (!board.playMove([old_drg, current_bos], { isInanimated: true, playSounds: true })) {
+              is_promotion_move = false;
+              cached_move_uci = null;
+              mock_move = board.playMove([old_drg, current_bos], { isMockMove: true });
+
+              is_legal_move = mock_move !== null;
+
+              if (is_legal_move) {
+                cached_move_uci = mock_move.uci;
+                is_promotion_move = !!mock_move.promotion;
+              }
+
+              if (is_promotion_move && is_legal_move && _CFG.interactivePromotion) {
+                if (_enterPromotionMode(board, old_drg, current_bos, mock_move, cached_move_uci, false)) {
+                  break block;
+                }
+              }
+
+              if (
+                !is_legal_move ||
+                !board.playMove(cached_move_uci, { isLegalMove: true, isInanimated: true, playSounds: true })
+              ) {
                 _cancelSelected();
               }
             }
@@ -711,13 +1168,28 @@
         });
 
         document.addEventListener('mousedown', function (e) {
-          var i, len, temp, legal_moves, board, square, current_bos, old_sel;
+          var i,
+            len,
+            temp,
+            legal_moves,
+            board,
+            square,
+            current_bos,
+            old_sel,
+            is_promotion_move,
+            mock_move,
+            is_legal_move,
+            cached_move_uci;
 
           old_sel = _SELECTED_BOS;
           _cancelSelected();
           _cancelDragging();
 
           block: {
+            if (_PROMOTION_MODE) {
+              break block;
+            }
+
             if (!_CFG.boardInteractions) {
               break block;
             }
@@ -749,9 +1221,30 @@
               break block;
             }
 
+            is_promotion_move = false;
+            cached_move_uci = null;
+
+            if (old_sel && old_sel !== current_bos) {
+              mock_move = board.playMove([old_sel, current_bos], { isMockMove: true });
+
+              is_legal_move = mock_move !== null;
+
+              if (is_legal_move) {
+                cached_move_uci = mock_move.uci;
+                is_promotion_move = !!mock_move.promotion;
+              }
+
+              if (is_promotion_move && is_legal_move && _CFG.interactivePromotion) {
+                if (_enterPromotionMode(board, old_sel, current_bos, mock_move, cached_move_uci, true)) {
+                  break block;
+                }
+              }
+            }
+
             if (
               !old_sel ||
-              (old_sel !== current_bos && !board.playMove([old_sel, current_bos], { playSounds: true }))
+              (old_sel !== current_bos &&
+                (!is_legal_move || !board.playMove(cached_move_uci, { isLegalMove: true, playSounds: true })))
             ) {
               if (square.className) {
                 _SELECTED_BOS = current_bos;
@@ -1480,6 +1973,7 @@
         _cancelSelected();
         _cancelDragging();
         _cancelAnimations();
+        _abortPromotionMode();
         _bindOnce();
 
         board_elm = document.getElementById('ic_ui_board');

@@ -57,6 +57,7 @@ https://ajax333221.github.io/isepic-chess-ui/
 
 - Responsive board size
 - Both _drag-and-drop_ and _click-from-click-to_ in parallel
+- Interactive pawn promotion options
 - Highlight last move, legal moves and checks
 - [Components](https://ajax333221.github.io/isepic-chess-ui/components.html):
   - Chess [board](https://ajax333221.github.io/isepic-chess-ui/components.html#board)

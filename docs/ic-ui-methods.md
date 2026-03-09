@@ -35,6 +35,7 @@ Valid options are:
 - **highlightLegalMoves** — Default: `true` (Boolean)
 - **highlightSelected** — Default: `true` (Boolean)
 - **scrollNavigation** — Default: `true` (Boolean)
+- **interactivePromotion** — Default: `true` (Boolean)
 - **arrowKeysNavigation** — Default: `false` (Boolean)
 - **moveTooltip** — Default: `false` (Boolean)
 - **moveTooltipSize** — Default: `250` (Number)
