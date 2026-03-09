@@ -2,7 +2,7 @@
 
 (function (windw, Ic) {
   var IcUi = (function () {
-    var _VERSION = '5.0.1';
+    var _VERSION = '5.1.0';
 
     var _CFG = {
       chessFont: 'merida',
@@ -182,9 +182,25 @@
     }
 
     function _exitPromotionMode(is_cancelled) {
-      var i, len, data, board, overlay_elm, opts, square_elm, holder_elm,
-        from_sq_elm, to_sq_elm, board_elm, rev_pawn_holder, rev_pawn_class,
-        rev_from_rect, rev_to_rect, rev_sq_h, rev_sq_w, rev_anim_pawn, final_uci;
+      var i,
+        len,
+        data,
+        board,
+        overlay_elm,
+        opts,
+        square_elm,
+        holder_elm,
+        from_sq_elm,
+        to_sq_elm,
+        board_elm,
+        rev_pawn_holder,
+        rev_pawn_class,
+        rev_from_rect,
+        rev_to_rect,
+        rev_sq_h,
+        rev_sq_w,
+        rev_anim_pawn,
+        final_uci;
 
       if (!_PROMOTION_MODE || !_PROMOTION_DATA) {
         return;
@@ -258,15 +274,18 @@
 
             void rev_anim_pawn.offsetWidth;
 
-            rev_anim_pawn.style.transition =
-              'top ' + _CFG.animationTime + 'ms, left ' + _CFG.animationTime + 'ms';
+            rev_anim_pawn.style.transition = 'top ' + _CFG.animationTime + 'ms, left ' + _CFG.animationTime + 'ms';
             rev_anim_pawn.style.top = rev_to_rect.top + 'px';
             rev_anim_pawn.style.left = rev_to_rect.left + 'px';
 
-            rev_anim_pawn.addEventListener('transitionend', function () {
-              rev_pawn_holder.style.display = '';
-              rev_anim_pawn.remove();
-            }, { once: true });
+            rev_anim_pawn.addEventListener(
+              'transitionend',
+              function () {
+                rev_pawn_holder.style.display = '';
+                rev_anim_pawn.remove();
+              },
+              { once: true }
+            );
           } else {
             data.fromHolderElm.style.display = '';
             _restoreLastMove(board);
@@ -293,11 +312,30 @@
     }
 
     function _enterPromotionMode(board, from_bos, to_bos, mock_move, cached_move_uci, is_click_move) {
-      var i, len, squares, piece_order, overlay_elm, board_elm, from_holder_elm,
-        from_lm_elm, to_lm_elm, r,
-        current_bos, square_elm, holder_elm, promo_class, promo_elm,
-        from_square_elm, pawn_holder, to_square_elm, pawn_class,
-        from_rect, to_rect, sq_h, sq_w, anim_pawn;
+      var i,
+        len,
+        squares,
+        piece_order,
+        overlay_elm,
+        board_elm,
+        from_holder_elm,
+        from_lm_elm,
+        to_lm_elm,
+        r,
+        current_bos,
+        square_elm,
+        holder_elm,
+        promo_class,
+        promo_elm,
+        from_square_elm,
+        pawn_holder,
+        to_square_elm,
+        pawn_class,
+        from_rect,
+        to_rect,
+        sq_h,
+        sq_w,
+        anim_pawn;
 
       if (!mock_move || !mock_move.promotion || !cached_move_uci) {
         return false;
@@ -413,14 +451,17 @@
 
               void anim_pawn.offsetWidth;
 
-              anim_pawn.style.transition =
-                'top ' + _CFG.animationTime + 'ms, left ' + _CFG.animationTime + 'ms';
+              anim_pawn.style.transition = 'top ' + _CFG.animationTime + 'ms, left ' + _CFG.animationTime + 'ms';
               anim_pawn.style.top = to_rect.top + 'px';
               anim_pawn.style.left = to_rect.left + 'px';
 
-              anim_pawn.addEventListener('transitionend', function () {
-                anim_pawn.remove();
-              }, { once: true });
+              anim_pawn.addEventListener(
+                'transitionend',
+                function () {
+                  anim_pawn.remove();
+                },
+                { once: true }
+              );
             }
           }
         }
@@ -1123,7 +1164,10 @@
                 }
               }
 
-              if (!is_legal_move || !board.playMove(cached_move_uci, { isLegalMove: true, isInanimated: true, playSounds: true })) {
+              if (
+                !is_legal_move ||
+                !board.playMove(cached_move_uci, { isLegalMove: true, isInanimated: true, playSounds: true })
+              ) {
                 _cancelSelected();
               }
             }
@@ -1207,8 +1251,7 @@
             if (
               !old_sel ||
               (old_sel !== current_bos &&
-                (!is_legal_move ||
-                  !board.playMove(cached_move_uci, { isLegalMove: true, playSounds: true })))
+                (!is_legal_move || !board.playMove(cached_move_uci, { isLegalMove: true, playSounds: true })))
             ) {
               if (square.className) {
                 _SELECTED_BOS = current_bos;
