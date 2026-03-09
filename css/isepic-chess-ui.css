@@ -85,6 +85,11 @@
 .ic_ui_board {
   background: #4c4c4c;
 }
+
+.ic_ui_board #ic_ui_board {
+  position: relative;
+  overflow: hidden;
+}
 .ic_ui_board .ic_theme_wood {
   background: #615937;
 }

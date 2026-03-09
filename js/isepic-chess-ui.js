@@ -321,7 +321,6 @@
         from_holder_elm,
         from_lm_elm,
         to_lm_elm,
-        r,
         current_bos,
         square_elm,
         holder_elm,
@@ -375,20 +374,17 @@
         if (to_lm_elm) to_lm_elm.classList.add('ic_lastmove');
       }
 
-      r = board_elm.getBoundingClientRect();
-
       overlay_elm = document.createElement('div');
       overlay_elm.id = 'ic_ui_promotion_overlay';
       overlay_elm.className = 'ic_promotion_overlay';
-      overlay_elm.style.position = 'fixed';
-      overlay_elm.style.top = r.top + 'px';
-      overlay_elm.style.left = r.left + 'px';
-      overlay_elm.style.width = r.width + 'px';
-      overlay_elm.style.height = r.height + 'px';
+      overlay_elm.style.position = 'absolute';
+      overlay_elm.style.top = '0';
+      overlay_elm.style.left = '0';
+      overlay_elm.style.width = '100%';
+      overlay_elm.style.height = '100%';
       overlay_elm.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-      overlay_elm.style.borderRadius = window.getComputedStyle(board_elm).borderRadius;
       overlay_elm.style.zIndex = '1010';
-      document.body.appendChild(overlay_elm);
+      board_elm.appendChild(overlay_elm);
 
       for (i = 0, len = piece_order.length; i < len && i < squares.length; i++) {
         current_bos = squares[i];
