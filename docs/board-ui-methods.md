@@ -28,6 +28,7 @@ This method will:
 - Finish ongoing piece animations.
 - Cancel ongoing piece dragging.
 - Unselect and unhighlight squares.
+- Cancel interactive promotion mode (if active).
 - Start the current animation (if any).
 - Highlight squares (if any).
 

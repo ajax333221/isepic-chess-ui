@@ -137,6 +137,50 @@
       }
     }
 
+    function _abortPromotionMode() {
+      var i, len, data, overlay_elm, opts, square_elm, holder_elm;
+
+      if (!_PROMOTION_MODE || !_PROMOTION_DATA) {
+        return;
+      }
+
+      data = _PROMOTION_DATA;
+      _PROMOTION_MODE = false;
+      _PROMOTION_DATA = null;
+
+      overlay_elm = document.getElementById('ic_ui_promotion_overlay');
+
+      if (overlay_elm && overlay_elm.parentNode) {
+        overlay_elm.parentNode.removeChild(overlay_elm);
+      }
+
+      opts = document.querySelectorAll('#ic_ui_board .ic_promotion_option');
+
+      for (i = 0, len = opts.length; i < len; i++) {
+        opts[i].remove();
+      }
+
+      if (data.squares && data.squares.length) {
+        for (i = 0, len = data.squares.length; i < len; i++) {
+          square_elm = document.getElementById('ic_ui_' + data.squares[i]);
+
+          if (square_elm) {
+            holder_elm = square_elm.querySelector(':scope > .ic_piece_holder');
+
+            if (holder_elm) {
+              holder_elm.style.display = '';
+            }
+          }
+        }
+      }
+
+      if (data.fromHolderElm) {
+        data.fromHolderElm.style.display = '';
+      }
+
+      _cancelAnimations();
+    }
+
     function _exitPromotionMode(is_cancelled) {
       var i, len, data, board, overlay_elm, opts, square_elm, holder_elm,
         from_sq_elm, to_sq_elm, board_elm, rev_pawn_holder, rev_pawn_class,
@@ -677,13 +721,7 @@
             piece_bal = opt_elm.dataset.piece || '';
 
             if (_PROMOTION_MODE && _PROMOTION_DATA && piece_bal) {
-              var board = Ic.getBoard(_PROMOTION_DATA.boardName);
-
               _PROMOTION_DATA.pieceBal = piece_bal;
-
-              if (board !== null) {
-                board.setPromoteTo(piece_bal);
-              }
 
               _exitPromotionMode(false);
             }
@@ -1899,6 +1937,7 @@
         _cancelSelected();
         _cancelDragging();
         _cancelAnimations();
+        _abortPromotionMode();
         _bindOnce();
 
         board_elm = document.getElementById('ic_ui_board');
