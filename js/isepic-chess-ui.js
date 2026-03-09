@@ -84,7 +84,6 @@
         return squares;
       }
 
-      // promotion always on rank 1 or 8; interior is towards center
       interior_dir = to_rank === 8 ? -1 : 1;
 
       for (i = 0; i < 4; i++) {
@@ -231,7 +230,6 @@
           if (square_elm) {
             holder_elm = square_elm.querySelector(':scope > .ic_piece_holder');
 
-            // Skip fromHolderElm — cancel animation or non-cancel restore handles it below
             if (holder_elm && holder_elm !== data.fromHolderElm) {
               holder_elm.style.display = '';
             }
@@ -340,8 +338,7 @@
         return false;
       }
 
-      // Always trust UCI move for to square
-      to_bos = (cached_move_uci || '').slice(2, 4) || to_bos;
+      to_bos = cached_move_uci.slice(2, 4) || to_bos;
 
       piece_order = ['q', 'n', 'r', 'b'];
       squares = _promotionSquaresHelper(to_bos);

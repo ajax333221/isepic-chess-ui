@@ -432,9 +432,16 @@
   color: #fefefe;
 }
 @keyframes ic_promotion_wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-2deg); }
-  75% { transform: rotate(2deg); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-2deg);
+  }
+  75% {
+    transform: rotate(2deg);
+  }
 }
 
 .ic_promotion_option {
