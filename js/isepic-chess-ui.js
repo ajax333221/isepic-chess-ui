@@ -668,7 +668,7 @@
         });
 
         document.addEventListener('mouseup', function (e) {
-          var temp, board, current_bos, old_drg;
+          var temp, board, current_bos, old_drg, is_promotion_move, mock_move, is_legal_move, cached_move_uci;
 
           old_drg = _DRAGGING_BOS;
           _cancelDragging();
@@ -703,7 +703,27 @@
             }
 
             if (old_drg !== current_bos) {
-              if (!board.playMove([old_drg, current_bos], { isInanimated: true, playSounds: true })) {
+              is_promotion_move = false;
+              cached_move_uci = null;
+              mock_move = board.playMove([old_drg, current_bos], { isMockMove: true });
+
+              is_legal_move = mock_move !== null;
+
+              if (is_legal_move) {
+                cached_move_uci = mock_move.uci;
+                is_promotion_move = !!mock_move.promotion;
+              }
+
+              alert(is_promotion_move);
+
+              if (
+                !is_legal_move ||
+                !board.playMove(cached_move_uci, {
+                  isLegalMove: true,
+                  isInanimated: true,
+                  playSounds: true,
+                })
+              ) {
                 _cancelSelected();
               }
             }
@@ -711,7 +731,18 @@
         });
 
         document.addEventListener('mousedown', function (e) {
-          var i, len, temp, legal_moves, board, square, current_bos, old_sel;
+          var i,
+            len,
+            temp,
+            legal_moves,
+            board,
+            square,
+            current_bos,
+            old_sel,
+            is_promotion_move,
+            mock_move,
+            is_legal_move,
+            cached_move_uci;
 
           old_sel = _SELECTED_BOS;
           _cancelSelected();
@@ -749,9 +780,27 @@
               break block;
             }
 
+            is_promotion_move = false;
+            cached_move_uci = null;
+
+            if (old_sel && old_sel !== current_bos) {
+              mock_move = board.playMove([old_sel, current_bos], { isMockMove: true });
+
+              is_legal_move = mock_move !== null;
+
+              if (is_legal_move) {
+                cached_move_uci = mock_move.uci;
+                is_promotion_move = !!mock_move.promotion;
+              }
+
+              alert(is_promotion_move);
+            }
+
             if (
               !old_sel ||
-              (old_sel !== current_bos && !board.playMove([old_sel, current_bos], { playSounds: true }))
+              (old_sel !== current_bos &&
+                (!is_legal_move ||
+                  !board.playMove(cached_move_uci, { isLegalMove: true, playSounds: true })))
             ) {
               if (square.className) {
                 _SELECTED_BOS = current_bos;
