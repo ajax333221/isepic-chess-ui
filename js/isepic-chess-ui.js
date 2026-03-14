@@ -25,6 +25,7 @@
       draggingTime: 50,
       scrollingTime: 60,
       pushAlertsTime: 5000,
+      highlightMarkers: true,
     };
 
     var _POS_Y = 0;
@@ -39,6 +40,10 @@
     var _DRAGGING_BOS = '';
     var _PROMOTION_MODE = false;
     var _PROMOTION_DATA = null;
+
+    var _MARKERS_LIST = [];
+    var _RIGHT_DOWN_BOS = '';
+    var _CURRENT_MARKER_BOS = '';
 
     var _ALERT_WARNING = 'warning';
     var _ALERT_ERROR = 'error';
@@ -592,6 +597,102 @@
       return rtn;
     }
 
+    function _refreshMarkers() {
+      var i,
+        len,
+        board_elm,
+        svg_elm,
+        marker,
+        from_sq,
+        to_sq,
+        from_rect,
+        to_rect,
+        board_rect,
+        x1,
+        y1,
+        x2,
+        y2,
+        dx,
+        dy,
+        angle,
+        dist,
+        svg_html,
+        markers_to_draw;
+
+      board_elm = document.getElementById('ic_ui_board');
+
+      if (!board_elm) {
+        return;
+      }
+
+      document.querySelectorAll('#ic_ui_markers_svg').forEach(function (elm) {
+        elm.remove();
+      });
+
+      markers_to_draw = _MARKERS_LIST.slice();
+
+      if (_RIGHT_DOWN_BOS && _CURRENT_MARKER_BOS) {
+        markers_to_draw.push({ from: _RIGHT_DOWN_BOS, to: _CURRENT_MARKER_BOS });
+      }
+
+      if (!_CFG.highlightMarkers || !markers_to_draw.length) {
+        return;
+      }
+
+      board_rect = board_elm.getBoundingClientRect();
+      svg_html = '';
+
+      for (i = 0, len = markers_to_draw.length; i < len; i++) {
+        marker = markers_to_draw[i];
+        from_sq = document.getElementById('ic_ui_' + marker.from);
+        to_sq = document.getElementById('ic_ui_' + marker.to);
+
+        if (!from_sq || !to_sq) {
+          continue;
+        }
+
+        from_rect = from_sq.getBoundingClientRect();
+        to_rect = to_sq.getBoundingClientRect();
+
+        x1 = from_rect.left + from_rect.width / 2 - board_rect.left;
+        y1 = from_rect.top + from_rect.height / 2 - board_rect.top;
+        x2 = to_rect.left + to_rect.width / 2 - board_rect.left;
+        y2 = to_rect.top + to_rect.height / 2 - board_rect.top;
+
+        if (marker.from === marker.to) {
+          svg_html += `<circle cx='${x1}' cy='${y1}' r='${
+            from_rect.width / 2.5
+          }' fill='none' stroke='rgba(235, 97, 80, 0.8)' stroke-width='4' />`;
+        } else {
+          dx = x2 - x1;
+          dy = y2 - y1;
+          angle = Math.atan2(dy, dx) * (180 / Math.PI);
+          dist = Math.sqrt(dx * dx + dy * dy);
+
+          svg_html += `<g transform='translate(${x1},${y1}) rotate(${angle})'>`;
+          svg_html += `<line x1='0' y1='0' x2='${
+            dist - 20
+          }' y2='0' stroke='rgba(235, 97, 80, 0.8)' stroke-width='12' />`;
+          svg_html += `<path d='M${dist - 25},-15 L${dist},0 L${dist - 25},15 Z' fill='rgba(235, 97, 80, 0.8)' />`;
+          svg_html += `</g>`;
+        }
+      }
+
+      svg_elm = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg_elm.id = 'ic_ui_markers_svg';
+      Object.assign(svg_elm.style, {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        zIndex: '1005',
+      });
+      svg_elm.innerHTML = svg_html;
+      board_elm.appendChild(svg_elm);
+    }
+
     function _animatePiece(from_bos, to_bos, piece_class, promotion_class) {
       var temp, piece_elm, from_square, to_square, old_offset, new_offset, old_h, old_w;
 
@@ -727,6 +828,12 @@
     function _bindOnce() {
       if (!_RAN_ONCE) {
         _RAN_ONCE = true;
+
+        document.addEventListener('contextmenu', function (e) {
+          if (e.target.closest('#ic_ui_board')) {
+            e.preventDefault();
+          }
+        });
 
         document.addEventListener('click', function (e) {
           var this_elm;
@@ -1090,18 +1197,38 @@
         });
 
         document.addEventListener('mousemove', function (e) {
+          var temp, current_bos;
+
           block: {
-            if (!_CFG.pieceDragging || !_DRAGGING_BOS) {
-              break block;
+            if (_CFG.pieceDragging && _DRAGGING_BOS) {
+              _POS_Y = e.pageY;
+              _POS_X = e.pageX;
             }
 
-            _POS_Y = e.pageY;
-            _POS_X = e.pageX;
+            if (_CFG.highlightMarkers && _RIGHT_DOWN_BOS) {
+              temp = _getHoverElement(e.pageX, e.pageY);
+              current_bos = temp ? temp.dataset.bos : '';
+
+              if (current_bos !== _CURRENT_MARKER_BOS) {
+                _CURRENT_MARKER_BOS = current_bos;
+                _refreshMarkers();
+              }
+            }
           }
         });
 
         document.addEventListener('mouseup', function (e) {
-          var temp, board, current_bos, old_drg, is_promotion_move, mock_move, is_legal_move, cached_move_uci;
+          var i,
+            len,
+            temp,
+            board,
+            current_bos,
+            old_drg,
+            is_promotion_move,
+            mock_move,
+            is_legal_move,
+            cached_move_uci,
+            marker_found;
 
           old_drg = _DRAGGING_BOS;
           _cancelDragging();
@@ -1112,6 +1239,31 @@
             }
 
             if (!_CFG.boardInteractions) {
+              break block;
+            }
+
+            if (e.button === 2 && _RIGHT_DOWN_BOS) {
+              current_bos = _CURRENT_MARKER_BOS;
+
+              if (current_bos) {
+                marker_found = false;
+
+                for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
+                  if (_MARKERS_LIST[i].from === _RIGHT_DOWN_BOS && _MARKERS_LIST[i].to === current_bos) {
+                    _MARKERS_LIST.splice(i, 1);
+                    marker_found = true;
+                    break;
+                  }
+                }
+
+                if (!marker_found) {
+                  _MARKERS_LIST.push({ from: _RIGHT_DOWN_BOS, to: current_bos });
+                }
+              }
+
+              _RIGHT_DOWN_BOS = '';
+              _CURRENT_MARKER_BOS = '';
+              _refreshMarkers();
               break block;
             }
 
@@ -1214,6 +1366,18 @@
               break block;
             }
 
+            if (e.button === 2) {
+              _RIGHT_DOWN_BOS = current_bos;
+              _CURRENT_MARKER_BOS = current_bos;
+              _refreshMarkers();
+              break block;
+            }
+
+            if (_MARKERS_LIST.length) {
+              _MARKERS_LIST = [];
+              _refreshMarkers();
+            }
+
             square = board.getSquare(current_bos);
 
             if (square === null) {
@@ -1261,7 +1425,6 @@
                   legal_moves = board.legalMoves(current_bos);
 
                   for (i = 0, len = legal_moves.length; i < len; i++) {
-                    //0<len
                     square = board.getSquare(legal_moves[i]);
                     temp = 'ic_highlight';
 
@@ -1294,7 +1457,6 @@
               temp = e && e.deltaY ? e.deltaY : 0;
 
               if (!temp) {
-                //horizontal scrolling or bad event
                 break block;
               }
 
@@ -1403,7 +1565,6 @@
                     ? ' ic_lastmove'
                     : '';
 
-                //TODO: isCheck via move property
                 in_check =
                   _CFG.highlightChecks &&
                   squares[current_bos].isKing &&
@@ -1485,7 +1646,6 @@
         new_html = '<strong>Boards:</strong> ';
 
         for (i = 0, len = board_list.length; i < len; i++) {
-          //0<len
           new_html += i ? ' | ' : '';
           current_board_name = board_list[i];
           current_board = Ic.getBoard(current_board_name);
@@ -1548,7 +1708,6 @@
       }
 
       for (i = 0; i < 8; i++) {
-        //0...7
         rank_bos = is_rotated ? i + 1 : 8 - i;
         new_html += '<tr>';
 
@@ -1557,7 +1716,6 @@
         }
 
         for (j = 0; j < 8; j++) {
-          //0...7
           current_bos = Ic.toBos(is_rotated ? [7 - i, 7 - j] : [i, j]);
           new_html +=
             "<td id='" +
@@ -1599,6 +1757,8 @@
       board_ref = document.getElementById('ic_ui_board');
       board_ref.className = new_class;
       board_ref.innerHTML = new_html;
+
+      _refreshMarkers();
     }
 
     //!---------------- utilities (this=apply)
@@ -1644,9 +1804,7 @@
       that = this;
 
       for (i = 0; i < 8; i++) {
-        //0...7
         for (j = 0; j < 8; j++) {
-          //0...7
           reset_class = (i + j) % 2 ? 'ic_bs' : 'ic_ws';
           current_square = that.getSquare(that.isRotated ? [7 - i, 7 - j] : [i, j]);
           square_class = current_square.className;
@@ -1678,13 +1836,11 @@
         };
 
         for (i = 0; i < 2; i++) {
-          //0...1
           current_side = that.isRotated === !i ? that.w : that.b;
           matdiff_html += i ? '<hr>' : '';
           temp = '';
 
           for (j = 0, len = current_side.materialDiff.length; j < len; j++) {
-            //0<len
             temp +=
               "<img src='" +
               ('./css/images/chess-fonts/' +
@@ -1725,7 +1881,6 @@
         new_html = '';
 
         for (i = 0, len = move_list.length; i < len; i++) {
-          //0<len
           if (i) {
             if (that.isPuzzleMode && i > that.currentMove) {
               continue;
@@ -1850,11 +2005,9 @@
         new_html += '<ul>';
 
         for (i = 0; i < 8; i++) {
-          //0...7
           current_row = [];
 
           for (j = 0; j < 8; j++) {
-            //0...7
             current_square = that.getSquare([i, j]);
             temp = '' + current_square.val;
 
@@ -1880,7 +2033,6 @@
         temp = '';
 
         for (i = 0, len = that.legalUci.length; i < len; i++) {
-          //0<len
           temp += (i ? ', ' : '') + (!i || i % 5 ? '' : '<br>') + that.legalUci[i];
         }
 
@@ -1891,7 +2043,6 @@
         temp = Object.keys(that.legalUciTree);
 
         for (i = 0, len = temp.length; i < len; i++) {
-          //0<len
           new_html += '<li><strong>' + temp[i] + ':</strong> [' + that.legalUciTree[temp[i]].join(', ') + ']</li>';
         }
 
@@ -1904,13 +2055,11 @@
         temp = Object.keys(that.legalRevTree);
 
         for (i = 0, len = temp.length; i < len; i++) {
-          //0<len
           new_html += '<li><strong>' + temp[i] + ':</strong>';
           new_html += ' {';
           temp2 = Object.keys(that.legalRevTree[temp[i]]);
 
           for (j = 0, len2 = temp2.length; j < len2; j++) {
-            //0<len2
             new_html +=
               (j ? ', ' : '') +
               '<strong>' +
@@ -2044,6 +2193,8 @@
             document.getElementById('ic_ui_' + that.moveList[that.currentMove].fromBos).classList.add('ic_lastmove');
             document.getElementById('ic_ui_' + that.moveList[that.currentMove].toBos).classList.add('ic_lastmove');
           }
+
+          _refreshMarkers();
         }
       }
     }
