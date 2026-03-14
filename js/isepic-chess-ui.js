@@ -2,7 +2,7 @@
 
 (function (windw, Ic) {
   var IcUi = (function () {
-    var _VERSION = '5.1.0';
+    var _VERSION = '5.1.1';
 
     var _CFG = {
       chessFont: 'merida',
@@ -617,7 +617,13 @@
         angle,
         dist,
         svg_html,
-        markers_to_draw;
+        opacity,
+        marker_arr,
+        active_from,
+        active_to,
+        preview_exists,
+        is_being_erased,
+        is_new_preview;
 
       board_elm = document.getElementById('ic_ui_board');
 
@@ -629,21 +635,51 @@
         elm.remove();
       });
 
-      markers_to_draw = _MARKERS_LIST.slice();
-
-      if (_RIGHT_DOWN_BOS && _CURRENT_MARKER_BOS) {
-        markers_to_draw.push({ from: _RIGHT_DOWN_BOS, to: _CURRENT_MARKER_BOS });
+      if (!_CFG.highlightMarkers) {
+        return;
       }
 
-      if (!_CFG.highlightMarkers || !markers_to_draw.length) {
+      active_from = _RIGHT_DOWN_BOS;
+      active_to = _CURRENT_MARKER_BOS;
+      preview_exists = !!(active_from && active_to);
+      marker_arr = [];
+
+      for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
+        is_being_erased = false;
+
+        if (preview_exists && _MARKERS_LIST[i].from === active_from && _MARKERS_LIST[i].to === active_to) {
+          is_being_erased = true;
+        }
+
+        marker_arr.push({ data: _MARKERS_LIST[i], opacity: is_being_erased ? 0.35 : 0.7 });
+      }
+
+      if (preview_exists) {
+        is_new_preview = true;
+
+        for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
+          if (_MARKERS_LIST[i].from === active_from && _MARKERS_LIST[i].to === active_to) {
+            is_new_preview = false;
+            break;
+          }
+        }
+
+        if (is_new_preview) {
+          marker_arr.push({ data: { from: active_from, to: active_to }, opacity: 0.7 });
+        }
+      }
+
+      if (!marker_arr.length) {
         return;
       }
 
       board_rect = board_elm.getBoundingClientRect();
       svg_html = '';
 
-      for (i = 0, len = markers_to_draw.length; i < len; i++) {
-        marker = markers_to_draw[i];
+      for (i = 0, len = marker_arr.length; i < len; i++) {
+        marker = marker_arr[i].data;
+        opacity = marker_arr[i].opacity;
+
         from_sq = document.getElementById('ic_ui_' + marker.from);
         to_sq = document.getElementById('ic_ui_' + marker.to);
 
@@ -660,20 +696,22 @@
         y2 = to_rect.top + to_rect.height / 2 - board_rect.top;
 
         if (marker.from === marker.to) {
+          svg_html += `<g opacity='${opacity}'>`;
           svg_html += `<circle cx='${x1}' cy='${y1}' r='${
-            from_rect.width / 2.5
-          }' fill='none' stroke='rgba(235, 97, 80, 0.8)' stroke-width='4' />`;
+            from_rect.width / 2 - 4
+          }' fill='none' stroke='rgb(235, 97, 80)' stroke-width='8' />`;
+          svg_html += `</g>`;
         } else {
           dx = x2 - x1;
           dy = y2 - y1;
           angle = Math.atan2(dy, dx) * (180 / Math.PI);
           dist = Math.sqrt(dx * dx + dy * dy);
 
-          svg_html += `<g transform='translate(${x1},${y1}) rotate(${angle})'>`;
-          svg_html += `<line x1='0' y1='0' x2='${
-            dist - 20
-          }' y2='0' stroke='rgba(235, 97, 80, 0.8)' stroke-width='12' />`;
-          svg_html += `<path d='M${dist - 25},-15 L${dist},0 L${dist - 25},15 Z' fill='rgba(235, 97, 80, 0.8)' />`;
+          svg_html += `<g transform='translate(${x1},${y1}) rotate(${angle})' opacity='${opacity}' stroke-linecap='round' stroke-linejoin='round'>`;
+          svg_html += `<line x1='0' y1='0' x2='${dist - 20}' y2='0' stroke='rgb(235, 97, 80)' stroke-width='12' />`;
+          svg_html += `<path d='M${dist - 25},-15 L${dist},0 L${
+            dist - 25
+          },15 Z' fill='rgb(235, 97, 80)' stroke='rgb(235, 97, 80)' stroke-width='6' />`;
           svg_html += `</g>`;
         }
       }
