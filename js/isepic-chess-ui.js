@@ -2,7 +2,7 @@
 
 (function (windw, Ic) {
   var IcUi = (function () {
-    var _VERSION = '5.1.1';
+    var _VERSION = '5.1.2';
 
     var _CFG = {
       chessFont: 'merida',
@@ -695,11 +695,14 @@
         x2 = to_rect.left + to_rect.width / 2 - board_rect.left;
         y2 = to_rect.top + to_rect.height / 2 - board_rect.top;
 
+        var stroke_w = Math.max(2, from_rect.width * 0.1); // Scales with size, minimum 2px
+        var arrow_size = from_rect.width * 0.45; // Scales arrowhead size
+
         if (marker.from === marker.to) {
           svg_html += `<g opacity='${opacity}'>`;
           svg_html += `<circle cx='${x1}' cy='${y1}' r='${
             from_rect.width / 2 - 4
-          }' fill='none' stroke='rgb(235, 97, 80)' stroke-width='8' />`;
+          }' fill='none' stroke='rgb(255, 231, 0)' stroke-width='${stroke_w * 0.85}' />`;
           svg_html += `</g>`;
         } else {
           dx = x2 - x1;
@@ -707,11 +710,18 @@
           angle = Math.atan2(dy, dx) * (180 / Math.PI);
           dist = Math.sqrt(dx * dx + dy * dy);
 
-          svg_html += `<g transform='translate(${x1},${y1}) rotate(${angle})' opacity='${opacity}' stroke-linecap='round' stroke-linejoin='round'>`;
-          svg_html += `<line x1='0' y1='0' x2='${dist - 20}' y2='0' stroke='rgb(235, 97, 80)' stroke-width='12' />`;
-          svg_html += `<path d='M${dist - 25},-15 L${dist},0 L${
-            dist - 25
-          },15 Z' fill='rgb(235, 97, 80)' stroke='rgb(235, 97, 80)' stroke-width='6' />`;
+          svg_html += `<g transform='translate(${x1},${y1}) rotate(${angle})' opacity='${opacity}' stroke-linecap='butt' stroke-linejoin='miter'>`;
+
+          // Line stops before the arrowhead base
+          svg_html += `<line x1='0' y1='0' x2='${
+            dist - arrow_size * 0.8
+          }' y2='0' stroke='rgb(255, 231, 0)' stroke-width='${stroke_w * 1.4}' />`;
+
+          // Proportional triangle
+          svg_html += `<path d='M${dist - arrow_size},-${arrow_size * 0.6} L${dist},0 L${dist - arrow_size},${
+            arrow_size * 0.6
+          } Z' fill='rgb(255, 231, 0)' />`;
+
           svg_html += `</g>`;
         }
       }
@@ -866,6 +876,10 @@
     function _bindOnce() {
       if (!_RAN_ONCE) {
         _RAN_ONCE = true;
+
+        window.addEventListener('resize', function () {
+          _refreshMarkers();
+        });
 
         document.addEventListener('contextmenu', function (e) {
           if (e.target.closest('#ic_ui_board')) {
@@ -2230,6 +2244,10 @@
           if (_CFG.highlightLastMove && that.currentMove !== 0) {
             document.getElementById('ic_ui_' + that.moveList[that.currentMove].fromBos).classList.add('ic_lastmove');
             document.getElementById('ic_ui_' + that.moveList[that.currentMove].toBos).classList.add('ic_lastmove');
+          }
+
+          if (animation_type) {
+            _MARKERS_LIST = [];
           }
 
           _refreshMarkers();
