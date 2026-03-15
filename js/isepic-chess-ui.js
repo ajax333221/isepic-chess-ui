@@ -2,7 +2,7 @@
 
 (function (windw, Ic) {
   var IcUi = (function () {
-    var _VERSION = '5.1.2';
+    var _VERSION = '5.2.0';
 
     var _CFG = {
       chessFont: 'merida',
@@ -78,6 +78,48 @@
         }
       }
       return bos;
+    }
+
+    function _addMarkerHelper(from_qos, to_qos, color) {
+      var i, len, from_bos, to_bos, marker_found;
+
+      from_bos = _qosHelper(from_qos);
+      to_bos = _qosHelper(to_qos);
+
+      if (!from_bos || !to_bos) {
+        return;
+      }
+
+      marker_found = false;
+      for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
+        if (_MARKERS_LIST[i].from === from_bos && _MARKERS_LIST[i].to === to_bos) {
+          _MARKERS_LIST[i].color = color;
+          marker_found = true;
+          break;
+        }
+      }
+
+      if (!marker_found) {
+        _MARKERS_LIST.push({ from: from_bos, to: to_bos, color: color });
+      }
+
+      _refreshMarkers();
+    }
+
+    function _removeMarkerHelper(from_qos, to_qos) {
+      var i, len, from_bos, to_bos;
+
+      from_bos = _qosHelper(from_qos);
+      to_bos = _qosHelper(to_qos);
+
+      for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
+        if (_MARKERS_LIST[i].from === from_bos && _MARKERS_LIST[i].to === to_bos) {
+          _MARKERS_LIST.splice(i, 1);
+          break;
+        }
+      }
+
+      _refreshMarkers();
     }
 
     function _chessFontHelper(chess_font) {
@@ -652,7 +694,8 @@
         active_from,
         active_to,
         preview_exists,
-        is_being_erased,
+        is_being_interacted,
+        is_different_color,
         is_new_preview,
         marker_color;
 
@@ -676,27 +719,39 @@
       marker_arr = [];
 
       for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
-        is_being_erased = false;
+        is_being_interacted = false;
+        is_different_color = false;
 
         if (preview_exists && _MARKERS_LIST[i].from === active_from && _MARKERS_LIST[i].to === active_to) {
-          is_being_erased = true;
+          is_being_interacted = true;
+          is_different_color = _MARKERS_LIST[i].color !== _CURRENT_MARKER_COLOR;
         }
 
-        marker_arr.push({ data: _MARKERS_LIST[i], opacity: is_being_erased ? 0.35 : 0.7 });
+        opacity = 0.7;
+
+        if (is_being_interacted) {
+          opacity = is_different_color ? 0 : 0.35;
+        }
+
+        if (opacity > 0) {
+          marker_arr.push({ data: _MARKERS_LIST[i], opacity: opacity });
+        }
       }
 
       if (preview_exists) {
         is_new_preview = true;
+        is_different_color = false;
 
         for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
           if (_MARKERS_LIST[i].from === active_from && _MARKERS_LIST[i].to === active_to) {
             is_new_preview = false;
+            is_different_color = _MARKERS_LIST[i].color !== _CURRENT_MARKER_COLOR;
             break;
           }
         }
 
-        if (is_new_preview) {
-          marker_arr.push({ data: { from: active_from, to: active_to, color: _CURRENT_MARKER_COLOR }, opacity: 0.7 });
+        if (is_new_preview || is_different_color) {
+          marker_arr.push({ data: { from: active_from, to: active_to, color: _CURRENT_MARKER_COLOR }, opacity: 1.0 });
         }
       }
 
@@ -1307,7 +1362,7 @@
             mock_move,
             is_legal_move,
             cached_move_uci,
-            marker_found;
+            found_idx;
 
           old_drg = _DRAGGING_BOS;
           _cancelDragging();
@@ -1325,17 +1380,22 @@
               current_bos = _CURRENT_MARKER_BOS;
 
               if (current_bos) {
-                marker_found = false;
+                found_idx = -1;
 
                 for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
                   if (_MARKERS_LIST[i].from === _RIGHT_DOWN_BOS && _MARKERS_LIST[i].to === current_bos) {
-                    _MARKERS_LIST.splice(i, 1);
-                    marker_found = true;
+                    found_idx = i;
                     break;
                   }
                 }
 
-                if (!marker_found) {
+                if (found_idx !== -1) {
+                  if (_MARKERS_LIST[found_idx].color === _CURRENT_MARKER_COLOR) {
+                    _MARKERS_LIST.splice(found_idx, 1);
+                  } else {
+                    _MARKERS_LIST[found_idx].color = _CURRENT_MARKER_COLOR;
+                  }
+                } else {
                   _MARKERS_LIST.push({ from: _RIGHT_DOWN_BOS, to: current_bos, color: _CURRENT_MARKER_COLOR });
                 }
               }
@@ -2194,30 +2254,20 @@
       _pushAlertHelper(alert_msg, false, class_name);
     }
 
-    function addMarker(from_qos, to_qos, color) {
-      var i, len, from_bos, to_bos, marker_found;
+    function drawCircle(qos, color) {
+      _addMarkerHelper(qos, qos, color);
+    }
 
-      from_bos = _qosHelper(from_qos);
-      to_bos = _qosHelper(to_qos);
+    function drawArrow(from_qos, to_qos, color) {
+      _addMarkerHelper(from_qos, to_qos, color);
+    }
 
-      if (!from_bos || !to_bos) {
-        return;
-      }
+    function clearCircle(qos) {
+      _removeMarkerHelper(qos, qos);
+    }
 
-      marker_found = false;
-      for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
-        if (_MARKERS_LIST[i].from === from_bos && _MARKERS_LIST[i].to === to_bos) {
-          _MARKERS_LIST[i].color = color;
-          marker_found = true;
-          break;
-        }
-      }
-
-      if (!marker_found) {
-        _MARKERS_LIST.push({ from: from_bos, to: to_bos, color: color });
-      }
-
-      _refreshMarkers();
+    function clearArrow(from_qos, to_qos) {
+      _removeMarkerHelper(from_qos, to_qos);
     }
 
     function clearMarkers() {
@@ -2327,7 +2377,10 @@
           setCfg: setCfg,
           pushAlert: pushAlert,
           refreshUi: refreshUi,
-          addMarker: addMarker,
+          drawCircle: drawCircle,
+          drawArrow: drawArrow,
+          clearCircle: clearCircle,
+          clearArrow: clearArrow,
           clearMarkers: clearMarkers,
         }
       : null;
