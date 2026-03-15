@@ -52,7 +52,7 @@
     //!---------------- helpers
 
     function _colorHelper(color) {
-      var map, default_val, color_clean;
+      var map, color_clean;
 
       map = {
         red: '#c0392b',
@@ -60,10 +60,9 @@
         green: '#27ae60',
         yellow: '#ffe700',
       };
-      default_val = map.green;
       color_clean = ('' + color).replace(/\s/g, '').toLowerCase();
 
-      return map[color_clean] || default_val;
+      return map[color_clean] || map.green;
     }
 
     function _qosHelper(qos) {
