@@ -2,7 +2,7 @@
 
 (function (windw, Ic) {
   var IcUi = (function () {
-    var _VERSION = '5.1.1';
+    var _VERSION = '5.1.2';
 
     var _CFG = {
       chessFont: 'merida',
@@ -44,11 +44,41 @@
     var _MARKERS_LIST = [];
     var _RIGHT_DOWN_BOS = '';
     var _CURRENT_MARKER_BOS = '';
+    var _CURRENT_MARKER_COLOR = '';
 
     var _ALERT_WARNING = 'warning';
     var _ALERT_ERROR = 'error';
 
     //!---------------- helpers
+
+    function _colorHelper(color) {
+      var map, default_val, color_clean;
+
+      map = {
+        red: '#c0392b',
+        blue: '#2980b9',
+        green: '#27ae60',
+        yellow: '#ffe700',
+      };
+      default_val = map.green;
+      color_clean = ('' + color).replace(/\s/g, '').toLowerCase();
+
+      return map[color_clean] || default_val;
+    }
+
+    function _qosHelper(qos) {
+      var bos = '';
+      if (qos) {
+        if (typeof qos === 'string') {
+          bos = qos;
+        } else if (Array.isArray(qos) && qos.length === 2) {
+          bos = Ic.toBos(qos);
+        } else if (typeof qos === 'object' && qos.bos) {
+          bos = qos.bos;
+        }
+      }
+      return bos;
+    }
 
     function _chessFontHelper(chess_font) {
       var arr, default_elm;
@@ -623,7 +653,8 @@
         active_to,
         preview_exists,
         is_being_erased,
-        is_new_preview;
+        is_new_preview,
+        marker_color;
 
       board_elm = document.getElementById('ic_ui_board');
 
@@ -665,7 +696,7 @@
         }
 
         if (is_new_preview) {
-          marker_arr.push({ data: { from: active_from, to: active_to }, opacity: 0.7 });
+          marker_arr.push({ data: { from: active_from, to: active_to, color: _CURRENT_MARKER_COLOR }, opacity: 0.7 });
         }
       }
 
@@ -679,6 +710,7 @@
       for (i = 0, len = marker_arr.length; i < len; i++) {
         marker = marker_arr[i].data;
         opacity = marker_arr[i].opacity;
+        marker_color = _colorHelper(marker.color);
 
         from_sq = document.getElementById('ic_ui_' + marker.from);
         to_sq = document.getElementById('ic_ui_' + marker.to);
@@ -695,14 +727,14 @@
         x2 = to_rect.left + to_rect.width / 2 - board_rect.left;
         y2 = to_rect.top + to_rect.height / 2 - board_rect.top;
 
-        var stroke_w = Math.max(2, from_rect.width * 0.1); // Scales with size, minimum 2px
-        var arrow_size = from_rect.width * 0.45; // Scales arrowhead size
+        var stroke_w = Math.max(2, from_rect.width * 0.1);
+        var arrow_size = from_rect.width * 0.45;
 
         if (marker.from === marker.to) {
           svg_html += `<g opacity='${opacity}'>`;
           svg_html += `<circle cx='${x1}' cy='${y1}' r='${
             from_rect.width / 2 - 4
-          }' fill='none' stroke='rgb(255, 231, 0)' stroke-width='${stroke_w * 0.85}' />`;
+          }' fill='none' stroke='${marker_color}' stroke-width='${stroke_w * 0.85}' />`;
           svg_html += `</g>`;
         } else {
           dx = x2 - x1;
@@ -711,17 +743,12 @@
           dist = Math.sqrt(dx * dx + dy * dy);
 
           svg_html += `<g transform='translate(${x1},${y1}) rotate(${angle})' opacity='${opacity}' stroke-linecap='butt' stroke-linejoin='miter'>`;
-
-          // Line stops before the arrowhead base
           svg_html += `<line x1='0' y1='0' x2='${
             dist - arrow_size * 0.8
-          }' y2='0' stroke='rgb(255, 231, 0)' stroke-width='${stroke_w * 1.4}' />`;
-
-          // Proportional triangle
+          }' y2='0' stroke='${marker_color}' stroke-width='${stroke_w * 1.4}' />`;
           svg_html += `<path d='M${dist - arrow_size},-${arrow_size * 0.6} L${dist},0 L${dist - arrow_size},${
             arrow_size * 0.6
-          } Z' fill='rgb(255, 231, 0)' />`;
-
+          } Z' fill='${marker_color}' />`;
           svg_html += `</g>`;
         }
       }
@@ -1309,7 +1336,7 @@
                 }
 
                 if (!marker_found) {
-                  _MARKERS_LIST.push({ from: _RIGHT_DOWN_BOS, to: current_bos });
+                  _MARKERS_LIST.push({ from: _RIGHT_DOWN_BOS, to: current_bos, color: _CURRENT_MARKER_COLOR });
                 }
               }
 
@@ -1419,6 +1446,14 @@
             }
 
             if (e.button === 2) {
+              if (e.altKey) {
+                _CURRENT_MARKER_COLOR = 'blue';
+              } else if (e.shiftKey || e.ctrlKey) {
+                _CURRENT_MARKER_COLOR = 'red';
+              } else {
+                _CURRENT_MARKER_COLOR = 'green';
+              }
+
               _RIGHT_DOWN_BOS = current_bos;
               _CURRENT_MARKER_BOS = current_bos;
               _refreshMarkers();
@@ -2159,6 +2194,37 @@
       _pushAlertHelper(alert_msg, false, class_name);
     }
 
+    function addMarker(from_qos, to_qos, color) {
+      var i, len, from_bos, to_bos, marker_found;
+
+      from_bos = _qosHelper(from_qos);
+      to_bos = _qosHelper(to_qos);
+
+      if (!from_bos || !to_bos) {
+        return;
+      }
+
+      marker_found = false;
+      for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
+        if (_MARKERS_LIST[i].from === from_bos && _MARKERS_LIST[i].to === to_bos) {
+          _MARKERS_LIST[i].color = color;
+          marker_found = true;
+          break;
+        }
+      }
+
+      if (!marker_found) {
+        _MARKERS_LIST.push({ from: from_bos, to: to_bos, color: color });
+      }
+
+      _refreshMarkers();
+    }
+
+    function clearMarkers() {
+      _MARKERS_LIST = [];
+      _refreshMarkers();
+    }
+
     //!---------------- board (this=apply)
 
     function refreshUi(animation_type, play_sounds) {
@@ -2261,6 +2327,8 @@
           setCfg: setCfg,
           pushAlert: pushAlert,
           refreshUi: refreshUi,
+          addMarker: addMarker,
+          clearMarkers: clearMarkers,
         }
       : null;
   })();
