@@ -2,7 +2,7 @@
 
 (function (windw, Ic) {
   var IcUi = (function () {
-    var _VERSION = '5.1.0';
+    var _VERSION = '5.1.1';
 
     var _CFG = {
       chessFont: 'merida',
@@ -302,14 +302,14 @@
           data.fromHolderElm.style.display = '';
         }
 
-        if (board !== null && data.cachedMoveUci) {
-          final_uci = data.cachedMoveUci.slice(0, 4) + data.pieceBal.toLowerCase();
+        if (board !== null && data.cacheMoveUci) {
+          final_uci = data.cacheMoveUci.slice(0, 4) + data.pieceBal.toLowerCase();
           board.playMove(final_uci, { isLegalMove: true, isInanimated: true, playSounds: true });
         }
       }
     }
 
-    function _enterPromotionMode(board, from_bos, to_bos, mock_move, cached_move_uci, is_click_move) {
+    function _enterPromotionMode(board, from_bos, to_bos, mock_move, cache_move_uci, is_click_move) {
       var i,
         len,
         squares,
@@ -334,11 +334,11 @@
         sq_w,
         anim_pawn;
 
-      if (!mock_move || !mock_move.promotion || !cached_move_uci) {
+      if (!mock_move || !mock_move.promotion || !cache_move_uci) {
         return false;
       }
 
-      to_bos = cached_move_uci.slice(2, 4) || to_bos;
+      to_bos = cache_move_uci.slice(2, 4) || to_bos;
 
       piece_order = ['q', 'n', 'r', 'b'];
       squares = _promotionSquaresHelper(to_bos);
@@ -465,7 +465,7 @@
         boardName: board.boardName,
         fromBos: from_bos,
         toBos: to_bos,
-        cachedMoveUci: cached_move_uci,
+        cacheMoveUci: cache_move_uci,
         squares: squares,
         fromHolderElm: from_holder_elm,
       };
@@ -1101,7 +1101,7 @@
         });
 
         document.addEventListener('mouseup', function (e) {
-          var temp, board, current_bos, old_drg, is_promotion_move, mock_move, is_legal_move, cached_move_uci;
+          var temp, board, current_bos, old_drg, is_promotion_move, mock_move, is_legal_move, cache_move_uci;
 
           old_drg = _DRAGGING_BOS;
           _cancelDragging();
@@ -1141,25 +1141,25 @@
 
             if (old_drg !== current_bos) {
               is_promotion_move = false;
-              cached_move_uci = null;
+              cache_move_uci = null;
               mock_move = board.playMove([old_drg, current_bos], { isMockMove: true });
 
               is_legal_move = mock_move !== null;
 
               if (is_legal_move) {
-                cached_move_uci = mock_move.uci;
+                cache_move_uci = mock_move.uci;
                 is_promotion_move = !!mock_move.promotion;
               }
 
               if (is_promotion_move && is_legal_move && _CFG.interactivePromotion) {
-                if (_enterPromotionMode(board, old_drg, current_bos, mock_move, cached_move_uci, false)) {
+                if (_enterPromotionMode(board, old_drg, current_bos, mock_move, cache_move_uci, false)) {
                   break block;
                 }
               }
 
               if (
                 !is_legal_move ||
-                !board.playMove(cached_move_uci, { isLegalMove: true, isInanimated: true, playSounds: true })
+                !board.playMove(cache_move_uci, { isLegalMove: true, isInanimated: true, playSounds: true })
               ) {
                 _cancelSelected();
               }
@@ -1179,7 +1179,7 @@
             is_promotion_move,
             mock_move,
             is_legal_move,
-            cached_move_uci;
+            cache_move_uci;
 
           old_sel = _SELECTED_BOS;
           _cancelSelected();
@@ -1222,7 +1222,7 @@
             }
 
             is_promotion_move = false;
-            cached_move_uci = null;
+            cache_move_uci = null;
 
             if (old_sel && old_sel !== current_bos) {
               mock_move = board.playMove([old_sel, current_bos], { isMockMove: true });
@@ -1230,12 +1230,12 @@
               is_legal_move = mock_move !== null;
 
               if (is_legal_move) {
-                cached_move_uci = mock_move.uci;
+                cache_move_uci = mock_move.uci;
                 is_promotion_move = !!mock_move.promotion;
               }
 
               if (is_promotion_move && is_legal_move && _CFG.interactivePromotion) {
-                if (_enterPromotionMode(board, old_sel, current_bos, mock_move, cached_move_uci, true)) {
+                if (_enterPromotionMode(board, old_sel, current_bos, mock_move, cache_move_uci, true)) {
                   break block;
                 }
               }
@@ -1244,7 +1244,7 @@
             if (
               !old_sel ||
               (old_sel !== current_bos &&
-                (!is_legal_move || !board.playMove(cached_move_uci, { isLegalMove: true, playSounds: true })))
+                (!is_legal_move || !board.playMove(cache_move_uci, { isLegalMove: true, playSounds: true })))
             ) {
               if (square.className) {
                 _SELECTED_BOS = current_bos;
@@ -1261,7 +1261,6 @@
                   legal_moves = board.legalMoves(current_bos);
 
                   for (i = 0, len = legal_moves.length; i < len; i++) {
-                    //0<len
                     square = board.getSquare(legal_moves[i]);
                     temp = 'ic_highlight';
 
@@ -1485,7 +1484,6 @@
         new_html = '<strong>Boards:</strong> ';
 
         for (i = 0, len = board_list.length; i < len; i++) {
-          //0<len
           new_html += i ? ' | ' : '';
           current_board_name = board_list[i];
           current_board = Ic.getBoard(current_board_name);
@@ -1548,7 +1546,6 @@
       }
 
       for (i = 0; i < 8; i++) {
-        //0...7
         rank_bos = is_rotated ? i + 1 : 8 - i;
         new_html += '<tr>';
 
@@ -1557,7 +1554,6 @@
         }
 
         for (j = 0; j < 8; j++) {
-          //0...7
           current_bos = Ic.toBos(is_rotated ? [7 - i, 7 - j] : [i, j]);
           new_html +=
             "<td id='" +
@@ -1644,9 +1640,7 @@
       that = this;
 
       for (i = 0; i < 8; i++) {
-        //0...7
         for (j = 0; j < 8; j++) {
-          //0...7
           reset_class = (i + j) % 2 ? 'ic_bs' : 'ic_ws';
           current_square = that.getSquare(that.isRotated ? [7 - i, 7 - j] : [i, j]);
           square_class = current_square.className;
@@ -1678,13 +1672,11 @@
         };
 
         for (i = 0; i < 2; i++) {
-          //0...1
           current_side = that.isRotated === !i ? that.w : that.b;
           matdiff_html += i ? '<hr>' : '';
           temp = '';
 
           for (j = 0, len = current_side.materialDiff.length; j < len; j++) {
-            //0<len
             temp +=
               "<img src='" +
               ('./css/images/chess-fonts/' +
@@ -1725,7 +1717,6 @@
         new_html = '';
 
         for (i = 0, len = move_list.length; i < len; i++) {
-          //0<len
           if (i) {
             if (that.isPuzzleMode && i > that.currentMove) {
               continue;
@@ -1850,11 +1841,9 @@
         new_html += '<ul>';
 
         for (i = 0; i < 8; i++) {
-          //0...7
           current_row = [];
 
           for (j = 0; j < 8; j++) {
-            //0...7
             current_square = that.getSquare([i, j]);
             temp = '' + current_square.val;
 
@@ -1880,7 +1869,6 @@
         temp = '';
 
         for (i = 0, len = that.legalUci.length; i < len; i++) {
-          //0<len
           temp += (i ? ', ' : '') + (!i || i % 5 ? '' : '<br>') + that.legalUci[i];
         }
 
@@ -1891,7 +1879,6 @@
         temp = Object.keys(that.legalUciTree);
 
         for (i = 0, len = temp.length; i < len; i++) {
-          //0<len
           new_html += '<li><strong>' + temp[i] + ':</strong> [' + that.legalUciTree[temp[i]].join(', ') + ']</li>';
         }
 
@@ -1904,13 +1891,11 @@
         temp = Object.keys(that.legalRevTree);
 
         for (i = 0, len = temp.length; i < len; i++) {
-          //0<len
           new_html += '<li><strong>' + temp[i] + ':</strong>';
           new_html += ' {';
           temp2 = Object.keys(that.legalRevTree[temp[i]]);
 
           for (j = 0, len2 = temp2.length; j < len2; j++) {
-            //0<len2
             new_html +=
               (j ? ', ' : '') +
               '<strong>' +
