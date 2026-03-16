@@ -113,6 +113,8 @@ Draws a circular highlight on a specific square.
 
 The Boolean option `isToggle` defaults to `false` when not set to a Boolean value of `true`.
 
+Accepted values for `color` are the strings `"red"`, `"green"`, `"blue"`, `"yellow"` and any valid Hex code (e.g., `"#f0d9b5"`). The default value of `"green"` will be used for incorrect values.
+
 <details>
 <summary><strong>Parameters</strong></summary>
 
@@ -144,6 +146,8 @@ IcUi.drawCircle("c2", "blue", true)
 Draws a directional arrow between two squares.
 
 The Boolean option `isToggle` defaults to `false` when not set to a Boolean value of `true`.
+
+Accepted values for `color` are the strings `"red"`, `"green"`, `"blue"`, `"yellow"` and any valid Hex code (e.g., `"#f0d9b5"`). The default value of `"green"` will be used for incorrect values.
 
 <details>
 <summary><strong>Parameters</strong></summary>
