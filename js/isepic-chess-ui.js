@@ -62,6 +62,10 @@
       };
       color_clean = ('' + color).replace(/\s/g, '').toLowerCase();
 
+      if (/^#([0-9a-f]{3}){1,2}$/i.test(color_clean)) {
+        return color_clean;
+      }
+
       return map[color_clean] || map.green;
     }
 
@@ -79,11 +83,13 @@
       return bos;
     }
 
-    function _addMarkerHelper(from_qos, to_qos, color) {
-      var i, len, from_bos, to_bos, marker_found;
+    function _addMarkerHelper(from_qos, to_qos, color, is_toggle) {
+      var i, len, from_bos, to_bos, marker_found, parsed_color;
 
+      is_toggle = is_toggle === true;
       from_bos = _qosHelper(from_qos);
       to_bos = _qosHelper(to_qos);
+      parsed_color = _colorHelper(color);
 
       if (!from_bos || !to_bos) {
         return;
@@ -92,14 +98,19 @@
       marker_found = false;
       for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
         if (_MARKERS_LIST[i].from === from_bos && _MARKERS_LIST[i].to === to_bos) {
-          _MARKERS_LIST[i].color = color;
           marker_found = true;
+
+          if (is_toggle && _MARKERS_LIST[i].color === parsed_color) {
+            _MARKERS_LIST.splice(i, 1);
+          } else {
+            _MARKERS_LIST[i].color = parsed_color;
+          }
           break;
         }
       }
 
       if (!marker_found) {
-        _MARKERS_LIST.push({ from: from_bos, to: to_bos, color: color });
+        _MARKERS_LIST.push({ from: from_bos, to: to_bos, color: parsed_color });
       }
 
       _refreshMarkers();
@@ -378,14 +389,14 @@
           data.fromHolderElm.style.display = '';
         }
 
-        if (board !== null && data.cachedMoveUci) {
-          final_uci = data.cachedMoveUci.slice(0, 4) + data.pieceBal.toLowerCase();
+        if (board !== null && data.cacheMoveUci) {
+          final_uci = data.cacheMoveUci.slice(0, 4) + data.pieceBal.toLowerCase();
           board.playMove(final_uci, { isLegalMove: true, isInanimated: true, playSounds: true });
         }
       }
     }
 
-    function _enterPromotionMode(board, from_bos, to_bos, mock_move, cached_move_uci, is_click_move) {
+    function _enterPromotionMode(board, from_bos, to_bos, mock_move, cache_move_uci, is_click_move) {
       var i,
         len,
         squares,
@@ -410,11 +421,11 @@
         sq_w,
         anim_pawn;
 
-      if (!mock_move || !mock_move.promotion || !cached_move_uci) {
+      if (!mock_move || !mock_move.promotion || !cache_move_uci) {
         return false;
       }
 
-      to_bos = cached_move_uci.slice(2, 4) || to_bos;
+      to_bos = cache_move_uci.slice(2, 4) || to_bos;
 
       piece_order = ['q', 'n', 'r', 'b'];
       squares = _promotionSquaresHelper(to_bos);
@@ -541,7 +552,7 @@
         boardName: board.boardName,
         fromBos: from_bos,
         toBos: to_bos,
-        cachedMoveUci: cached_move_uci,
+        cacheMoveUci: cache_move_uci,
         squares: squares,
         fromHolderElm: from_holder_elm,
       };
@@ -1351,17 +1362,17 @@
         });
 
         document.addEventListener('mouseup', function (e) {
-          var i,
-            len,
-            temp,
+          var temp,
             board,
             current_bos,
             old_drg,
             is_promotion_move,
             mock_move,
             is_legal_move,
-            cached_move_uci,
-            found_idx;
+            cache_move_uci,
+            cache_right_down_bos,
+            cache_marker_bos,
+            cache_marker_color;
 
           old_drg = _DRAGGING_BOS;
           _cancelDragging();
@@ -1376,32 +1387,20 @@
             }
 
             if (e.button === 2 && _RIGHT_DOWN_BOS) {
-              current_bos = _CURRENT_MARKER_BOS;
-
-              if (current_bos) {
-                found_idx = -1;
-
-                for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
-                  if (_MARKERS_LIST[i].from === _RIGHT_DOWN_BOS && _MARKERS_LIST[i].to === current_bos) {
-                    found_idx = i;
-                    break;
-                  }
-                }
-
-                if (found_idx !== -1) {
-                  if (_MARKERS_LIST[found_idx].color === _CURRENT_MARKER_COLOR) {
-                    _MARKERS_LIST.splice(found_idx, 1);
-                  } else {
-                    _MARKERS_LIST[found_idx].color = _CURRENT_MARKER_COLOR;
-                  }
-                } else {
-                  _MARKERS_LIST.push({ from: _RIGHT_DOWN_BOS, to: current_bos, color: _CURRENT_MARKER_COLOR });
-                }
-              }
+              cache_right_down_bos = _RIGHT_DOWN_BOS;
+              cache_marker_bos = _CURRENT_MARKER_BOS;
+              cache_marker_color = _CURRENT_MARKER_COLOR;
 
               _RIGHT_DOWN_BOS = '';
               _CURRENT_MARKER_BOS = '';
-              _refreshMarkers();
+              _CURRENT_MARKER_COLOR = '';
+
+              if (cache_marker_bos) {
+                _addMarkerHelper(cache_right_down_bos, cache_marker_bos, cache_marker_color, true);
+              } else {
+                _refreshMarkers();
+              }
+
               break block;
             }
 
@@ -1431,25 +1430,25 @@
 
             if (old_drg !== current_bos) {
               is_promotion_move = false;
-              cached_move_uci = null;
+              cache_move_uci = null;
               mock_move = board.playMove([old_drg, current_bos], { isMockMove: true });
 
               is_legal_move = mock_move !== null;
 
               if (is_legal_move) {
-                cached_move_uci = mock_move.uci;
+                cache_move_uci = mock_move.uci;
                 is_promotion_move = !!mock_move.promotion;
               }
 
               if (is_promotion_move && is_legal_move && _CFG.interactivePromotion) {
-                if (_enterPromotionMode(board, old_drg, current_bos, mock_move, cached_move_uci, false)) {
+                if (_enterPromotionMode(board, old_drg, current_bos, mock_move, cache_move_uci, false)) {
                   break block;
                 }
               }
 
               if (
                 !is_legal_move ||
-                !board.playMove(cached_move_uci, { isLegalMove: true, isInanimated: true, playSounds: true })
+                !board.playMove(cache_move_uci, { isLegalMove: true, isInanimated: true, playSounds: true })
               ) {
                 _cancelSelected();
               }
@@ -1469,7 +1468,7 @@
             is_promotion_move,
             mock_move,
             is_legal_move,
-            cached_move_uci;
+            cache_move_uci;
 
           old_sel = _SELECTED_BOS;
           _cancelSelected();
@@ -1506,11 +1505,11 @@
 
             if (e.button === 2) {
               if (e.altKey) {
-                _CURRENT_MARKER_COLOR = 'blue';
+                _CURRENT_MARKER_COLOR = _colorHelper('blue');
               } else if (e.shiftKey || e.ctrlKey) {
-                _CURRENT_MARKER_COLOR = 'red';
+                _CURRENT_MARKER_COLOR = _colorHelper('red');
               } else {
-                _CURRENT_MARKER_COLOR = 'green';
+                _CURRENT_MARKER_COLOR = _colorHelper('green');
               }
 
               _RIGHT_DOWN_BOS = current_bos;
@@ -1532,7 +1531,7 @@
             }
 
             is_promotion_move = false;
-            cached_move_uci = null;
+            cache_move_uci = null;
 
             if (old_sel && old_sel !== current_bos) {
               mock_move = board.playMove([old_sel, current_bos], { isMockMove: true });
@@ -1540,12 +1539,12 @@
               is_legal_move = mock_move !== null;
 
               if (is_legal_move) {
-                cached_move_uci = mock_move.uci;
+                cache_move_uci = mock_move.uci;
                 is_promotion_move = !!mock_move.promotion;
               }
 
               if (is_promotion_move && is_legal_move && _CFG.interactivePromotion) {
-                if (_enterPromotionMode(board, old_sel, current_bos, mock_move, cached_move_uci, true)) {
+                if (_enterPromotionMode(board, old_sel, current_bos, mock_move, cache_move_uci, true)) {
                   break block;
                 }
               }
@@ -1554,7 +1553,7 @@
             if (
               !old_sel ||
               (old_sel !== current_bos &&
-                (!is_legal_move || !board.playMove(cached_move_uci, { isLegalMove: true, playSounds: true })))
+                (!is_legal_move || !board.playMove(cache_move_uci, { isLegalMove: true, playSounds: true })))
             ) {
               if (square.className) {
                 _SELECTED_BOS = current_bos;
@@ -2253,12 +2252,12 @@
       _pushAlertHelper(alert_msg, false, class_name);
     }
 
-    function drawCircle(qos, color) {
-      _addMarkerHelper(qos, qos, color);
+    function drawCircle(qos, color, is_toggle) {
+      _addMarkerHelper(qos, qos, color, is_toggle);
     }
 
-    function drawArrow(from_qos, to_qos, color) {
-      _addMarkerHelper(from_qos, to_qos, color);
+    function drawArrow(from_qos, to_qos, color, is_toggle) {
+      _addMarkerHelper(from_qos, to_qos, color, is_toggle);
     }
 
     function clearCircle(qos) {
