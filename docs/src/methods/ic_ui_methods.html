@@ -106,16 +106,30 @@
 
     // start: drawCircle
     icui.drawCircle.params = {
-      children: [{ name: 'qos', type: 'String|Array|Object' }],
+      children: [
+        p_qos,
+        {
+          name: 'color',
+          type: 'String',
+          icon: 'eight_pointed_black_star',
+        },
+        {
+          name: 'isToggle',
+          type: 'Boolean',
+          icon: 'eight_pointed_black_star',
+        },
+      ],
     };
 
     icui.drawCircle.returnVal = {};
 
-    icui.drawCircle.description = [
-      'Draws a circular highlight on a specific square.',
-      'The **qos** parameter accepts a BOS string (e.g., `"e4"`), a coordinate array (e.g., `[4, 4]`), or a square object.',
-    ];
+    icui.drawCircle.description = [];
+    icui.drawCircle.description.push('Draws a circular highlight on a specific square.');
+    icui.drawCircle.description.push(
+      'The Boolean option `isToggle` defaults to `false` when not set to a Boolean value of `true`.'
+    );
 
+    icui.drawCircle.examples = [];
     icui.drawCircle.examples.push('IcUi.drawCircle("e4")');
     icui.drawCircle.examples.push('IcUi.drawCircle([0, 0])');
     icui.drawCircle.examples.push('IcUi.drawCircle("a2", "#9f4ae0")');
@@ -126,15 +140,30 @@
     // start: drawArrow
     icui.drawArrow.params = {
       children: [
-        { name: 'from_qos', type: 'String|Array|Object' },
-        { name: 'to_qos', type: 'String|Array|Object' },
+        from_qos,
+        to_qos,
+        {
+          name: 'color',
+          type: 'String',
+          icon: 'eight_pointed_black_star',
+        },
+        {
+          name: 'isToggle',
+          type: 'Boolean',
+          icon: 'eight_pointed_black_star',
+        },
       ],
     };
 
     icui.drawArrow.returnVal = {};
 
-    icui.drawArrow.description = ['Draws a directional arrow between two squares.'];
+    icui.drawArrow.description = [];
+    icui.drawArrow.description.push('Draws a directional arrow between two squares.');
+    icui.drawArrow.description.push(
+      'The Boolean option `isToggle` defaults to `false` when not set to a Boolean value of `true`.'
+    );
 
+    icui.drawArrow.examples = [];
     icui.drawArrow.examples.push('IcUi.drawArrow("g1", "f3")');
     icui.drawArrow.examples.push('IcUi.drawArrow([6, 4], [4, 4], "blue")');
     icui.drawArrow.examples.push('IcUi.drawArrow("a2", "a4", "#9f4ae0")');
@@ -144,29 +173,37 @@
 
     // start: clearCircle
     icui.clearCircle.params = {
-      children: [{ name: 'qos', type: 'String|Array|Object' }],
+      children: [
+        p_qos
+      ],
     };
 
     icui.clearCircle.returnVal = {};
 
-    icui.clearCircle.description = ['Removes a specific circular highlight if it exists.'];
+    icui.clearCircle.description = [];
+    icui.clearCircle.description.push('Removes a specific circular highlight if it exists.');
 
+    icui.clearCircle.examples = [];
     icui.clearCircle.examples.push('IcUi.clearCircle("e4")');
+    icui.clearCircle.examples.push('IcUi.clearCircle([0, 0])');
     // end: clearCircle
 
     // start: clearArrow
     icui.clearArrow.params = {
       children: [
-        { name: 'from_qos', type: 'String|Array|Object' },
-        { name: 'to_qos', type: 'String|Array|Object' },
+        from_qos,
+        to_qos,
       ],
     };
 
     icui.clearArrow.returnVal = {};
 
-    icui.clearArrow.description = ['Removes a specific arrow between two squares if it exists.'];
+    icui.clearArrow.description = [];
+    icui.clearArrow.description.push('Removes a specific arrow between two squares if it exists.');
 
+    icui.clearArrow.examples = [];
     icui.clearArrow.examples.push('IcUi.clearArrow("g1", "f3")');
+    icui.clearArrow.examples.push('IcUi.clearArrow([6, 4], [4, 4])');
     // end: clearArrow
 
     // start: clearMarkers
@@ -174,11 +211,11 @@
 
     icui.clearMarkers.returnVal = {};
 
-    icui.clearMarkers.description = [
-      'Clears all markers (both arrows and circles) from the board.',
-      '> [!NOTE]\n> Markers are also automatically cleared whenever a board animation occurs (navigating moves or playing a move).',
-    ];
+    icui.clearMarkers.description = [];
+    icui.clearMarkers.description.push('Clears all markers (both arrows and circles) from the board.');
+    icui.clearMarkers.description.push('> [!NOTE]\n> Markers are also automatically cleared whenever a board animation occurs (navigating moves or playing a move).');
 
+    icui.clearMarkers.examples = [];
     icui.clearMarkers.examples.push('IcUi.clearMarkers()');
     // end: clearMarkers
 

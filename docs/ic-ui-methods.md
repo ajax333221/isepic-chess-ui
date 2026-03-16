@@ -111,12 +111,17 @@ IcUi.pushAlert("Alert with error style", "error")
 
 Draws a circular highlight on a specific square.
 
-The **qos** parameter accepts a BOS string (e.g., `"e4"`), a coordinate array (e.g., `[4, 4]`), or a square object.
+The Boolean option `isToggle` defaults to `false` when not set to a Boolean value of `true`.
 
 <details>
 <summary><strong>Parameters</strong></summary>
 
-- `qos` `(String|Array|Object)`
+- `qos`
+  - **squareBos** `(String)`
+  - **squarePos** `(Array)`
+  - **square** `(Object)`
+- `color` `(String)` — *optional*
+- `isToggle` `(Boolean)` — *optional*
 
 </details>
 
@@ -127,6 +132,9 @@ The **qos** parameter accepts a BOS string (e.g., `"e4"`), a coordinate array (e
 ```javascript
 IcUi.drawCircle("e4")
 IcUi.drawCircle([0, 0])
+IcUi.drawCircle("a2", "#9f4ae0")
+IcUi.drawCircle("b2", "red", false)
+IcUi.drawCircle("c2", "blue", true)
 ```
 
 ---
@@ -135,11 +143,21 @@ IcUi.drawCircle([0, 0])
 
 Draws a directional arrow between two squares.
 
+The Boolean option `isToggle` defaults to `false` when not set to a Boolean value of `true`.
+
 <details>
 <summary><strong>Parameters</strong></summary>
 
-- `from_qos` `(String|Array|Object)`
-- `to_qos` `(String|Array|Object)`
+- `from_qos`
+  - **squareBos** `(String)`
+  - **squarePos** `(Array)`
+  - **square** `(Object)`
+- `to_qos`
+  - **squareBos** `(String)`
+  - **squarePos** `(Array)`
+  - **square** `(Object)`
+- `color` `(String)` — *optional*
+- `isToggle` `(Boolean)` — *optional*
 
 </details>
 
@@ -149,7 +167,10 @@ Draws a directional arrow between two squares.
 
 ```javascript
 IcUi.drawArrow("g1", "f3")
-IcUi.drawArrow([6, 4], [4, 4])
+IcUi.drawArrow([6, 4], [4, 4], "blue")
+IcUi.drawArrow("a2", "a4", "#9f4ae0")
+IcUi.drawArrow("b2", "b4", "red", false)
+IcUi.drawArrow("c2", "c4", "blue", true)
 ```
 
 ---
@@ -161,7 +182,10 @@ Removes a specific circular highlight if it exists.
 <details>
 <summary><strong>Parameters</strong></summary>
 
-- `qos` `(String|Array|Object)`
+- `qos`
+  - **squareBos** `(String)`
+  - **squarePos** `(Array)`
+  - **square** `(Object)`
 
 </details>
 
@@ -171,6 +195,7 @@ Removes a specific circular highlight if it exists.
 
 ```javascript
 IcUi.clearCircle("e4")
+IcUi.clearCircle([0, 0])
 ```
 
 ---
@@ -182,8 +207,14 @@ Removes a specific arrow between two squares if it exists.
 <details>
 <summary><strong>Parameters</strong></summary>
 
-- `from_qos` `(String|Array|Object)`
-- `to_qos` `(String|Array|Object)`
+- `from_qos`
+  - **squareBos** `(String)`
+  - **squarePos** `(Array)`
+  - **square** `(Object)`
+- `to_qos`
+  - **squareBos** `(String)`
+  - **squarePos** `(Array)`
+  - **square** `(Object)`
 
 </details>
 
@@ -193,6 +224,7 @@ Removes a specific arrow between two squares if it exists.
 
 ```javascript
 IcUi.clearArrow("g1", "f3")
+IcUi.clearArrow([6, 4], [4, 4])
 ```
 
 ---
