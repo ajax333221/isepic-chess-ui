@@ -59,6 +59,7 @@ https://ajax333221.github.io/isepic-chess-ui/
 - Both _drag-and-drop_ and _click-from-click-to_ in parallel
 - Interactive pawn promotion options
 - Highlight last move, legal moves and checks
+- Integrated drawing system for multi-color arrows and circles
 - [Components](https://ajax333221.github.io/isepic-chess-ui/components.html):
   - Chess [board](https://ajax333221.github.io/isepic-chess-ui/components.html#board)
   - [Board tabs](https://ajax333221.github.io/isepic-chess-ui/components.html#board_tabs) (with _switch-to-board_ links)

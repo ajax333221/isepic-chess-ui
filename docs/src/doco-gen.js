@@ -2,6 +2,41 @@ var GIT_REPO_URL = 'https://github.com/ajax333221/isepic-chess-ui';
 var GIT_README_URL = GIT_REPO_URL + '?tab=readme-ov-file';
 var GIT_DOCS_URL = GIT_REPO_URL + '/blob/master/docs/';
 
+//---
+
+var p_qos_ch1 = {
+  name: 'squareBos',
+  type: 'String',
+  isBold: true,
+};
+
+var p_qos_ch2 = {
+  name: 'squarePos',
+  type: 'Array',
+  isBold: true,
+};
+
+var p_qos_ch3 = {
+  name: 'square',
+  type: 'Object',
+  isBold: true,
+};
+
+var p_qos = {
+  name: 'qos',
+  children: [p_qos_ch1, p_qos_ch2, p_qos_ch3],
+};
+
+var from_qos = {
+  name: 'from_qos',
+  children: [p_qos_ch1, p_qos_ch2, p_qos_ch3],
+};
+
+var to_qos = {
+  name: 'to_qos',
+  children: [p_qos_ch1, p_qos_ch2, p_qos_ch3],
+};
+
 //=====================================================
 
 function isObj(obj) {

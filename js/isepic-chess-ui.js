@@ -2,7 +2,7 @@
 
 (function (windw, Ic) {
   var IcUi = (function () {
-    var _VERSION = '5.1.1';
+    var _VERSION = '5.2.0';
 
     var _CFG = {
       chessFont: 'merida',
@@ -25,6 +25,7 @@
       draggingTime: 50,
       scrollingTime: 60,
       pushAlertsTime: 5000,
+      highlightMarkers: true,
     };
 
     var _POS_Y = 0;
@@ -40,10 +41,96 @@
     var _PROMOTION_MODE = false;
     var _PROMOTION_DATA = null;
 
+    var _MARKERS_LIST = [];
+    var _RIGHT_DOWN_BOS = '';
+    var _CURRENT_MARKER_BOS = '';
+    var _CURRENT_MARKER_COLOR = '';
+
     var _ALERT_WARNING = 'warning';
     var _ALERT_ERROR = 'error';
 
     //!---------------- helpers
+
+    function _colorHelper(color) {
+      var map, color_clean;
+
+      map = {
+        red: '#c0392b',
+        blue: '#2980b9',
+        green: '#27ae60',
+        yellow: '#ffe700',
+      };
+      color_clean = ('' + color).replace(/\s/g, '').toLowerCase();
+
+      if (/^#([0-9a-f]{3}){1,2}$/i.test(color_clean)) {
+        return color_clean;
+      }
+
+      return map[color_clean] || map.green;
+    }
+
+    function _addMarkerHelper(from_qos, to_qos, color, is_toggle) {
+      var i, len, from_bos, to_bos, marker_found, parsed_color;
+
+      is_toggle = is_toggle === true;
+      from_bos = Ic.toBos(from_qos);
+      to_bos = Ic.toBos(to_qos);
+
+      block: {
+        if (from_bos === null || to_bos === null) {
+          break block;
+        }
+
+        parsed_color = _colorHelper(color);
+        marker_found = false;
+
+        for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
+          if (_MARKERS_LIST[i].from === from_bos && _MARKERS_LIST[i].to === to_bos) {
+            marker_found = true;
+
+            if (is_toggle && _MARKERS_LIST[i].color === parsed_color) {
+              _MARKERS_LIST.splice(i, 1);
+            } else {
+              _MARKERS_LIST[i].color = parsed_color;
+            }
+            break;
+          }
+        }
+
+        if (!marker_found) {
+          _MARKERS_LIST.push({ from: from_bos, to: to_bos, color: parsed_color });
+        }
+
+        _refreshMarkers();
+      }
+    }
+
+    function _removeMarkerHelper(from_qos, to_qos) {
+      var i, len, from_bos, to_bos, removed;
+
+      from_bos = Ic.toBos(from_qos);
+      to_bos = Ic.toBos(to_qos);
+
+      block: {
+        if (from_bos === null || to_bos === null) {
+          break block;
+        }
+
+        removed = false;
+
+        for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
+          if (_MARKERS_LIST[i].from === from_bos && _MARKERS_LIST[i].to === to_bos) {
+            _MARKERS_LIST.splice(i, 1);
+            removed = true;
+            break;
+          }
+        }
+
+        if (removed) {
+          _refreshMarkers();
+        }
+      }
+    }
 
     function _chessFontHelper(chess_font) {
       var arr, default_elm;
@@ -74,7 +161,7 @@
     }
 
     function _promotionSquaresHelper(to_bos) {
-      var file_bos, to_rank, interior_dir, i, squares;
+      var i, file_bos, to_rank, interior_dir, squares, current_rank;
 
       squares = [];
       file_bos = (to_bos || '').charAt(0);
@@ -87,7 +174,7 @@
       interior_dir = to_rank === 8 ? -1 : 1;
 
       for (i = 0; i < 4; i++) {
-        var current_rank = to_rank + interior_dir * i;
+        current_rank = to_rank + interior_dir * i;
 
         if (current_rank < 1 || current_rank > 8) {
           break;
@@ -592,6 +679,162 @@
       return rtn;
     }
 
+    function _refreshMarkers() {
+      var i,
+        len,
+        board_elm,
+        svg_elm,
+        marker,
+        from_sq,
+        to_sq,
+        from_rect,
+        to_rect,
+        board_rect,
+        x1,
+        y1,
+        x2,
+        y2,
+        dx,
+        dy,
+        angle,
+        dist,
+        svg_html,
+        opacity,
+        marker_arr,
+        active_from,
+        active_to,
+        preview_exists,
+        is_being_interacted,
+        is_different_color,
+        is_new_preview,
+        marker_color,
+        stroke_w,
+        arrow_size;
+
+      board_elm = document.getElementById('ic_ui_board');
+
+      if (!board_elm) {
+        return;
+      }
+
+      document.querySelectorAll('#ic_ui_markers_svg').forEach(function (elm) {
+        elm.remove();
+      });
+
+      if (!_CFG.highlightMarkers) {
+        return;
+      }
+
+      active_from = _RIGHT_DOWN_BOS;
+      active_to = _CURRENT_MARKER_BOS;
+      preview_exists = !!(active_from && active_to);
+      marker_arr = [];
+
+      for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
+        is_being_interacted = false;
+        is_different_color = false;
+
+        if (preview_exists && _MARKERS_LIST[i].from === active_from && _MARKERS_LIST[i].to === active_to) {
+          is_being_interacted = true;
+          is_different_color = _MARKERS_LIST[i].color !== _CURRENT_MARKER_COLOR;
+        }
+
+        opacity = 0.7;
+
+        if (is_being_interacted) {
+          opacity = is_different_color ? 0 : 0.35;
+        }
+
+        if (opacity > 0) {
+          marker_arr.push({ data: _MARKERS_LIST[i], opacity: opacity });
+        }
+      }
+
+      if (preview_exists) {
+        is_new_preview = true;
+        is_different_color = false;
+
+        for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
+          if (_MARKERS_LIST[i].from === active_from && _MARKERS_LIST[i].to === active_to) {
+            is_new_preview = false;
+            is_different_color = _MARKERS_LIST[i].color !== _CURRENT_MARKER_COLOR;
+            break;
+          }
+        }
+
+        if (is_new_preview || is_different_color) {
+          marker_arr.push({ data: { from: active_from, to: active_to, color: _CURRENT_MARKER_COLOR }, opacity: 1.0 });
+        }
+      }
+
+      if (!marker_arr.length) {
+        return;
+      }
+
+      board_rect = board_elm.getBoundingClientRect();
+      svg_html = '';
+
+      for (i = 0, len = marker_arr.length; i < len; i++) {
+        marker = marker_arr[i].data;
+        opacity = marker_arr[i].opacity;
+        marker_color = _colorHelper(marker.color);
+
+        from_sq = document.getElementById('ic_ui_' + marker.from);
+        to_sq = document.getElementById('ic_ui_' + marker.to);
+
+        if (!from_sq || !to_sq) {
+          continue;
+        }
+
+        from_rect = from_sq.getBoundingClientRect();
+        to_rect = to_sq.getBoundingClientRect();
+
+        x1 = from_rect.left + from_rect.width / 2 - board_rect.left;
+        y1 = from_rect.top + from_rect.height / 2 - board_rect.top;
+        x2 = to_rect.left + to_rect.width / 2 - board_rect.left;
+        y2 = to_rect.top + to_rect.height / 2 - board_rect.top;
+
+        stroke_w = Math.max(2, from_rect.width * 0.1);
+        arrow_size = from_rect.width * 0.45;
+
+        if (marker.from === marker.to) {
+          svg_html += `<g opacity='${opacity}'>`;
+          svg_html += `<circle cx='${x1}' cy='${y1}' r='${
+            from_rect.width / 2 - 4
+          }' fill='none' stroke='${marker_color}' stroke-width='${stroke_w * 0.85}' />`;
+          svg_html += `</g>`;
+        } else {
+          dx = x2 - x1;
+          dy = y2 - y1;
+          angle = Math.atan2(dy, dx) * (180 / Math.PI);
+          dist = Math.sqrt(dx * dx + dy * dy);
+
+          svg_html += `<g transform='translate(${x1},${y1}) rotate(${angle})' opacity='${opacity}' stroke-linecap='butt' stroke-linejoin='miter'>`;
+          svg_html += `<line x1='0' y1='0' x2='${
+            dist - arrow_size * 0.8
+          }' y2='0' stroke='${marker_color}' stroke-width='${stroke_w * 1.4}' />`;
+          svg_html += `<path d='M${dist - arrow_size},-${arrow_size * 0.6} L${dist},0 L${dist - arrow_size},${
+            arrow_size * 0.6
+          } Z' fill='${marker_color}' />`;
+          svg_html += `</g>`;
+        }
+      }
+
+      svg_elm = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg_elm.id = 'ic_ui_markers_svg';
+      Object.assign(svg_elm.style, {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        zIndex: '1005',
+      });
+      svg_elm.innerHTML = svg_html;
+      board_elm.appendChild(svg_elm);
+    }
+
     function _animatePiece(from_bos, to_bos, piece_class, promotion_class) {
       var temp, piece_elm, from_square, to_square, old_offset, new_offset, old_h, old_w;
 
@@ -727,6 +970,16 @@
     function _bindOnce() {
       if (!_RAN_ONCE) {
         _RAN_ONCE = true;
+
+        window.addEventListener('resize', function () {
+          _refreshMarkers();
+        });
+
+        document.addEventListener('contextmenu', function (e) {
+          if (e.target.closest('#ic_ui_board')) {
+            e.preventDefault();
+          }
+        });
 
         document.addEventListener('click', function (e) {
           var this_elm;
@@ -1090,18 +1343,38 @@
         });
 
         document.addEventListener('mousemove', function (e) {
+          var temp, current_bos;
+
           block: {
-            if (!_CFG.pieceDragging || !_DRAGGING_BOS) {
-              break block;
+            if (_CFG.pieceDragging && _DRAGGING_BOS) {
+              _POS_Y = e.pageY;
+              _POS_X = e.pageX;
             }
 
-            _POS_Y = e.pageY;
-            _POS_X = e.pageX;
+            if (_CFG.highlightMarkers && _RIGHT_DOWN_BOS) {
+              temp = _getHoverElement(e.pageX, e.pageY);
+              current_bos = temp ? temp.dataset.bos : '';
+
+              if (current_bos !== _CURRENT_MARKER_BOS) {
+                _CURRENT_MARKER_BOS = current_bos;
+                _refreshMarkers();
+              }
+            }
           }
         });
 
         document.addEventListener('mouseup', function (e) {
-          var temp, board, current_bos, old_drg, is_promotion_move, mock_move, is_legal_move, cache_move_uci;
+          var temp,
+            board,
+            current_bos,
+            old_drg,
+            is_promotion_move,
+            mock_move,
+            is_legal_move,
+            cache_move_uci,
+            cache_right_down_bos,
+            cache_marker_bos,
+            cache_marker_color;
 
           old_drg = _DRAGGING_BOS;
           _cancelDragging();
@@ -1112,6 +1385,24 @@
             }
 
             if (!_CFG.boardInteractions) {
+              break block;
+            }
+
+            if (e.button === 2 && _RIGHT_DOWN_BOS) {
+              cache_right_down_bos = _RIGHT_DOWN_BOS;
+              cache_marker_bos = _CURRENT_MARKER_BOS;
+              cache_marker_color = _CURRENT_MARKER_COLOR;
+
+              _RIGHT_DOWN_BOS = '';
+              _CURRENT_MARKER_BOS = '';
+              _CURRENT_MARKER_COLOR = '';
+
+              if (cache_marker_bos) {
+                _addMarkerHelper(cache_right_down_bos, cache_marker_bos, cache_marker_color, true);
+              } else {
+                _refreshMarkers();
+              }
+
               break block;
             }
 
@@ -1212,6 +1503,26 @@
             if (!current_bos) {
               Ic.utilityMisc.consoleLog('[mousedown]: missing data-bos', _ALERT_ERROR);
               break block;
+            }
+
+            if (e.button === 2) {
+              if (e.altKey) {
+                _CURRENT_MARKER_COLOR = _colorHelper('blue');
+              } else if (e.shiftKey || e.ctrlKey) {
+                _CURRENT_MARKER_COLOR = _colorHelper('red');
+              } else {
+                _CURRENT_MARKER_COLOR = _colorHelper('green');
+              }
+
+              _RIGHT_DOWN_BOS = current_bos;
+              _CURRENT_MARKER_BOS = current_bos;
+              _refreshMarkers();
+              break block;
+            }
+
+            if (_MARKERS_LIST.length) {
+              _MARKERS_LIST = [];
+              _refreshMarkers();
             }
 
             square = board.getSquare(current_bos);
@@ -1595,6 +1906,8 @@
       board_ref = document.getElementById('ic_ui_board');
       board_ref.className = new_class;
       board_ref.innerHTML = new_html;
+
+      _refreshMarkers();
     }
 
     //!---------------- utilities (this=apply)
@@ -1943,6 +2256,27 @@
       _pushAlertHelper(alert_msg, false, class_name);
     }
 
+    function drawCircle(qos, color, is_toggle) {
+      _addMarkerHelper(qos, qos, color, is_toggle);
+    }
+
+    function drawArrow(from_qos, to_qos, color, is_toggle) {
+      _addMarkerHelper(from_qos, to_qos, color, is_toggle);
+    }
+
+    function clearCircle(qos) {
+      _removeMarkerHelper(qos, qos);
+    }
+
+    function clearArrow(from_qos, to_qos) {
+      _removeMarkerHelper(from_qos, to_qos);
+    }
+
+    function clearMarkers() {
+      _MARKERS_LIST = [];
+      _refreshMarkers();
+    }
+
     //!---------------- board (this=apply)
 
     function refreshUi(animation_type, play_sounds) {
@@ -2029,6 +2363,12 @@
             document.getElementById('ic_ui_' + that.moveList[that.currentMove].fromBos).classList.add('ic_lastmove');
             document.getElementById('ic_ui_' + that.moveList[that.currentMove].toBos).classList.add('ic_lastmove');
           }
+
+          if (animation_type) {
+            _MARKERS_LIST = [];
+          }
+
+          _refreshMarkers();
         }
       }
     }
@@ -2039,6 +2379,11 @@
           setCfg: setCfg,
           pushAlert: pushAlert,
           refreshUi: refreshUi,
+          drawCircle: drawCircle,
+          drawArrow: drawArrow,
+          clearCircle: clearCircle,
+          clearArrow: clearArrow,
+          clearMarkers: clearMarkers,
         }
       : null;
   })();
