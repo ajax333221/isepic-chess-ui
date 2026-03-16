@@ -128,7 +128,9 @@
     icui.drawCircle.description.push(
       'The Boolean option `isToggle` defaults to `false` when not set to a Boolean value of `true`.'
     );
-    icui.drawCircle.description.push('Accepted values for `color` are the strings `"red"`, `"green"`, `"blue"`, `"yellow"` and any valid Hex code (e.g., `"#f0d9b5"`). The default value of `"green"` will be used for incorrect values.');
+    icui.drawCircle.description.push(
+      'Accepted values for `color` are the strings `"red"`, `"green"`, `"blue"`, `"yellow"` and any valid Hex code (e.g., `"#f0d9b5"`). The default value of `"green"` will be used for incorrect values.'
+    );
 
     icui.drawCircle.examples = [];
     icui.drawCircle.examples.push('IcUi.drawCircle("e4")');
@@ -163,7 +165,9 @@
     icui.drawArrow.description.push(
       'The Boolean option `isToggle` defaults to `false` when not set to a Boolean value of `true`.'
     );
-    icui.drawArrow.description.push('Accepted values for `color` are the strings `"red"`, `"green"`, `"blue"`, `"yellow"` and any valid Hex code (e.g., `"#f0d9b5"`). The default value of `"green"` will be used for incorrect values.');
+    icui.drawArrow.description.push(
+      'Accepted values for `color` are the strings `"red"`, `"green"`, `"blue"`, `"yellow"` and any valid Hex code (e.g., `"#f0d9b5"`). The default value of `"green"` will be used for incorrect values.'
+    );
 
     icui.drawArrow.examples = [];
     icui.drawArrow.examples.push('IcUi.drawArrow("g1", "f3")');
@@ -175,9 +179,7 @@
 
     // start: clearCircle
     icui.clearCircle.params = {
-      children: [
-        p_qos
-      ],
+      children: [p_qos],
     };
 
     icui.clearCircle.returnVal = {};
@@ -192,10 +194,7 @@
 
     // start: clearArrow
     icui.clearArrow.params = {
-      children: [
-        from_qos,
-        to_qos,
-      ],
+      children: [from_qos, to_qos],
     };
 
     icui.clearArrow.returnVal = {};
@@ -215,7 +214,9 @@
 
     icui.clearMarkers.description = [];
     icui.clearMarkers.description.push('Clears all markers (both arrows and circles) from the board.');
-    icui.clearMarkers.description.push('> [!NOTE]\n> Markers are also automatically cleared whenever a board animation occurs (navigating moves or playing a move).');
+    icui.clearMarkers.description.push(
+      '> [!NOTE]\n> Markers are also automatically cleared whenever a board animation occurs (navigating moves or playing a move).'
+    );
 
     icui.clearMarkers.examples = [];
     icui.clearMarkers.examples.push('IcUi.clearMarkers()');
