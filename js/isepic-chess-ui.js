@@ -1570,6 +1570,7 @@
                   legal_moves = board.legalMoves(current_bos);
 
                   for (i = 0, len = legal_moves.length; i < len; i++) {
+                    //0<len
                     square = board.getSquare(legal_moves[i]);
                     temp = 'ic_highlight';
 
@@ -1602,6 +1603,7 @@
               temp = e && e.deltaY ? e.deltaY : 0;
 
               if (!temp) {
+                //horizontal scrolling or bad event
                 break block;
               }
 
@@ -1695,9 +1697,11 @@
             html = "<table cellpadding='0' cellspacing='0'>";
 
             for (i = 0; i < 8; i++) {
+              //0...7
               html += '<tr>';
 
               for (j = 0; j < 8; j++) {
+                //0...7
                 square_color = (i + j) % 2 ? 'ic_bs' : 'ic_ws';
 
                 current_bos = Ic.toBos(board.isRotated ? [7 - i, 7 - j] : [i, j]);
@@ -1710,6 +1714,7 @@
                     ? ' ic_lastmove'
                     : '';
 
+                //TODO: isCheck via move property
                 in_check =
                   _CFG.highlightChecks &&
                   squares[current_bos].isKing &&
@@ -1791,6 +1796,7 @@
         new_html = '<strong>Boards:</strong> ';
 
         for (i = 0, len = board_list.length; i < len; i++) {
+          //0<len
           new_html += i ? ' | ' : '';
           current_board_name = board_list[i];
           current_board = Ic.getBoard(current_board_name);
@@ -1949,7 +1955,9 @@
       that = this;
 
       for (i = 0; i < 8; i++) {
+        //0...7
         for (j = 0; j < 8; j++) {
+          //0...7
           reset_class = (i + j) % 2 ? 'ic_bs' : 'ic_ws';
           current_square = that.getSquare(that.isRotated ? [7 - i, 7 - j] : [i, j]);
           square_class = current_square.className;
@@ -1981,11 +1989,13 @@
         };
 
         for (i = 0; i < 2; i++) {
+          //0...1
           current_side = that.isRotated === !i ? that.w : that.b;
           matdiff_html += i ? '<hr>' : '';
           temp = '';
 
           for (j = 0, len = current_side.materialDiff.length; j < len; j++) {
+            //0<len
             temp +=
               "<img src='" +
               ('./css/images/chess-fonts/' +
@@ -2026,6 +2036,7 @@
         new_html = '';
 
         for (i = 0, len = move_list.length; i < len; i++) {
+          //0<len
           if (i) {
             if (that.isPuzzleMode && i > that.currentMove) {
               continue;
@@ -2150,9 +2161,11 @@
         new_html += '<ul>';
 
         for (i = 0; i < 8; i++) {
+          //0...7
           current_row = [];
 
           for (j = 0; j < 8; j++) {
+            //0...7
             current_square = that.getSquare([i, j]);
             temp = '' + current_square.val;
 
@@ -2178,6 +2191,7 @@
         temp = '';
 
         for (i = 0, len = that.legalUci.length; i < len; i++) {
+          //0<len
           temp += (i ? ', ' : '') + (!i || i % 5 ? '' : '<br>') + that.legalUci[i];
         }
 
@@ -2188,6 +2202,7 @@
         temp = Object.keys(that.legalUciTree);
 
         for (i = 0, len = temp.length; i < len; i++) {
+          //0<len
           new_html += '<li><strong>' + temp[i] + ':</strong> [' + that.legalUciTree[temp[i]].join(', ') + ']</li>';
         }
 
@@ -2200,11 +2215,13 @@
         temp = Object.keys(that.legalRevTree);
 
         for (i = 0, len = temp.length; i < len; i++) {
+          //0<len
           new_html += '<li><strong>' + temp[i] + ':</strong>';
           new_html += ' {';
           temp2 = Object.keys(that.legalRevTree[temp[i]]);
 
           for (j = 0, len2 = temp2.length; j < len2; j++) {
+            //0<len2
             new_html +=
               (j ? ', ' : '') +
               '<strong>' +
