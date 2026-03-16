@@ -69,67 +69,67 @@
       return map[color_clean] || map.green;
     }
 
-    function _qosHelper(qos) {
-      var bos = '';
-      if (qos) {
-        if (typeof qos === 'string') {
-          bos = qos;
-        } else if (Array.isArray(qos) && qos.length === 2) {
-          bos = Ic.toBos(qos);
-        } else if (typeof qos === 'object' && qos.bos) {
-          bos = qos.bos;
-        }
-      }
-      return bos;
-    }
-
     function _addMarkerHelper(from_qos, to_qos, color, is_toggle) {
       var i, len, from_bos, to_bos, marker_found, parsed_color;
 
       is_toggle = is_toggle === true;
-      from_bos = _qosHelper(from_qos);
-      to_bos = _qosHelper(to_qos);
-      parsed_color = _colorHelper(color);
+      from_bos = Ic.toBos(from_qos);
+      to_bos = Ic.toBos(to_qos);
 
-      if (!from_bos || !to_bos) {
-        return;
-      }
-
-      marker_found = false;
-      for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
-        if (_MARKERS_LIST[i].from === from_bos && _MARKERS_LIST[i].to === to_bos) {
-          marker_found = true;
-
-          if (is_toggle && _MARKERS_LIST[i].color === parsed_color) {
-            _MARKERS_LIST.splice(i, 1);
-          } else {
-            _MARKERS_LIST[i].color = parsed_color;
-          }
-          break;
+      block: {
+        if (from_bos === null || to_bos === null) {
+          break block;
         }
-      }
 
-      if (!marker_found) {
-        _MARKERS_LIST.push({ from: from_bos, to: to_bos, color: parsed_color });
-      }
+        parsed_color = _colorHelper(color);
+        marker_found = false;
 
-      _refreshMarkers();
+        for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
+          if (_MARKERS_LIST[i].from === from_bos && _MARKERS_LIST[i].to === to_bos) {
+            marker_found = true;
+
+            if (is_toggle && _MARKERS_LIST[i].color === parsed_color) {
+              _MARKERS_LIST.splice(i, 1);
+            } else {
+              _MARKERS_LIST[i].color = parsed_color;
+            }
+            break;
+          }
+        }
+
+        if (!marker_found) {
+          _MARKERS_LIST.push({ from: from_bos, to: to_bos, color: parsed_color });
+        }
+
+        _refreshMarkers();
+      }
     }
 
     function _removeMarkerHelper(from_qos, to_qos) {
-      var i, len, from_bos, to_bos;
+      var i, len, from_bos, to_bos, removed;
 
-      from_bos = _qosHelper(from_qos);
-      to_bos = _qosHelper(to_qos);
+      from_bos = Ic.toBos(from_qos);
+      to_bos = Ic.toBos(to_qos);
 
-      for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
-        if (_MARKERS_LIST[i].from === from_bos && _MARKERS_LIST[i].to === to_bos) {
-          _MARKERS_LIST.splice(i, 1);
-          break;
+      block: {
+        if (from_bos === null || to_bos === null) {
+          break block;
+        }
+
+        removed = false;
+
+        for (i = 0, len = _MARKERS_LIST.length; i < len; i++) {
+          if (_MARKERS_LIST[i].from === from_bos && _MARKERS_LIST[i].to === to_bos) {
+            _MARKERS_LIST.splice(i, 1);
+            removed = true;
+            break;
+          }
+        }
+
+        if (removed) {
+          _refreshMarkers();
         }
       }
-
-      _refreshMarkers();
     }
 
     function _chessFontHelper(chess_font) {
@@ -161,7 +161,7 @@
     }
 
     function _promotionSquaresHelper(to_bos) {
-      var file_bos, to_rank, interior_dir, i, squares;
+      var i, file_bos, to_rank, interior_dir, squares, current_rank;
 
       squares = [];
       file_bos = (to_bos || '').charAt(0);
@@ -174,7 +174,7 @@
       interior_dir = to_rank === 8 ? -1 : 1;
 
       for (i = 0; i < 4; i++) {
-        var current_rank = to_rank + interior_dir * i;
+        current_rank = to_rank + interior_dir * i;
 
         if (current_rank < 1 || current_rank > 8) {
           break;
@@ -707,7 +707,9 @@
         is_being_interacted,
         is_different_color,
         is_new_preview,
-        marker_color;
+        marker_color,
+        stroke_w,
+        arrow_size;
 
       board_elm = document.getElementById('ic_ui_board');
 
@@ -792,8 +794,8 @@
         x2 = to_rect.left + to_rect.width / 2 - board_rect.left;
         y2 = to_rect.top + to_rect.height / 2 - board_rect.top;
 
-        var stroke_w = Math.max(2, from_rect.width * 0.1);
-        var arrow_size = from_rect.width * 0.45;
+        stroke_w = Math.max(2, from_rect.width * 0.1);
+        arrow_size = from_rect.width * 0.45;
 
         if (marker.from === marker.to) {
           svg_html += `<g opacity='${opacity}'>`;
