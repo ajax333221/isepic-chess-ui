@@ -116,7 +116,11 @@
       'The **qos** parameter accepts a BOS string (e.g., `"e4"`), a coordinate array (e.g., `[4, 4]`), or a square object.',
     ];
 
-    icui.drawCircle.examples = ['IcUi.drawCircle("e4")', 'IcUi.drawCircle([0, 0])'];
+    icui.drawCircle.examples.push('IcUi.drawCircle("e4")');
+    icui.drawCircle.examples.push('IcUi.drawCircle([0, 0])');
+    icui.drawCircle.examples.push('IcUi.drawCircle("a2", "#9f4ae0")');
+    icui.drawCircle.examples.push('IcUi.drawCircle("b2", "red", false)');
+    icui.drawCircle.examples.push('IcUi.drawCircle("c2", "blue", true)');
     // end: drawCircle
 
     // start: drawArrow
@@ -131,7 +135,11 @@
 
     icui.drawArrow.description = ['Draws a directional arrow between two squares.'];
 
-    icui.drawArrow.examples = ['IcUi.drawArrow("g1", "f3")', 'IcUi.drawArrow([6, 4], [4, 4])'];
+    icui.drawArrow.examples.push('IcUi.drawArrow("g1", "f3")');
+    icui.drawArrow.examples.push('IcUi.drawArrow([6, 4], [4, 4], "blue")');
+    icui.drawArrow.examples.push('IcUi.drawArrow("a2", "a4", "#9f4ae0")');
+    icui.drawArrow.examples.push('IcUi.drawArrow("b2", "b4", "red", false)');
+    icui.drawArrow.examples.push('IcUi.drawArrow("c2", "c4", "blue", true)');
     // end: drawArrow
 
     // start: clearCircle
@@ -143,7 +151,7 @@
 
     icui.clearCircle.description = ['Removes a specific circular highlight if it exists.'];
 
-    icui.clearCircle.examples = ['IcUi.clearCircle("e4")'];
+    icui.clearCircle.examples.push('IcUi.clearCircle("e4")');
     // end: clearCircle
 
     // start: clearArrow
@@ -158,7 +166,7 @@
 
     icui.clearArrow.description = ['Removes a specific arrow between two squares if it exists.'];
 
-    icui.clearArrow.examples = ['IcUi.clearArrow("g1", "f3")'];
+    icui.clearArrow.examples.push('IcUi.clearArrow("g1", "f3")');
     // end: clearArrow
 
     // start: clearMarkers
@@ -171,7 +179,7 @@
       '> [!NOTE]\n> Markers are also automatically cleared whenever a board animation occurs (navigating moves or playing a move).',
     ];
 
-    icui.clearMarkers.examples = ['IcUi.clearMarkers()'];
+    icui.clearMarkers.examples.push('IcUi.clearMarkers()');
     // end: clearMarkers
 
     res = '';
